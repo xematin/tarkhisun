@@ -19,8 +19,8 @@ const BusinessCardGuide = () => {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
-    "headline": "کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور",
-    "description": "راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت، هزینه صدور و نحوه درخواست کارت بازرگانی",
+    "headline": "کارت بازرگانی چیست؟ انواع، شرایط، معایب و افراد معاف و محروم",
+    "description": "راهنمای کامل کارت بازرگانی: انواع تولیدی، خدماتی و موردی، مدارک، شرایط، معایب، افراد معاف و محرومین از دریافت کارت",
     "image": "https://tarkhisun.com/og-image.jpg",
     "author": {
       "@type": "Organization",
@@ -41,12 +41,12 @@ const BusinessCardGuide = () => {
       }
     },
     "datePublished": "2025-10-03",
-    "dateModified": "2025-10-03",
+    "dateModified": "2026-06-09",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://tarkhisun.com/blog/business-card-complete-guide"
     },
-    "keywords": "کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات"
+    "keywords": "کارت بازرگانی, کارت بازرگانی تولیدی, کارت بازرگانی خدماتی, کارت بازرگانی موردی, معایب کارت بازرگانی, معافیت کارت بازرگانی, محرومین کارت بازرگانی, شرایط کارت بازرگانی, مدارک کارت بازرگانی"
   };
 
   const breadcrumbSchema = {
@@ -62,20 +62,20 @@ const BusinessCardGuide = () => {
   return (
     <>
       <Helmet>
-        <title>کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور</title>
-        <meta name="description" content="راهنمای کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و هزینه صدور برای واردات و صادرات" />
-        <meta name="keywords" content="کارت بازرگانی, دریافت کارت بازرگانی, شرایط کارت بازرگانی, واردات و صادرات, اتاق بازرگانی, مدارک کارت بازرگانی, انواع کارت بازرگانی, صدور کارت بازرگانی" />
+        <title>کارت بازرگانی چیست؟ انواع، شرایط، معایب و افراد معاف و محروم</title>
+        <meta name="description" content="راهنمای کامل کارت بازرگانی: انواع تولیدی، خدماتی و موردی، مدارک، شرایط، معایب، افراد معاف و محرومین از دریافت کارت" />
+        <meta name="keywords" content="کارت بازرگانی, کارت بازرگانی تولیدی, کارت بازرگانی خدماتی, کارت بازرگانی موردی, معایب کارت بازرگانی, معافیت کارت بازرگانی, محرومین کارت بازرگانی, شرایط کارت بازرگانی, مدارک کارت بازرگانی, اتاق بازرگانی, صدور کارت بازرگانی" />
         
-        <meta property="og:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
-        <meta property="og:description" content="راهنمای جامع کارت بازرگانی: تعریف، انواع، مدارک لازم، شرایط دریافت و نحوه درخواست" />
+        <meta property="og:title" content="کارت بازرگانی چیست؟ انواع، شرایط، معایب و افراد معاف و محروم" />
+        <meta property="og:description" content="راهنمای کامل کارت بازرگانی: انواع تولیدی، خدماتی و موردی، مدارک، شرایط، معایب، افراد معاف و محرومین" />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://tarkhisun.com/blog/business-card-complete-guide" />
         <meta property="og:locale" content="fa_IR" />
         <meta property="og:site_name" content="ترخیصان" />
         <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور" />
-        <meta name="twitter:description" content="راهنمای جامع کارت بازرگانی: مدارک، شرایط و نحوه درخواست" />
+        <meta name="twitter:title" content="کارت بازرگانی: انواع، شرایط، معایب، معاف و محروم" />
+        <meta name="twitter:description" content="راهنمای کامل کارت بازرگانی: انواع، شرایط، معایب و افراد معاف و محروم" />
         <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
         <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
