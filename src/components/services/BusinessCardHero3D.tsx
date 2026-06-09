@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Environment, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -194,52 +194,28 @@ function BusinessCard() {
   );
 }
 
-function StampRing() {
-  const ref = useRef<THREE.Group>(null);
-  useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.z += delta * 0.25;
-  });
+function ResponsiveScene() {
+  const { viewport } = useThree();
+  // Card width is 3.4 units; fit with comfortable padding
+  const s = Math.min(1, viewport.width / 4.6);
   return (
-    <group ref={ref} position={[2.6, 1.2, -0.8]} rotation={[0.3, -0.4, 0.2]}>
-      <mesh>
-        <torusGeometry args={[0.55, 0.06, 24, 80]} />
-        <meshPhysicalMaterial color="#b8262b" metalness={0.4} roughness={0.4} clearcoat={0.5} />
-      </mesh>
-      <mesh position={[0, 0, 0.01]}>
-        <torusGeometry args={[0.42, 0.025, 16, 64]} />
-        <meshPhysicalMaterial color="#b8262b" metalness={0.3} roughness={0.5} />
-      </mesh>
-      <mesh position={[0, 0, -0.02]}>
-        <circleGeometry args={[0.5, 32]} />
-        <meshBasicMaterial color="#b8262b" transparent opacity={0.12} />
-      </mesh>
+    <group scale={s}>
+      <Float speed={1.1} rotationIntensity={0.25} floatIntensity={0.8}>
+        <BusinessCard />
+      </Float>
+      <Sparkles
+        count={40}
+        size={3}
+        scale={[6, 4, 3]}
+        speed={0.4}
+        color="#c9a84c"
+        opacity={0.7}
+      />
     </group>
   );
 }
 
-function DocumentPlane() {
-  const ref = useRef<THREE.Mesh>(null);
-  useFrame((state) => {
-    if (ref.current) {
-      ref.current.position.y = -1.3 + Math.sin(state.clock.elapsedTime * 0.8) * 0.05;
-    }
-  });
-  return (
-    <mesh ref={ref} position={[-2.4, -1.3, -0.6]} rotation={[-0.15, 0.35, -0.18]}>
-      <planeGeometry args={[2.2, 2.8]} />
-      <meshPhysicalMaterial
-        color="#f7f3e8"
-        roughness={0.85}
-        metalness={0.02}
-        side={THREE.DoubleSide}
-      />
-    </mesh>
-  );
-}
-
 const BusinessCardHero3D = () => {
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
   return (
     <Canvas
       camera={{ position: [0, 0.2, 5.2], fov: 45 }}
@@ -253,25 +229,7 @@ const BusinessCardHero3D = () => {
       <pointLight position={[3, 3, -3]} intensity={0.6} color="#c9a84c" />
 
       <Suspense fallback={null}>
-        <Float speed={1.1} rotationIntensity={0.25} floatIntensity={0.8}>
-          <BusinessCard />
-        </Float>
-        <Float speed={1.5} rotationIntensity={0.6} floatIntensity={1.2}>
-          <StampRing />
-        </Float>
-        <Float speed={0.8} rotationIntensity={0.3} floatIntensity={0.6}>
-          <DocumentPlane />
-        </Float>
-
-        <Sparkles
-          count={isMobile ? 20 : 45}
-          size={3}
-          scale={[8, 5, 4]}
-          speed={0.4}
-          color="#c9a84c"
-          opacity={0.7}
-        />
-
+        <ResponsiveScene />
         <Environment preset="city" />
       </Suspense>
     </Canvas>
@@ -279,3 +237,4 @@ const BusinessCardHero3D = () => {
 };
 
 export default BusinessCardHero3D;
+
