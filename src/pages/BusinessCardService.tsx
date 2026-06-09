@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PageBreadcrumb from "@/components/PageBreadcrumb";
+
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -198,12 +198,6 @@ const BusinessCardService = () => {
         <Header />
 
         <main>
-          <PageBreadcrumb
-            items={[
-              { label: "خدمات", href: "/services" },
-              { label: "اخذ کارت بازرگانی" },
-            ]}
-          />
 
           {/* Hero */}
           <section className="relative overflow-hidden">
