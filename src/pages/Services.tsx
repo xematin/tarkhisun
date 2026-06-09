@@ -224,30 +224,30 @@ const Services = () => {
           </section>
 
           {/* Services Glass Grid */}
-          <section id="services-grid" className="relative py-20 bg-background">
+          <section id="services-grid" className="relative py-12 sm:py-20 bg-background">
             <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
               <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
               <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
             </div>
 
             <div className="container mx-auto px-4 relative" dir="rtl">
-              <div className="text-center mb-14 max-w-2xl mx-auto">
-                <h2 className="heading-secondary mb-4 text-persian">
+              <div className="text-center mb-10 sm:mb-14 max-w-2xl mx-auto">
+                <h2 className="heading-secondary mb-3 sm:mb-4 text-persian">
                   هر <strong>خدمت</strong> یک پرونده موفق
                 </h2>
-                <p className="text-muted-foreground text-persian text-lg">
+                <p className="text-muted-foreground text-persian text-base sm:text-lg">
                   ۸ سرفصل خدماتی برای پوشش کامل تجارت خارجی شما
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {services.map((s, i) => {
                   const Icon = s.icon;
                   return (
                     <Link
                       key={i}
                       to={s.link}
-                      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-accent/40"
+                      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-4 sm:p-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-accent/40"
                       style={{
                         boxShadow: "0 8px 32px -8px hsl(var(--primary) / 0.08)",
                       }}
@@ -259,19 +259,19 @@ const Services = () => {
                       />
 
                       <div className="relative">
-                        <div className="w-14 h-14 mb-5 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
-                          <Icon className="w-7 h-7 text-white" strokeWidth={1.8} />
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 mb-4 sm:mb-5 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                          <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={1.8} />
                         </div>
 
-                        <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-accent-dark transition-colors text-persian">
+                        <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-foreground group-hover:text-accent-dark transition-colors text-persian">
                           <strong>{s.title}</strong>
                         </h3>
 
-                        <p className="text-sm text-muted-foreground mb-5 leading-relaxed text-persian min-h-[60px]">
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 leading-relaxed text-persian min-h-[48px] sm:min-h-[60px]">
                           {s.description}
                         </p>
 
-                        <ul className="space-y-2 mb-5">
+                        <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-5">
                           {s.features.map((f, fi) => (
                             <li key={fi} className="flex items-center text-xs text-muted-foreground text-persian">
                               <div className="w-1.5 h-1.5 bg-accent rounded-full ml-2 flex-shrink-0" />
@@ -280,7 +280,7 @@ const Services = () => {
                           ))}
                         </ul>
 
-                        <div className="pt-4 border-t border-border/60 flex items-center justify-between text-accent-dark font-semibold text-sm text-persian">
+                        <div className="pt-3 sm:pt-4 border-t border-border/60 flex items-center justify-between text-accent-dark font-semibold text-sm text-persian">
                           <span>اطلاعات بیشتر</span>
                           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         </div>
