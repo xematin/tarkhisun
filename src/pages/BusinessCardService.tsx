@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/select";
 import { submitLead, normalizeDigits, isValidIranMobile } from "@/lib/lead-tracking";
 
-const Hero3D = lazy(() => import("@/components/services/Hero3D"));
+const Hero3D = lazy(() => import("@/components/services/BusinessCardHero3D"));
 
 const cardTypes = [
   {
