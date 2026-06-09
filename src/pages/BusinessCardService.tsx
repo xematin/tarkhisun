@@ -613,8 +613,8 @@ const BusinessCardService = () => {
                       تماس مستقیم
                     </a>
                     <button
-                      onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-7 py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      disabled
+                      className="px-7 py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white/60 font-bold text-persian cursor-not-allowed opacity-60"
                     >
                       چت با ترخیصان‌یار
                     </button>
