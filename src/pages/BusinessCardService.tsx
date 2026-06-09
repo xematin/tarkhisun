@@ -225,7 +225,11 @@ const BusinessCardService = () => {
                   </div>
 
                   <h1 className="heading-primary !text-white mb-6 text-persian leading-tight">
-                    اخذ <strong>کارت بازرگانی</strong> حقیقی، حقوقی، تولیدی و موردی
+                    اخذ <strong>کارت بازرگانی</strong>
+                    <br className="md:hidden" />
+                    <span className="md:hidden"> </span>
+                    <span className="hidden md:inline"> </span>
+                    حقیقی، حقوقی، تولیدی و موردی
                   </h1>
 
                   <p className="text-lg md:text-xl text-white/85 mb-8 text-persian leading-relaxed">
