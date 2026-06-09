@@ -316,30 +316,30 @@ const Services = () => {
           </section>
 
           {/* CTA */}
-          <section className="py-20 bg-background">
+          <section className="py-12 sm:py-20 bg-background">
             <div className="container mx-auto px-4" dir="rtl">
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-light to-accent p-10 md:p-16 text-center text-white">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-light to-accent p-6 sm:p-10 md:p-16 text-center text-white">
                 <div className="absolute inset-0 opacity-30" aria-hidden="true">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
                   <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-300/20 rounded-full blur-3xl" />
                 </div>
                 <div className="relative max-w-2xl mx-auto">
-                  <h2 className="heading-secondary !text-white mb-4 text-persian">
+                  <h2 className="heading-secondary !text-white mb-3 sm:mb-4 text-persian">
                     نیاز به <strong>مشاوره تخصصی</strong> دارید؟
                   </h2>
-                  <p className="text-white/85 mb-8 text-lg text-persian">
+                  <p className="text-white/85 mb-6 sm:mb-8 text-base sm:text-lg text-persian">
                     کارشناسان ترخیصان آماده ارائه مشاوره رایگان و بررسی پرونده شما هستند.
                   </p>
-                  <div className="flex flex-wrap gap-4 justify-center">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
                     <Link
                       to="/#contact"
-                      className="px-7 py-3.5 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+                      className="px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-center"
                     >
                       درخواست مشاوره رایگان
                     </Link>
                     <button
                       onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-7 py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      className="px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white font-bold text-persian hover:bg-white/20 transition-all"
                     >
                       چت با ترخیصان‌یار
                     </button>
