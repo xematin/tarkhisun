@@ -236,6 +236,9 @@ const BusinessCardGuide = () => {
               {/* Requirements Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">شرایط دریافت کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  پیش از <Link to="/business-card" className="text-accent hover:underline">اقدام برای اخذ کارت بازرگانی</Link> باید از داشتن تمامی شرایط زیر اطمینان حاصل کنید. تیم ترخیصان در تمام این مراحل همراه شما خواهد بود.
+                </p>
                 
                 <div className="bg-secondary/30 rounded-xl p-6 mb-6">
                   <h3 className="heading-tertiary mb-4 text-persian">برای اشخاص حقیقی:</h3>
@@ -293,6 +296,9 @@ const BusinessCardGuide = () => {
               {/* Documents Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مدارک لازم برای صدور کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  جمع‌آوری و تنظیم صحیح مدارک، مهم‌ترین گام برای <Link to="/business-card" className="text-accent hover:underline">دریافت کارت بازرگانی بدون ریجکتی</Link> است. در ادامه فهرست مدارک مورد نیاز برای هر دو گروه حقیقی و حقوقی آمده است.
+                </p>
                 
                 <Card className="card-service mb-6">
                   <CardHeader>
@@ -368,6 +374,9 @@ const BusinessCardGuide = () => {
               {/* Process Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مراحل دریافت کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  فرآیند <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی</Link> شامل چند مرحله مشخص است که با رعایت دقیق آن‌ها می‌توانید در کمترین زمان ممکن کارت خود را دریافت کنید. تیم ترخیصان آماده انجام این مراحل به نیابت از شما است.
+                </p>
                 
                 <div className="space-y-4">
                   <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
