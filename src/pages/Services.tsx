@@ -171,33 +171,33 @@ const Services = () => {
               />
             </div>
 
-            <div className="container mx-auto px-4 py-16 lg:py-24 relative" dir="rtl">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="container mx-auto px-4 py-10 sm:py-16 lg:py-24 relative" dir="rtl">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 {/* Text */}
-                <div className="text-white">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span className="text-sm text-persian">خدمات تخصصی ترخیصان</span>
+                <div className="text-white order-2 lg:order-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+                    <span className="text-xs sm:text-sm text-persian">خدمات تخصصی ترخیصان</span>
                   </div>
 
-                  <h1 className="heading-primary !text-white mb-6 text-persian leading-tight">
+                  <h1 className="heading-primary !text-white mb-4 sm:mb-6 text-persian leading-tight">
                     خدمات تخصصی ترخیص و امور گمرکی
                   </h1>
 
-                  <p className="text-lg md:text-xl text-white/85 mb-8 text-persian leading-relaxed">
+                  <p className="text-base sm:text-lg md:text-xl text-white/85 mb-6 sm:mb-8 text-persian leading-relaxed">
                     از ترخیص کالا تا اخذ کارت بازرگانی، تمام نیازهای تجارت بین‌الملل شما را با تیم مجرب و فناوری روز پوشش می‌دهیم.
                   </p>
 
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                     <a
                       href="#services-grid"
-                      className="px-6 py-3 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+                      className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-center"
                     >
                       مشاهده خدمات
                     </a>
                     <button
                       onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-persian hover:bg-white/20 transition-all"
                     >
                       مشاوره با ترخیصان‌یار
                     </button>
@@ -205,11 +205,11 @@ const Services = () => {
                 </div>
 
                 {/* 3D Canvas */}
-                <div className="relative h-[380px] md:h-[460px] lg:h-[520px]">
+                <div className="relative h-[220px] sm:h-[300px] md:h-[400px] lg:h-[520px] order-1 lg:order-2">
                   <Suspense
                     fallback={
                       <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-md animate-pulse" />
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white/10 backdrop-blur-md animate-pulse" />
                       </div>
                     }
                   >
@@ -224,30 +224,30 @@ const Services = () => {
           </section>
 
           {/* Services Glass Grid */}
-          <section id="services-grid" className="relative py-20 bg-background">
+          <section id="services-grid" className="relative py-12 sm:py-20 bg-background">
             <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
               <div className="absolute top-1/4 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
               <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
             </div>
 
             <div className="container mx-auto px-4 relative" dir="rtl">
-              <div className="text-center mb-14 max-w-2xl mx-auto">
-                <h2 className="heading-secondary mb-4 text-persian">
+              <div className="text-center mb-10 sm:mb-14 max-w-2xl mx-auto">
+                <h2 className="heading-secondary mb-3 sm:mb-4 text-persian">
                   هر <strong>خدمت</strong> یک پرونده موفق
                 </h2>
-                <p className="text-muted-foreground text-persian text-lg">
+                <p className="text-muted-foreground text-persian text-base sm:text-lg">
                   ۸ سرفصل خدماتی برای پوشش کامل تجارت خارجی شما
                 </p>
               </div>
 
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {services.map((s, i) => {
                   const Icon = s.icon;
                   return (
                     <Link
                       key={i}
                       to={s.link}
-                      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-accent/40"
+                      className="group relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-4 sm:p-6 transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-accent/40"
                       style={{
                         boxShadow: "0 8px 32px -8px hsl(var(--primary) / 0.08)",
                       }}
@@ -259,19 +259,19 @@ const Services = () => {
                       />
 
                       <div className="relative">
-                        <div className="w-14 h-14 mb-5 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
-                          <Icon className="w-7 h-7 text-white" strokeWidth={1.8} />
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 mb-4 sm:mb-5 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-110 transition-transform">
+                          <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" strokeWidth={1.8} />
                         </div>
 
-                        <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-accent-dark transition-colors text-persian">
+                        <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-foreground group-hover:text-accent-dark transition-colors text-persian">
                           <strong>{s.title}</strong>
                         </h3>
 
-                        <p className="text-sm text-muted-foreground mb-5 leading-relaxed text-persian min-h-[60px]">
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 leading-relaxed text-persian min-h-[48px] sm:min-h-[60px]">
                           {s.description}
                         </p>
 
-                        <ul className="space-y-2 mb-5">
+                        <ul className="space-y-1.5 sm:space-y-2 mb-4 sm:mb-5">
                           {s.features.map((f, fi) => (
                             <li key={fi} className="flex items-center text-xs text-muted-foreground text-persian">
                               <div className="w-1.5 h-1.5 bg-accent rounded-full ml-2 flex-shrink-0" />
@@ -280,7 +280,7 @@ const Services = () => {
                           ))}
                         </ul>
 
-                        <div className="pt-4 border-t border-border/60 flex items-center justify-between text-accent-dark font-semibold text-sm text-persian">
+                        <div className="pt-3 sm:pt-4 border-t border-border/60 flex items-center justify-between text-accent-dark font-semibold text-sm text-persian">
                           <span>اطلاعات بیشتر</span>
                           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         </div>
@@ -293,21 +293,21 @@ const Services = () => {
           </section>
 
           {/* Stats Section */}
-          <section className="py-20 bg-gradient-to-br from-secondary/50 via-background to-accent/5">
+          <section className="py-12 sm:py-20 bg-gradient-to-br from-secondary/50 via-background to-accent/5">
             <div className="container mx-auto px-4" dir="rtl">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {stats.map((s, i) => {
                   const Icon = s.icon;
                   return (
                     <div
                       key={i}
-                      className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-6 text-center"
+                      className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-4 sm:p-6 text-center"
                     >
-                      <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-white" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
-                      <div className="text-3xl font-bold text-primary mb-1 text-persian">{s.value}</div>
-                      <div className="text-sm text-muted-foreground text-persian">{s.label}</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 text-persian">{s.value}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground text-persian">{s.label}</div>
                     </div>
                   );
                 })}
@@ -316,30 +316,30 @@ const Services = () => {
           </section>
 
           {/* CTA */}
-          <section className="py-20 bg-background">
+          <section className="py-12 sm:py-20 bg-background">
             <div className="container mx-auto px-4" dir="rtl">
-              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-light to-accent p-10 md:p-16 text-center text-white">
+              <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary-light to-accent p-6 sm:p-10 md:p-16 text-center text-white">
                 <div className="absolute inset-0 opacity-30" aria-hidden="true">
                   <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full blur-3xl" />
                   <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-300/20 rounded-full blur-3xl" />
                 </div>
                 <div className="relative max-w-2xl mx-auto">
-                  <h2 className="heading-secondary !text-white mb-4 text-persian">
+                  <h2 className="heading-secondary !text-white mb-3 sm:mb-4 text-persian">
                     نیاز به <strong>مشاوره تخصصی</strong> دارید؟
                   </h2>
-                  <p className="text-white/85 mb-8 text-lg text-persian">
+                  <p className="text-white/85 mb-6 sm:mb-8 text-base sm:text-lg text-persian">
                     کارشناسان ترخیصان آماده ارائه مشاوره رایگان و بررسی پرونده شما هستند.
                   </p>
-                  <div className="flex flex-wrap gap-4 justify-center">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
                     <Link
                       to="/#contact"
-                      className="px-7 py-3.5 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+                      className="px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-center"
                     >
                       درخواست مشاوره رایگان
                     </Link>
                     <button
                       onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-7 py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      className="px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-xl bg-white/10 backdrop-blur-md border border-white/40 text-white font-bold text-persian hover:bg-white/20 transition-all"
                     >
                       چت با ترخیصان‌یار
                     </button>

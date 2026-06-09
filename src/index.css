@@ -510,12 +510,12 @@
 
   /* Persian Typography */
   .heading-primary {
-    @apply text-4xl md:text-6xl font-bold text-primary leading-tight;
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary leading-tight;
     font-family: 'Noto Sans Arabic', sans-serif;
   }
 
   .heading-secondary {
-    @apply text-2xl md:text-4xl font-semibold text-primary;
+    @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold text-primary;
     font-family: 'Noto Sans Arabic', sans-serif;
   }
 
