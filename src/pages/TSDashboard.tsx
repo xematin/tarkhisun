@@ -396,4 +396,230 @@ const CardsEntry = () => (
   </Card>
 );
 
+// ============================================================
+// Business card consultation panel
+// ============================================================
+interface ConsultRow {
+  id: number;
+  phone: string;
+  source: string;
+  ip: string | null;
+  note: string | null;
+  status: "new" | "contacted" | "done" | "rejected";
+  created_at: string;
+  updated_at: string;
+}
+
+const STATUS_LABEL: Record<ConsultRow["status"], string> = {
+  new: "جدید",
+  contacted: "در حال تماس",
+  done: "انجام شد",
+  rejected: "رد شده",
+};
+
+const STATUS_VARIANT: Record<ConsultRow["status"], "default" | "secondary" | "outline" | "destructive"> = {
+  new: "default",
+  contacted: "secondary",
+  done: "outline",
+  rejected: "destructive",
+};
+
+const CardConsultPanel = () => {
+  const { toast } = useToast();
+  const [items, setItems] = useState<ConsultRow[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
+  const [q, setQ] = useState("");
+  const [status, setStatus] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+  const [drafts, setDrafts] = useState<Record<number, { status?: string; note?: string }>>({});
+
+  const limit = 25;
+  const totalPages = Math.max(1, Math.ceil(total / limit));
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const qs = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        q,
+        status,
+      });
+      const res = await api<{ items: ConsultRow[]; total: number }>(
+        `/api/admin/card-consult-list.php?${qs.toString()}`
+      );
+      setItems(res.items);
+      setTotal(res.total);
+      setDrafts({});
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  }, [page, q, status, toast]);
+
+  useEffect(() => { void load(); }, [load]);
+
+  const handleDelete = async (id: number) => {
+    if (!confirm("این درخواست حذف شود؟")) return;
+    try {
+      await api("/api/admin/card-consult-delete.php", {
+        method: "POST", body: JSON.stringify({ id }),
+      });
+      toast({ title: "حذف شد" });
+      void load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
+  const handleSave = async (row: ConsultRow) => {
+    const d = drafts[row.id];
+    if (!d) return;
+    try {
+      await api("/api/admin/card-consult-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: row.id,
+          status: d.status ?? row.status,
+          note: d.note ?? row.note ?? "",
+        }),
+      });
+      toast({ title: "ذخیره شد" });
+      void load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            <BookOpen className="w-5 h-5" /> مشاوره کارت بازرگانی <Badge variant="secondary">{total}</Badge>
+          </CardTitle>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative">
+              <Search className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                value={q}
+                onChange={(e) => { setPage(1); setQ(e.target.value); }}
+                placeholder="جستجوی شماره"
+                className="h-9 pr-8 w-44 text-persian"
+              />
+            </div>
+            <Select value={status || "all"} onValueChange={(v) => { setPage(1); setStatus(v === "all" ? "" : v); }}>
+              <SelectTrigger className="h-9 w-36 text-persian"><SelectValue placeholder="وضعیت" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">همه</SelectItem>
+                <SelectItem value="new">جدید</SelectItem>
+                <SelectItem value="contacted">در حال تماس</SelectItem>
+                <SelectItem value="done">انجام شد</SelectItem>
+                <SelectItem value="rejected">رد شده</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button size="sm" variant="outline" onClick={() => load()}>
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+            <a href="/api/admin/card-consult-export.php" target="_blank" rel="noreferrer">
+              <Button size="sm" variant="outline" className="text-persian">
+                <Download className="w-4 h-4 ml-1" /> CSV
+              </Button>
+            </a>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {loading ? (
+          <div className="py-10 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : items.length === 0 ? (
+          <p className="py-10 text-center text-muted-foreground text-persian">درخواستی ثبت نشده است.</p>
+        ) : (
+          <>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-right text-persian">شماره</TableHead>
+                  <TableHead className="text-right text-persian">تاریخ ثبت</TableHead>
+                  <TableHead className="text-right text-persian">منبع</TableHead>
+                  <TableHead className="text-right text-persian">IP</TableHead>
+                  <TableHead className="text-right text-persian">وضعیت</TableHead>
+                  <TableHead className="text-right text-persian">یادداشت</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.map((r) => {
+                  const d = drafts[r.id] || {};
+                  const dirty = (d.status !== undefined && d.status !== r.status) ||
+                                (d.note !== undefined && d.note !== (r.note ?? ""));
+                  return (
+                    <TableRow key={r.id}>
+                      <TableCell className="font-mono" dir="ltr">
+                        <a href={`tel:${r.phone}`} className="hover:underline">{r.phone}</a>
+                      </TableCell>
+                      <TableCell className="text-persian text-xs">{fmt(r.created_at)}</TableCell>
+                      <TableCell className="text-persian text-xs">{r.source}</TableCell>
+                      <TableCell className="text-xs" dir="ltr">{r.ip || "—"}</TableCell>
+                      <TableCell>
+                        <Select
+                          value={d.status ?? r.status}
+                          onValueChange={(v) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], status: v } }))}
+                        >
+                          <SelectTrigger className="h-8 w-32 text-persian">
+                            <SelectValue>
+                              <Badge variant={STATUS_VARIANT[(d.status ?? r.status) as ConsultRow["status"]]}>
+                                {STATUS_LABEL[(d.status ?? r.status) as ConsultRow["status"]]}
+                              </Badge>
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">جدید</SelectItem>
+                            <SelectItem value="contacted">در حال تماس</SelectItem>
+                            <SelectItem value="done">انجام شد</SelectItem>
+                            <SelectItem value="rejected">رد شده</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="min-w-[180px]">
+                        <Input
+                          value={d.note ?? r.note ?? ""}
+                          onChange={(e) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], note: e.target.value } }))}
+                          placeholder="—"
+                          className="h-8 text-persian"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Button size="sm" variant="ghost" disabled={!dirty} onClick={() => handleSave(r)} title="ذخیره">
+                            <Save className={`w-4 h-4 ${dirty ? "text-primary" : "text-muted-foreground"}`} />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)}>
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between mt-4 text-persian text-sm">
+                <span>صفحه {page} از {totalPages}</span>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>قبلی</Button>
+                  <Button size="sm" variant="outline" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>بعدی</Button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
 export default TSDashboard;
