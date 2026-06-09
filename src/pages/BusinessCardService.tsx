@@ -236,11 +236,11 @@ const BusinessCardService = () => {
                       className="px-6 py-3 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all inline-flex items-center gap-2"
                     >
                       <Send className="w-4 h-4" />
-                      درخواست رایگان
+                      مشاوره رایگان
                     </a>
                     <button
-                      onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      disabled
+                      className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white/60 font-bold text-persian cursor-not-allowed opacity-60"
                     >
                       مشاوره با ترخیصان‌یار
                     </button>
