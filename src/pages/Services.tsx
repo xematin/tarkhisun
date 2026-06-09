@@ -293,21 +293,21 @@ const Services = () => {
           </section>
 
           {/* Stats Section */}
-          <section className="py-20 bg-gradient-to-br from-secondary/50 via-background to-accent/5">
+          <section className="py-12 sm:py-20 bg-gradient-to-br from-secondary/50 via-background to-accent/5">
             <div className="container mx-auto px-4" dir="rtl">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {stats.map((s, i) => {
                   const Icon = s.icon;
                   return (
                     <div
                       key={i}
-                      className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-6 text-center"
+                      className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 backdrop-blur-xl p-4 sm:p-6 text-center"
                     >
-                      <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-white" />
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-2 sm:mb-3 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
-                      <div className="text-3xl font-bold text-primary mb-1 text-persian">{s.value}</div>
-                      <div className="text-sm text-muted-foreground text-persian">{s.label}</div>
+                      <div className="text-2xl sm:text-3xl font-bold text-primary mb-1 text-persian">{s.value}</div>
+                      <div className="text-xs sm:text-sm text-muted-foreground text-persian">{s.label}</div>
                     </div>
                   );
                 })}
