@@ -1,59 +1,84 @@
 ## هدف
-جایگزینی Hero3D فعلی (کره/حلقه/ایکوزاهدرون شناور) در صفحه `/services/business-card` با یک صحنه سه‌بعدی واقعاً مرتبط با «کارت بازرگانی»: یک **کارت هوشمند سه‌بعدی** که در فضا می‌چرخد، روی آن نشان رسمی، هولوگرام طلایی، شماره کارت، و مهر «اتاق بازرگانی» حک شده، به همراه اِلمان‌های پشتیبان (مهر رسمی، برگه سند، و ذرات طلایی).
+1. تغییر دکمه «مشاوره با ترخیصان‌یار» در Hero صفحه `/services/business-card` به دکمه‌ی فعال **«راهنمای کارت بازرگانی و مراحل اخذ آن»**.
+2. با کلیک، یک **Dialog** باز شود که:
+   - شماره تماس تیم ترخیصان را نمایش دهد (قابل کلیک برای تماس مستقیم).
+   - فرم کوتاهی برای دریافت شماره تماس کاربر داشته باشد (با اعتبارسنجی فرمت `09XXXXXXXXX`).
+   - با ثبت، شماره در دیتابیس ذخیره شود تا تیم با کاربر تماس بگیرد.
+3. یک **تب/پنل جدید در پنل مدیریت `TSDashboard`** به نام **«مشاوره کارت بازرگانی»** که این درخواست‌ها را مشابه «لیدها» لیست/جستجو/حذف/خروجی CSV می‌گیرد.
 
-## ایده طراحی (Concept)
-صحنه‌ای شبیه «صدور رسمی کارت بازرگانی»:
-- **کارت اصلی (Business Card 3D):** یک مکعب نازک (BoxGeometry با ابعاد ~3.4 × 2.1 × 0.08) که نقش کارت بازرگانی را دارد.
-  - رنگ بدنه: گرادیان سبز نفتی → سرمه‌ای (هم‌خوان با برند ترخیصان).
-  - متریال: `meshPhysicalMaterial` با `clearcoat`، `metalness: 0.6`، `roughness: 0.25` تا حس کارت لمینت‌شده/هولوگرافیک بدهد.
-  - چرخش آرام حول محور Y (مثل کارت در حال نمایش)، با کمی tilt روی X.
-- **محتوای روی کارت (CanvasTexture):**
-  - بالا سمت راست: نوشته «کارت بازرگانی» با فونت فارسی.
-  - وسط: شماره کارت ساختگی `IR-1405-…`.
-  - پایین: «اتاق بازرگانی ایران» + لوگوی ساده برداری (دایره با حروف).
-  - یک نوار طلایی هولوگرام شبیه‌سازی‌شده در گوشه با `MeshTransmissionMaterial` یا یک Plane با emissive طلایی.
-- **مهر رسمی (Torus + Text):** یک حلقه نازک قرمز/طلایی پشت کارت که نقش «مهر تأیید» را بازی می‌کند و آهسته حول محور خودش می‌چرخد.
-- **برگه سند (Plane نازک سفید):** پشت کارت در زاویه کج، شبیه فرم درخواست — حس «مدارک + کارت» را می‌دهد.
-- **ذرات طلایی شناور (Sparkles از drei):** برای حس رسمی/پرستیژ بدون شلوغی.
-- **نورپردازی:** نور اصلی گرم از بالا + نور آبی-سبز از پایین برای reflectionی روی کارت + Environment preset `studio` یا `city` (همان فعلی).
+## معماری (مطابق سیستم موجود PHP/MySQL)
 
-## نتیجه بصری
-کاربر به‌جای اشکال انتزاعی، یک کارت بازرگانی واقعی می‌بیند که در فضا می‌چرخد، نور را منعکس می‌کند، و کنارش مهر و سند است — کاملاً هم‌راستا با موضوع صفحه.
+ذخیره‌سازی روی همان بک‌اند PHP فعلی (`public/api/...`) و جدول جدید `ts_card_consult` در MySQL. (سیستم با Supabase پر نشده، با PHP/MySQL کار می‌کند — همان الگوی `ts_leads` تکرار می‌شود.)
 
-## تغییرات فنی
-
-**فایل تغییر می‌کند:** فقط `src/components/services/Hero3D.tsx` (یا ساخت فایل جدید `BusinessCardHero3D.tsx` و استفاده در `BusinessCardService.tsx`).
-
-**رویکرد پیشنهادی:** ساخت کامپوننت جدید `src/components/services/BusinessCardHero3D.tsx` تا `Hero3D.tsx` فعلی برای صفحه `/services` (کلی) دست‌نخورده بماند، و فقط در صفحه اختصاصی کارت بازرگانی استفاده شود.
-
-### اجزای کد
-```text
-<Canvas>
-  ├── ambientLight + directionalLight + pointLight (طلایی)
-  ├── <Environment preset="city" />
-  ├── <Sparkles count={40} color="#c9a84c" />
-  ├── <Float> → BusinessCard (Box + CanvasTexture برای رو/پشت)
-  ├── <Float> → StampRing (Torus قرمز/طلایی)
-  └── <Float> → DocumentPlane (Plane کج پشت کارت)
+### شِما جدول جدید
+```sql
+CREATE TABLE ts_card_consult (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  phone VARCHAR(15) NOT NULL,
+  source VARCHAR(50) DEFAULT 'business-card-hero',
+  ip VARCHAR(45) NULL,
+  user_agent VARCHAR(255) NULL,
+  note VARCHAR(255) NULL,
+  status ENUM('new','contacted','done','rejected') DEFAULT 'new',
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NOT NULL,
+  INDEX idx_phone (phone),
+  INDEX idx_created (created_at)
+);
 ```
+> مهاجرت در `public/api/migrations/2026_06_09_card_consult.sql` ذخیره می‌شود و در `install.php` بارگذاری خواهد شد.
 
-### CanvasTexture برای متن فارسی روی کارت
-- ساخت `HTMLCanvasElement` 1024×640 با `2d context`.
-- رسم پس‌زمینه گرادیان + متن فارسی (`ctx.direction = 'rtl'`، فونت `Vazirmatn` یا سیستمی).
-- تبدیل به `THREE.CanvasTexture` و اعمال به `map` متریال کارت.
+### اندپوینت‌های PHP جدید
+- **`public/api/card-consult-submit.php`** (عمومی، POST): اعتبارسنجی `phone` با `ts_valid_phone`، نرمال‌سازی ارقام، ذخیره در `ts_card_consult` با IP/UA/source.
+- **`public/api/admin/card-consult-list.php`** (نیاز به ادمین، GET): pagination + جستجو روی phone، مشابه `leads.php`.
+- **`public/api/admin/card-consult-delete.php`** (POST).
+- **`public/api/admin/card-consult-export.php`** (GET → CSV).
+- **`public/api/admin/card-consult-update.php`** (POST): تغییر `status` و `note`.
 
-### پکیج‌ها
-هیچ پکیج جدیدی لازم نیست — `@react-three/fiber`, `@react-three/drei` (شامل `Sparkles`, `Float`, `Environment`)، و `three` همگی نصب‌اند.
+## تغییرات فرانت‌اند
 
-### Performance
-- `dpr={[1, 2]}` حفظ می‌شود.
-- در موبایل تعداد ذرات Sparkles به 20 کاهش (بر اساس `window.innerWidth`).
-- ارتفاع canvas روی موبایل همان `h-[220px]` فعلی.
+### 1) `src/components/business-card/CardConsultDialog.tsx` (جدید)
+- استفاده از `Dialog` (shadcn).
+- نمایش شماره تماس ثابت تیم (یک رشته متنی — **شماره دقیق از کاربر گرفته شود؛ به‌صورت پیش‌فرض `021-91006970` یا شماره موجود در Contact استفاده می‌شود**).
+- لینک `tel:` و دکمه «کپی شماره».
+- فرم: input شماره موبایل + Button «درخواست تماس از من».
+- اعتبارسنجی با `zod` (regex `^09\d{9}$` و نرمال‌سازی ارقام فارسی).
+- POST به `/api/card-consult-submit.php`، نمایش toast موفقیت/خطا، بستن دیالوگ.
 
-## فایل‌های تغییر یا ایجاد
-- **ایجاد:** `src/components/services/BusinessCardHero3D.tsx`
-- **ویرایش:** `src/pages/BusinessCardService.tsx` — جایگزینی import از `Hero3D` با `BusinessCardHero3D` در بخش Hero.
+### 2) `src/pages/BusinessCardService.tsx`
+- خطوط 241-246: حذف دکمه disabled فعلی، جایگزینی با دکمه فعال:
+  ```tsx
+  <button onClick={() => setConsultOpen(true)} className="px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-persian transition-all inline-flex items-center gap-2">
+    <BookOpen className="w-4 h-4" />
+    راهنمای کارت بازرگانی و مراحل اخذ آن
+  </button>
+  ```
+- State جدید `consultOpen` و رندر `<CardConsultDialog open={consultOpen} onOpenChange={setConsultOpen} />` در انتهای کامپوننت.
+
+### 3) `src/pages/TSDashboard.tsx`
+- تبدیل ساختار فعلی (تک‌قطعه `LeadsPanel + CardsEntry`) به سیستم تب‌محور با `Tabs` از shadcn:
+  - تب 1: **لیدها** (`LeadsPanel` فعلی).
+  - تب 2: **مشاوره کارت بازرگانی** (`CardConsultPanel` جدید).
+  - تب 3: **کارت‌های مشتریان** (`CardsEntry` فعلی).
+- کامپوننت جدید `CardConsultPanel` کاملاً موازی با `LeadsPanel` (جدول، جستجو، صفحه‌بندی، حذف، CSV) با ستون‌های: شماره، تاریخ ثبت، IP، وضعیت (Select قابل تغییر inline: جدید/در حال تماس/انجام شد/رد شده)، یادداشت.
+
+## فایل‌های ایجاد/تغییر
+**ایجاد:**
+- `public/api/migrations/2026_06_09_card_consult.sql`
+- `public/api/card-consult-submit.php`
+- `public/api/admin/card-consult-list.php`
+- `public/api/admin/card-consult-delete.php`
+- `public/api/admin/card-consult-export.php`
+- `public/api/admin/card-consult-update.php`
+- `src/components/business-card/CardConsultDialog.tsx`
+
+**ویرایش:**
+- `public/api/install.php` (اجرای migration جدید)
+- `src/pages/BusinessCardService.tsx` (دکمه + دیالوگ)
+- `src/pages/TSDashboard.tsx` (تب‌بندی + پنل جدید)
 
 ## خارج از محدوده
-- صفحه `/services` (کلی) دست نمی‌خورد — `Hero3D.tsx` فعلی همان‌جا باقی می‌ماند.
-- محتوای متنی، CTA، فرم، و SEO صفحه business-card بدون تغییر.
+- صحنه 3D، فرم اصلی «درخواست رایگان» موجود در صفحه، و سایر بخش‌های صفحه دست‌نخورده باقی می‌مانند.
+
+## نکته نیاز به تأیید کاربر
+**شماره تماس تیم ترخیصان** که در دیالوگ نمایش داده می‌شود چه باشد؟ اگر مشخص نکنید، از همان شماره‌ای که در بخش «تماس با ما» سایت موجود است استفاده می‌کنم.
