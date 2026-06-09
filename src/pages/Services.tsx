@@ -115,27 +115,37 @@ const Services = () => {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "خانه", item: "https://tarkhisun.com/" },
+      { "@type": "ListItem", position: 2, name: "خدمات", item: "https://tarkhisun.com/services" },
+    ],
+  };
+
   return (
     <>
       <Helmet>
-        <title>خدمات تخصصی ترخیص و امور گمرکی | ترخیص کالا و کارت بازرگانی</title>
+        <title>خدمات تخصصی ترخیص کالا و کارت بازرگانی در بندرعباس</title>
         <meta
           name="description"
-          content="خدمات تخصصی ترخیص کالا، اخذ کارت بازرگانی، صدور مجوز، مشاوره گمرکی، بیمه و حمل بین‌المللی در بندرعباس و سراسر ایران"
+          content="خدمات تخصصی ترخیص کالا، اخذ کارت بازرگانی، صدور مجوز، مشاوره گمرکی، بیمه و حمل بین‌المللی در بندرعباس شهید رجایی."
         />
         <meta
           name="keywords"
-          content="خدمات ترخیص کالا, اخذ کارت بازرگانی, مشاوره گمرکی, ترخیص بندرعباس, صدور مجوز, حمل بین‌المللی, ترخیص کار رسمی"
+          content="خدمات ترخیص کالا, اخذ کارت بازرگانی, مشاوره گمرکی بندرعباس, ترخیص بندر شهید رجایی, صدور مجوز, حمل بین‌المللی, کوتاژ گمرکی, ترخیص کار رسمی"
         />
         <meta property="og:title" content="خدمات تخصصی ترخیص و امور گمرکی" />
         <meta
           property="og:description"
-          content="ترخیص کالا، اخذ کارت بازرگانی، صدور مجوز، مشاوره گمرکی و حمل بین‌المللی با تیم متخصص"
+          content="ترخیص کالا، اخذ کارت بازرگانی، صدور مجوز، مشاوره گمرکی و حمل بین‌المللی با تیم متخصص ترخیصان."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://tarkhisun.com/services" />
         <meta property="og:locale" content="fa_IR" />
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-background">
