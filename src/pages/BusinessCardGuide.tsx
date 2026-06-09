@@ -637,14 +637,14 @@ const BusinessCardGuide = () => {
                       تیم ترخیصان آماده است تا در تمامی مراحل دریافت کارت بازرگانی و امور گمرکی شما را همراهی کند
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                      <Link to="/#contact">
+                      <Link to="/business-card">
                         <Button size="lg" className="text-persian">
-                          تماس با ما
+                          درخواست اخذ کارت بازرگانی
                         </Button>
                       </Link>
-                      <Link to="/blog">
+                      <Link to="/#contact">
                         <Button variant="outline" size="lg" className="text-persian">
-                          مقالات بیشتر
+                          تماس با ما
                         </Button>
                       </Link>
                     </div>
