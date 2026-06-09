@@ -152,10 +152,8 @@ const Services = () => {
         <Header />
 
         <main>
-          <PageBreadcrumb items={[{ label: "خدمات" }]} />
-
           {/* Hero with 3D */}
-          <section className="relative overflow-hidden">
+          <section className="relative overflow-hidden -mt-[68px] pt-[68px]">
             {/* Gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary to-primary-light" aria-hidden="true" />
             {/* Animated blobs */}
