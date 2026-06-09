@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Search, Trash2, Download, RefreshCw, ArrowRight, Phone, CreditCard } from "lucide-react";
+import { Loader2, LogOut, Search, Trash2, Download, RefreshCw, ArrowRight, Phone, CreditCard, BookOpen, Save } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,10 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
 type AdminState = "loading" | "setup" | "login" | "auth";
@@ -101,10 +105,16 @@ const TSDashboard = () => {
           {state === "setup" && <SetupForm onDone={refreshAuth} />}
           {state === "login" && <LoginForm onDone={refreshAuth} />}
           {state === "auth" && (
-            <div className="space-y-6">
-              <LeadsPanel />
-              <CardsEntry />
-            </div>
+            <Tabs defaultValue="leads" className="space-y-6">
+              <TabsList className="text-persian">
+                <TabsTrigger value="leads">لیدها</TabsTrigger>
+                <TabsTrigger value="card-consult">مشاوره کارت بازرگانی</TabsTrigger>
+                <TabsTrigger value="cards">کارت‌های مشتریان</TabsTrigger>
+              </TabsList>
+              <TabsContent value="leads"><LeadsPanel /></TabsContent>
+              <TabsContent value="card-consult"><CardConsultPanel /></TabsContent>
+              <TabsContent value="cards"><CardsEntry /></TabsContent>
+            </Tabs>
           )}
         </main>
       </div>
