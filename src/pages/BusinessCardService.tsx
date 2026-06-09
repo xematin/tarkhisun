@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ServicesSection from "@/components/Services";
 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -590,6 +591,9 @@ const BusinessCardService = () => {
               </Link>
             </div>
           </section>
+
+          {/* Other services */}
+          <ServicesSection />
 
           {/* Final CTA */}
           <section className="py-20 bg-background">

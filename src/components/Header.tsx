@@ -96,16 +96,51 @@ const Header = () => {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 flex-1 justify-center">
-            {navItems.map((item) => (
-              <a
-                key={item.title}
-                href={item.href}
-                className={`pill-nav-link text-persian ${isActive(item.href) ? "pill-nav-active" : ""}`}
-              >
-                {item.title}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const hasChildren = item.children && item.children.length > 0;
+              if (!hasChildren) {
+                return (
+                  <a
+                    key={item.title}
+                    href={item.href}
+                    className={`pill-nav-link text-persian ${isActive(item.href) ? "pill-nav-active" : ""}`}
+                  >
+                    {item.title}
+                  </a>
+                );
+              }
+              return (
+                <div key={item.title} className="relative group">
+                  <a
+                    href={item.href}
+                    className={`pill-nav-link text-persian inline-flex items-center gap-1 ${isActive(item.href) ? "pill-nav-active" : ""}`}
+                  >
+                    {item.title}
+                    <ChevronDown className="w-3.5 h-3.5 opacity-70 transition-transform group-hover:rotate-180" />
+                  </a>
+                  {/* Hover bridge to avoid gap flicker */}
+                  <div className="absolute right-0 left-0 top-full h-3" aria-hidden="true" />
+                  <div
+                    className="absolute right-0 top-[calc(100%+0.5rem)] min-w-[220px] opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 focus-within:opacity-100 focus-within:visible focus-within:translate-y-0 transition-all duration-200 z-50"
+                    role="menu"
+                  >
+                    <div className="glass-card p-2 flex flex-col gap-1">
+                      {item.children!.map((child) => (
+                        <a
+                          key={child.title}
+                          href={child.href}
+                          className={`pill-row text-persian text-sm ${isActive(child.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
+                        >
+                          <span>{child.title}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </nav>
+
 
           {/* Desktop CTA */}
           <a
