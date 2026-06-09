@@ -639,6 +639,7 @@ const BusinessCardService = () => {
 
         <Footer />
       </div>
+      <CardConsultDialog open={consultOpen} onOpenChange={setConsultOpen} />
     </>
   );
 };
