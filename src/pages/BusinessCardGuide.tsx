@@ -115,7 +115,7 @@ const BusinessCardGuide = () => {
               </div>
 
               <p className="text-xl text-muted-foreground text-persian leading-relaxed">
-                کارت بازرگانی یکی از مهم‌ترین مدارک برای فعالیت در حوزه تجارت خارجی است. در این مقاله به طور کامل با تعریف، انواع، شرایط دریافت و مدارک لازم برای صدور کارت بازرگانی آشنا می‌شوید.
+                <strong>کارت بازرگانی</strong> یکی از مهم‌ترین مدارک برای فعالیت در حوزه تجارت خارجی است. در این مقاله به طور کامل با تعریف، انواع، شرایط دریافت و مدارک لازم برای <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی</Link> آشنا می‌شوید.
               </p>
             </div>
           </div>
@@ -138,7 +138,7 @@ const BusinessCardGuide = () => {
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">کارت بازرگانی چیست؟</h2>
                 <p className="text-body mb-6 text-persian">
-                  <strong>کارت بازرگانی</strong> سندی است که توسط اتاق بازرگانی، صنایع، معادن و کشاورزی ایران صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات و صادرات</Link> انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است.
+                  <strong>کارت بازرگانی</strong> سندی است که توسط اتاق بازرگانی، صنایع، معادن و کشاورزی ایران صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات و صادرات</Link> انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است. اگر به دنبال <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی حقیقی، حقوقی یا موردی</Link> هستید، مجموعه ترخیصان به‌صورت تخصصی شما را همراهی می‌کند.
                 </p>
                 <p className="text-body mb-6 text-persian">
                   داشتن کارت بازرگانی برای تمامی اشخاص حقیقی و حقوقی که قصد ورود به عرصه تجارت خارجی را دارند، الزامی است و بدون آن امکان ثبت سفارش، <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا از گمرک</Link> و انجام فعالیت‌های صادراتی وجود ندارد.
@@ -193,13 +193,17 @@ const BusinessCardGuide = () => {
                   </Card>
                 </div>
 
+                <p className="text-body mb-6 text-persian">
+                  انتخاب نوع کارت بازرگانی بستگی به ماهیت فعالیت تجاری شما دارد. برای راهنمایی دقیق‌تر در <Link to="/business-card" className="text-accent hover:underline">انتخاب و اخذ کارت بازرگانی مناسب</Link> با کارشناسان ترخیصان مشورت کنید.
+                </p>
+
                 <h3 className="heading-tertiary mb-4 mt-8 text-persian">تقسیم‌بندی بر اساس نوع درخواست</h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   <Card className="card-service">
                     <CardContent className="pt-6">
                       <h4 className="text-persian mb-2"><strong>کارت بازرگانی تولیدی</strong></h4>
                       <p className="text-sm text-muted-foreground text-persian">
-                        مخصوص واحدهای تولیدی دارای پروانه بهره‌برداری برای واردات مواد اولیه و ماشین‌آلات و صادرات محصولات تولیدی.
+                        مخصوص واحدهای تولیدی دارای پروانه بهره‌برداری برای واردات مواد اولیه و ماشین‌آلات و صادرات محصولات تولیدی. جهت <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی تولیدی</Link> مدارک مخصوص صنعتی مورد نیاز است.
                       </p>
                     </CardContent>
                   </Card>
@@ -207,7 +211,7 @@ const BusinessCardGuide = () => {
                     <CardContent className="pt-6">
                       <h4 className="text-persian mb-2"><strong>کارت بازرگانی خدماتی</strong></h4>
                       <p className="text-sm text-muted-foreground text-persian">
-                        برای شرکت‌ها و افرادی که در حوزه ارائه خدمات بین‌المللی فعالیت می‌کنند.
+                        برای شرکت‌ها و افرادی که در حوزه ارائه خدمات بین‌المللی فعالیت می‌کنند. برای <Link to="/business-card" className="text-accent hover:underline">دریافت کارت بازرگانی خدماتی</Link> باید مجوزهای مربوط به حوزه فعالیت خود را داشته باشید.
                       </p>
                     </CardContent>
                   </Card>
@@ -215,7 +219,7 @@ const BusinessCardGuide = () => {
                     <CardContent className="pt-6">
                       <h4 className="text-persian mb-2"><strong>کارت بازرگانی موردی</strong></h4>
                       <p className="text-sm text-muted-foreground text-persian">
-                        برای انجام یک‌بار واردات یا صادرات محدود به یک محموله خاص و در زمان مشخص صادر می‌شود.
+                        برای انجام یک‌بار واردات یا صادرات محدود به یک محموله خاص و در زمان مشخص صادر می‌شود. <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی موردی</Link> سریع‌تر و با مدارک کم‌تری انجام می‌شود.
                       </p>
                     </CardContent>
                   </Card>
@@ -232,6 +236,9 @@ const BusinessCardGuide = () => {
               {/* Requirements Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">شرایط دریافت کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  پیش از <Link to="/business-card" className="text-accent hover:underline">اقدام برای اخذ کارت بازرگانی</Link> باید از داشتن تمامی شرایط زیر اطمینان حاصل کنید. تیم ترخیصان در تمام این مراحل همراه شما خواهد بود.
+                </p>
                 
                 <div className="bg-secondary/30 rounded-xl p-6 mb-6">
                   <h3 className="heading-tertiary mb-4 text-persian">برای اشخاص حقیقی:</h3>
@@ -289,6 +296,9 @@ const BusinessCardGuide = () => {
               {/* Documents Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مدارک لازم برای صدور کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  جمع‌آوری و تنظیم صحیح مدارک، مهم‌ترین گام برای <Link to="/business-card" className="text-accent hover:underline">دریافت کارت بازرگانی بدون ریجکتی</Link> است. در ادامه فهرست مدارک مورد نیاز برای هر دو گروه حقیقی و حقوقی آمده است.
+                </p>
                 
                 <Card className="card-service mb-6">
                   <CardHeader>
@@ -364,6 +374,9 @@ const BusinessCardGuide = () => {
               {/* Process Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مراحل دریافت کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  فرآیند <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی</Link> شامل چند مرحله مشخص است که با رعایت دقیق آن‌ها می‌توانید در کمترین زمان ممکن کارت خود را دریافت کنید. تیم ترخیصان آماده انجام این مراحل به نیابت از شما است.
+                </p>
                 
                 <div className="space-y-4">
                   <div className="bg-gradient-to-l from-accent/15 to-accent/5 border-r-4 border-accent rounded-lg p-6">
@@ -609,7 +622,7 @@ const BusinessCardGuide = () => {
                   کارت بازرگانی دروازه ورود به دنیای تجارت بین‌المللی است. داشتن این کارت نه‌تنها یک الزام قانونی، بلکه نشان‌دهنده جدیت و حرفه‌ای بودن شما در فضای تجاری است. با آگاهی از شرایط، مدارک لازم و مراحل دریافت، می‌توانید به‌راحتی این کارت را دریافت کرده و فعالیت تجاری خود را آغاز کنید.
                 </p>
                 <p className="text-body text-persian">
-                  برای راهنمایی و مشاوره در زمینه دریافت کارت بازرگانی و انجام امور گمرکی، تیم متخصص ترخیصان آماده خدمت‌رسانی به شما عزیزان است.
+                  اگر قصد <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی حقیقی، حقوقی، تولیدی یا موردی</Link> را دارید، تیم متخصص ترخیصان با سال‌ها تجربه در امور گمرکی و بازرگانی، آماده است تا در تمامی مراحل ثبت‌نام، تهیه مدارک و پیگیری فرآیند صدور کارت شما را همراهی کند.
                 </p>
               </section>
 
@@ -624,14 +637,14 @@ const BusinessCardGuide = () => {
                       تیم ترخیصان آماده است تا در تمامی مراحل دریافت کارت بازرگانی و امور گمرکی شما را همراهی کند
                     </p>
                     <div className="flex flex-wrap justify-center gap-4">
-                      <Link to="/#contact">
+                      <Link to="/business-card">
                         <Button size="lg" className="text-persian">
-                          تماس با ما
+                          درخواست اخذ کارت بازرگانی
                         </Button>
                       </Link>
-                      <Link to="/blog">
+                      <Link to="/#contact">
                         <Button variant="outline" size="lg" className="text-persian">
-                          مقالات بیشتر
+                          تماس با ما
                         </Button>
                       </Link>
                     </div>
