@@ -96,7 +96,7 @@ const BusinessCardGuide = () => {
               </Link>
               
               <h1 className="heading-primary mb-6 text-persian">
-                کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور
+                کارت بازرگانی چیست؟ انواع، شرایط، معایب و افراد معاف و محروم
               </h1>
               
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-8 text-persian">
