@@ -200,7 +200,7 @@ const BusinessCardService = () => {
         <main>
 
           {/* Hero */}
-          <section className="relative overflow-hidden">
+          <section className="relative overflow-hidden -mt-[68px] pt-[68px]">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary to-primary-light" aria-hidden="true" />
             <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
               <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent/30 rounded-full blur-3xl animate-pulse" />
