@@ -49,6 +49,7 @@ const ElectricCarTariffGuide = lazy(() => import("./pages/ElectricCarTariffGuide
 const CustomsTariff2025Guide = lazy(() => import("./pages/CustomsTariff2025Guide"));
 const Budget1405Guide = lazy(() => import("./pages/Budget1405Guide"));
 const ServicesPage = lazy(() => import("./pages/Services"));
+const BusinessCardService = lazy(() => import("./pages/BusinessCardService"));
 
 const queryClient = new QueryClient();
 
@@ -110,6 +111,7 @@ const AppContent = () => {
         <Route path="/TSCardUser" element={<TSCardUser />} />
         <Route path="/install" element={<Install />} />
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services/business-card" element={<BusinessCardService />} />
         <Route path="/contact" element={<ContactRedirect />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />

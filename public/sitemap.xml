@@ -22,7 +22,14 @@
     <loc>https://tarkhisun.com/services</loc>
     <lastmod>2026-06-09</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://tarkhisun.com/services/business-card</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <url>

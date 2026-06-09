@@ -1,87 +1,110 @@
 
-# پلن اجرا
+## هدف
+ساخت صفحه اختصاصی «اخذ کارت بازرگانی» در مسیر `/services/business-card` با همان زبان طراحی شیشه‌ای + 3D صفحه `/services`، اصلاح لینک «خدمات» در هدر، تقویت سئو صفحه `/services` و افزودن صفحه جدید به sitemap.
 
-## ۱. به‌روزرسانی SEO و ساختار هدینگ‌های مقاله کارت بازرگانی
-فایل: `src/pages/BusinessCardGuide.tsx`
+## 1) صفحه جدید: `src/pages/BusinessCardService.tsx`
 
-- بازنویسی `<title>` در Helmet (طبق Core memory: حداکثر یک H1، حداکثر ۱۵۵ کاراکتر برای description، بدون برند «ترخیصان» در عنوان صفحات داخلی).
-  - title پیشنهادی: «کارت بازرگانی چیست؟ انواع، شرایط، معایب و افراد معاف و محروم»
-  - description: «راهنمای کامل کارت بازرگانی: انواع تولیدی/خدماتی/موردی، مدارک، شرایط، معایب، افراد معاف و محرومین از دریافت کارت» (زیر ۱۵۵)
-- به‌روزرسانی `keywords` با افزودن: «کارت بازرگانی تولیدی»، «کارت بازرگانی خدماتی»، «کارت بازرگانی موردی»، «معایب کارت بازرگانی»، «معافیت کارت بازرگانی»، «محرومین کارت بازرگانی».
-- به‌روزرسانی `headline` و `description` در JSON-LD Article.
-- بازبینی ساختار H1/H2/H3:
-  - یک H1 یکتا در ابتدای مقاله: «کارت بازرگانی چیست؟»
-  - هر بخش جدید که اضافه کردیم (نوع درخواست، معایب، معاف، محرومین) با `<h2>` سمنتیک باشد، نه div با کلاس heading.
-  - زیربخش‌ها (کارت تولیدی/خدماتی/موردی، ...) با `<h3>`.
-- حفظ Canonical فعلی (طبق Core memory، مقالات بلاگ canonical ندارند — اگر فعلاً وجود دارد، حذف می‌شود).
-- به‌روزرسانی og:title / twitter:title / og:description هم‌راستا.
+استایل: glassmorphism + 3D (با کامپوننت موجود `Hero3D` به‌صورت اشتراکی)، RTL، Persian، هم‌سان با `Services.tsx`.
 
-## ۲. افزودن «اخذ کارت بازرگانی» به Services.tsx
-فایل: `src/components/Services.tsx`
+ساختار بخش‌ها:
 
-- اضافه شدن آیتم جدید با آیکن `CreditCard` (lucide):
-  - title: «اخذ کارت بازرگانی»
-  - description: «اخذ و تمدید کارت بازرگانی حقیقی، حقوقی و موردی با کمترین زمان»
-  - features: ["مشاوره تخصصی", "تهیه مدارک", "تمدید سالانه"]
-  - link: `/services/business-card` (در آینده) — فعلاً به `/blog/business-card-complete-guide` لینک می‌دهیم (در این مرحله صفحه اختصاصی نمی‌سازیم؛ کاربر در گزینه‌های انتخابی فقط /services را تأیید کرد، نه /services/business-card — پس فقط به مقاله لینک می‌دهیم).
+- **Hero** (gradient + blob + ستون چپ متن، ستون راست `<Hero3D />` در `<Suspense>`)
+  - H1: «اخذ کارت بازرگانی | حقیقی، حقوقی، تولیدی، خدماتی و موردی»
+  - زیرعنوان + دو CTA: «درخواست رایگان» (اسکرول به فرم) و «مشاوره با ترخیصان‌یار» (تلگرام)
+  - Badge: «خدمات تخصصی ترخیصان»
 
-> یادداشت: کاربر گزینه `/services/business-card` را در پاسخ نیاورد. اگر بخواهید، در یک تغییر بعدی صفحه اختصاصی هم می‌سازیم.
+- **انواع کارت بازرگانی** (4 کارت شیشه‌ای: حقیقی، حقوقی، تولیدی/خدماتی، موردی) — هر کدام آیکن lucide، توضیح کوتاه، لینک «جزئیات بیشتر» به انکر مقاله.
 
-## ۳. ساخت صفحه `/services` با Three.js واقعی + Glassmorphism
-فایل‌های جدید:
-- `src/pages/Services.tsx` — صفحه مستقل
-- `src/components/services/Hero3D.tsx` — صحنه `@react-three/fiber` در hero
-- `src/components/services/GlassServiceCard.tsx` — کارت شیشه‌ای
+- **مزایا و کاربردها** (لیست glass card با آیکن CheckCircle): واردات/صادرات رسمی، اخذ کوتاژ، حضور در نمایشگاه بین‌المللی، افتتاح LC، استفاده از تسهیلات.
 
-روت: در `src/App.tsx` افزودن `<Route path="/services" element={<Services />} />` (lazy load).
+- **مدارک لازم** (دو ستون: حقیقی / حقوقی) به‌صورت لیست‌های جدا در glass cards.
 
-### وابستگی‌ها (مطابق تنظیمات پروژه)
-- `@react-three/fiber@^8.18`
-- `@react-three/drei@^9.122`
-- `three@^0.160`
+- **مراحل اخذ کارت** (Timeline عمودی شیشه‌ای 5 مرحله): ثبت‌نام در سامانه جامع تجارت → ثبت‌نام در اتاق بازرگانی → بارگذاری مدارک → پرداخت → صدور کارت.
 
-### ساختار صفحه
-1. **Header** (همان Header موجود)
-2. **PageBreadcrumb** (خانه › خدمات)
-3. **Hero**:
-   - عنوان `<h1>`: «خدمات تخصصی ترخیص و امور گمرکی»
-   - زیرعنوان فارسی
-   - پس‌زمینه: صحنه 3D شامل کره/تروس شیشه‌ای چرخان با MeshTransmissionMaterial از drei + ذرات شناور + نورپردازی نرم.
-   - دو CTA: «مشاوره رایگان» / «مشاوره با ترخیصان‌یار»
-4. **شبکه خدمات** (Glassmorphism):
-   - ۸ کارت: ترخیص کالا، اخذ کارت بازرگانی، صدور مجوزها، مشاوره گمرکی، پیگیری پرونده، خدمات بیمه، حمل بین‌المللی، خدمات ۲۴ ساعته.
-   - هر کارت: `backdrop-blur-xl`, border نیمه‌شفاف، gradient ظریف، آیکن lucide، hover با ارتفاع و درخشش.
-   - هر کارت لینک به مقاله/صفحه مربوطه.
-5. **بخش «چرا ترخیصان»** خلاصه با ۴ آمار شیشه‌ای.
-6. **CTA پایانی** با گرادیان و دکمه‌ها.
-7. **Footer** موجود.
+- **افراد معاف / محرومین** (Accordion یا دو کارت کنار هم — بدون duplication با مقاله، فقط خلاصه + لینک به سکشن مربوطه در مقاله).
 
-### SEO صفحه
-- Helmet با title بدون برند، description زیر ۱۵۵ کاراکتر.
-- بدون canonical (طبق Core memory فقط `/`, `/blog`, `/currencies`, `/install` مجاز).
-- JSON-LD از نوع `Service` یا `ItemList`.
-- یک H1 یکتا.
+- **فرم درخواست** (سکشن `id="request-form"`، glass card، اعتبارسنجی با zod + react-hook-form که در پروژه موجود است):
+  - نام و نام خانوادگی (3-100 char)
+  - شماره موبایل (regex ایرانی `^09\d{9}$`)
+  - نوع کارت (Select: حقیقی، حقوقی، تولیدی، خدماتی، موردی)
+  - استان (input کوتاه)
+  - توضیحات اختیاری (textarea، max 1000)
+  - ارسال → POST به `public/api/lead-submit.php` (همان endpoint موجود در پروژه — تأیید با `rg lead-submit`) با `source: "business-card-service"`، نمایش toast موفقیت/خطا با `sonner`، ریست فرم.
+  - رعایت قوانین input-validation: trim، encode، بدون لاگ داده‌های حساس.
 
-### پرفورمنس
-- `Suspense` + `lazy` برای صفحه.
-- `Canvas` با `dpr={[1, 2]}` و `frameloop="demand"` در صورت امکان، یا کاهش frameloop در پایین صفحه.
-- ابعاد محدود hero (مثلاً ۶۰vh) تا overhead 3D کنترل شود.
+- **CTA پایانی** (هم‌سبک با CTA صفحه /services): «نیاز به مشاوره سریع‌تر دارید؟» + دکمه تلگرام + تماس.
 
-## فایل‌ها
+- **لینک به مقاله مرتبط** (لینک‌دهی داخلی برای سئو):
+  - در پایان بخش انواع و بخش معاف/محروم → `to="/blog/business-card-complete-guide"`
+  - یک bar مستطیلی «مطالعه مقاله کامل کارت بازرگانی →» قبل از CTA.
 
-```text
-ویرایش:
-  src/pages/BusinessCardGuide.tsx   (SEO + H1/H2)
-  src/components/Services.tsx       (کارت جدید کارت بازرگانی)
-  src/App.tsx                       (route /services)
-  package.json                      (وابستگی‌های three)
+- **Footer + Header + PageBreadcrumb**: `[{ label: "خدمات", href: "/services" }, { label: "اخذ کارت بازرگانی" }]`.
 
-افزودن:
-  src/pages/Services.tsx
-  src/components/services/Hero3D.tsx
-  src/components/services/GlassServiceCard.tsx
+### Helmet سئو صفحه
+
+- `<title>` (≤60 char بدون «ترخیصان» طبق قاعده پروژه): «اخذ کارت بازرگانی | انواع، مدارک و مراحل»
+- meta description (≤155 char): «اخذ کارت بازرگانی حقیقی، حقوقی، تولیدی، خدماتی و موردی؛ مدارک، مراحل و درخواست آنلاین مشاوره تخصصی در بندرعباس.»
+- keywords، og:title/description/url/locale
+- JSON-LD `Service` schema با `provider` به `Organization` + `areaServed` ایران + `serviceType: "اخذ کارت بازرگانی"`
+- JSON-LD `BreadcrumbList`
+- **بدون canonical** (طبق Core rule: canonical فقط روی /, /blog, /currencies, /install)
+
+## 2) Routing — `src/App.tsx`
+
+افزودن lazy import و Route قبل از catch-all:
+```
+const BusinessCardService = lazy(() => import("./pages/BusinessCardService"));
+<Route path="/services/business-card" element={<BusinessCardService />} />
 ```
 
-## خارج از این پلن
-- صفحه اختصاصی `/services/business-card` (در صورت تمایل، در مرحله بعد).
-- به‌روزرسانی `sitemap.xml` و `index.html` (لینک‌های استاتیک SEO) برای `/services` — طبق memory باید همگام شود؛ این هم در پلن انجام می‌شود (در `public/sitemap.xml` و در بخش لینک‌های مخفی `index.html` اگر موجود است).
+## 3) لینک هدر — `src/components/Header.tsx`
+
+تغییر `{ title: "خدمات", href: "/#services" }` به `{ title: "خدمات", href: "/services" }`. منطق `isActive` فعلی برای مسیرهای غیر-hash درست کار می‌کند (`pathname === href || pathname.startsWith(href + "/")`)، پس روی `/services` و `/services/business-card` هر دو فعال می‌شود. نسخه موبایل نیز همان آرایه است، خودکار آپدیت می‌گردد.
+
+## 4) سئو صفحه `/services` (تقویت `src/pages/Services.tsx`)
+
+- بهبود description (دقیق‌تر، با کلمات کلیدی محلی) و حفظ ≤155 char.
+- افزودن `<meta property="og:locale">` (موجود است).
+- افزودن JSON-LD `BreadcrumbList` در کنار `ItemList` فعلی.
+- افزودن JSON-LD `Service` جمعی برای هر کارت با لینک‌های blog/services.
+- لینک کارت «اخذ کارت بازرگانی» در آرایه `services` تغییر کند از `"/blog/business-card-complete-guide"` به `"/services/business-card"` (تا hub صفحه خدمت باشد، صفحه خدمت خود به مقاله لینک می‌دهد).
+- افزودن یک sub-heading H2 سئویی پایین Hero «خدمات تخصصی گمرکی و بازرگانی» (متن کوتاه semantic با `<strong>` برای کلمات کلیدی).
+- لینک‌دهی متقابل: در سکشن «اخذ کارت بازرگانی» کارت `Services.tsx` اصلی روی صفحه اصلی نیز به `/services/business-card` بفرستد (بررسی و آپدیت `src/components/Services.tsx`).
+
+## 5) Sitemap — `public/sitemap.xml`
+
+افزودن یک `<url>` در بخش Priority 0.8:
+```xml
+<url>
+  <loc>https://tarkhisun.com/services/business-card</loc>
+  <lastmod>2026-06-09</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.8</priority>
+</url>
+```
+
+## 6) لینک Static SEO — `index.html`
+
+افزودن لینک جدید زیر `<nav aria-label="منوی اصلی">`:
+```html
+<a href="/services/business-card">اخذ کارت بازرگانی - انواع، مدارک و مراحل</a>
+```
+(طبق memory پروژه باید لینک‌های استاتیک با مسیرهای React Router همگام بمانند.)
+
+## فایل‌های جدید
+- `src/pages/BusinessCardService.tsx`
+
+## فایل‌های ویرایش‌شده
+- `src/App.tsx` (route)
+- `src/components/Header.tsx` (لینک «خدمات»)
+- `src/components/Services.tsx` (لینک کارت کارت بازرگانی → /services/business-card)
+- `src/pages/Services.tsx` (سئو، breadcrumb schema، لینک کارت کارت بازرگانی)
+- `public/sitemap.xml`
+- `index.html` (static SEO link)
+
+## ملاحظات فنی
+- استفاده مجدد از `Hero3D` موجود — بدون پکیج جدید.
+- فرم: zod schema + react-hook-form + `Input/Textarea/Label/Select` از shadcn (موجود). توست با `sonner`. اعتبارسنجی client + ارسال به endpoint موجود.
+- بدون تغییر در `src/integrations/supabase/*` و config.toml.
+- رعایت WCAG: کنتراست متن سفید روی gradient hero و کنتراست متن کارت‌ها روی پس‌زمینه شیشه‌ای.
+- بدون canonical در صفحه جدید (مطابق memory).
