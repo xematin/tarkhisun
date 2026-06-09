@@ -171,33 +171,33 @@ const Services = () => {
               />
             </div>
 
-            <div className="container mx-auto px-4 py-16 lg:py-24 relative" dir="rtl">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="container mx-auto px-4 py-10 sm:py-16 lg:py-24 relative" dir="rtl">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 {/* Text */}
-                <div className="text-white">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
-                    <Sparkles className="w-4 h-4 text-amber-300" />
-                    <span className="text-sm text-persian">خدمات تخصصی ترخیصان</span>
+                <div className="text-white order-2 lg:order-1">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+                    <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300" />
+                    <span className="text-xs sm:text-sm text-persian">خدمات تخصصی ترخیصان</span>
                   </div>
 
-                  <h1 className="heading-primary !text-white mb-6 text-persian leading-tight">
+                  <h1 className="heading-primary !text-white mb-4 sm:mb-6 text-persian leading-tight">
                     خدمات تخصصی ترخیص و امور گمرکی
                   </h1>
 
-                  <p className="text-lg md:text-xl text-white/85 mb-8 text-persian leading-relaxed">
+                  <p className="text-base sm:text-lg md:text-xl text-white/85 mb-6 sm:mb-8 text-persian leading-relaxed">
                     از ترخیص کالا تا اخذ کارت بازرگانی، تمام نیازهای تجارت بین‌الملل شما را با تیم مجرب و فناوری روز پوشش می‌دهیم.
                   </p>
 
-                  <div className="flex flex-wrap gap-4">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
                     <a
                       href="#services-grid"
-                      className="px-6 py-3 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all"
+                      className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white text-primary font-bold text-persian shadow-xl hover:shadow-2xl hover:-translate-y-0.5 transition-all text-center"
                     >
                       مشاهده خدمات
                     </a>
                     <button
                       onClick={() => window.open("https://t.me/N8NAutoBotBot", "_blank")}
-                      className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-persian hover:bg-white/20 transition-all"
+                      className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-persian hover:bg-white/20 transition-all"
                     >
                       مشاوره با ترخیصان‌یار
                     </button>
@@ -205,11 +205,11 @@ const Services = () => {
                 </div>
 
                 {/* 3D Canvas */}
-                <div className="relative h-[380px] md:h-[460px] lg:h-[520px]">
+                <div className="relative h-[220px] sm:h-[300px] md:h-[400px] lg:h-[520px] order-1 lg:order-2">
                   <Suspense
                     fallback={
                       <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-24 h-24 rounded-full bg-white/10 backdrop-blur-md animate-pulse" />
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white/10 backdrop-blur-md animate-pulse" />
                       </div>
                     }
                   >
