@@ -32,6 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { submitLead, normalizeDigits, isValidIranMobile } from "@/lib/lead-tracking";
+import CardConsultDialog from "@/components/business-card/CardConsultDialog";
 
 const Hero3D = lazy(() => import("@/components/services/BusinessCardHero3D"));
 
@@ -106,6 +107,7 @@ const BusinessCardService = () => {
   const [province, setProvince] = useState("");
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [consultOpen, setConsultOpen] = useState(false);
 
   useEffect(() => {
     document.documentElement.setAttribute("dir", "rtl");
@@ -239,11 +241,14 @@ const BusinessCardService = () => {
                       مشاوره رایگان
                     </a>
                     <button
-                      disabled
-                      className="px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/30 text-white/60 font-bold text-persian cursor-not-allowed opacity-60"
+                      type="button"
+                      onClick={() => setConsultOpen(true)}
+                      className="px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-persian transition-all inline-flex items-center gap-2"
                     >
-                      مشاوره با ترخیصان‌یار
+                      <BookOpen className="w-4 h-4" />
+                      راهنمای کارت بازرگانی و مراحل اخذ آن
                     </button>
+
                   </div>
                 </div>
 
