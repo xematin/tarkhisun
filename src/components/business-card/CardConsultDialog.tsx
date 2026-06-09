@@ -79,7 +79,10 @@ const CardConsultDialog = ({ open, onOpenChange }: Props) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent dir="rtl" className="sm:max-w-md text-persian">
+      <DialogContent
+        dir="rtl"
+        className="sm:max-w-md text-persian rounded-2xl sm:rounded-2xl border border-border/50 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.35)] w-[calc(100%-1.5rem)] max-w-[calc(100%-1.5rem)] sm:w-full sm:max-w-md p-5"
+      >
         <DialogHeader>
           <DialogTitle className="text-persian text-right">
             راهنمای کارت بازرگانی و مراحل اخذ آن
