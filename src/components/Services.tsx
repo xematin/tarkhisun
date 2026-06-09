@@ -11,6 +11,13 @@ const Services = () => {
       link: "/blog/complete-guide-customs-clearance-shahid-rajaei"
     },
     {
+      icon: CreditCard,
+      title: "اخذ کارت بازرگانی",
+      description: "اخذ، تمدید و مشاوره کارت بازرگانی حقیقی، حقوقی، تولیدی، خدماتی و موردی",
+      features: ["مشاوره و تهیه مدارک", "ثبت‌نام در اتاق بازرگانی", "تمدید سالانه کارت"],
+      link: "/blog/business-card-complete-guide"
+    },
+    {
       icon: FileCheck,
       title: "صدور مجوزها",
       description: "اخذ انواع مجوزهای واردات، صادرات و مجوزهای تخصصی از سازمان‌های مختلف",
