@@ -1,4 +1,4 @@
-import { Truck, FileCheck, Users, Search, Shield, Clock } from "lucide-react";
+import { Truck, FileCheck, Users, Search, Shield, Clock, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Services = () => {
@@ -9,6 +9,13 @@ const Services = () => {
       description: "ترخیص سریع و مطمئن انواع کالاهای وارداتی و صادراتی در تمام بنادر کشور",
       features: ["ترخیص در کمترین زمان", "مشاوره تخصصی", "پیگیری ۲۴ ساعته"],
       link: "/blog/complete-guide-customs-clearance-shahid-rajaei"
+    },
+    {
+      icon: CreditCard,
+      title: "اخذ کارت بازرگانی",
+      description: "اخذ، تمدید و مشاوره کارت بازرگانی حقیقی، حقوقی، تولیدی، خدماتی و موردی",
+      features: ["مشاوره و تهیه مدارک", "ثبت‌نام در اتاق بازرگانی", "تمدید سالانه کارت"],
+      link: "/blog/business-card-complete-guide"
     },
     {
       icon: FileCheck,

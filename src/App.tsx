@@ -48,6 +48,7 @@ const ImportRoutesIranGuide = lazy(() => import("./pages/ImportRoutesIranGuide")
 const ElectricCarTariffGuide = lazy(() => import("./pages/ElectricCarTariffGuide"));
 const CustomsTariff2025Guide = lazy(() => import("./pages/CustomsTariff2025Guide"));
 const Budget1405Guide = lazy(() => import("./pages/Budget1405Guide"));
+const ServicesPage = lazy(() => import("./pages/Services"));
 
 const queryClient = new QueryClient();
 
@@ -108,6 +109,7 @@ const AppContent = () => {
         <Route path="/TSCards" element={<TSCards />} />
         <Route path="/TSCardUser" element={<TSCardUser />} />
         <Route path="/install" element={<Install />} />
+        <Route path="/services" element={<ServicesPage />} />
         <Route path="/contact" element={<ContactRedirect />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />

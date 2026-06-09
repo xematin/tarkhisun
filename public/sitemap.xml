@@ -19,6 +19,13 @@
 
   <!-- Priority 0.8 -->
   <url>
+    <loc>https://tarkhisun.com/services</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
     <loc>https://tarkhisun.com/currencies</loc>
     <lastmod>2026-05-05</lastmod>
     <changefreq>hourly</changefreq>
