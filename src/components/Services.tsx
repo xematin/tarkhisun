@@ -15,7 +15,7 @@ const Services = () => {
       title: "اخذ کارت بازرگانی",
       description: "اخذ، تمدید و مشاوره کارت بازرگانی حقیقی، حقوقی، تولیدی، خدماتی و موردی",
       features: ["مشاوره و تهیه مدارک", "ثبت‌نام در اتاق بازرگانی", "تمدید سالانه کارت"],
-      link: "/blog/business-card-complete-guide"
+      link: "/services/business-card"
     },
     {
       icon: FileCheck,

@@ -5,7 +5,7 @@ import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 
 const navItems = [
   { title: "خانه", href: "/" },
-  { title: "خدمات", href: "/#services" },
+  { title: "خدمات", href: "/services" },
   { title: "نرخ ارز", href: "/currencies" },
   { title: "جستجوی تعرفه", href: "/hscode" },
   { title: "بلاگ", href: "/blog" },
