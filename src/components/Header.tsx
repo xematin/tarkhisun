@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, ChevronDown, ChevronUp } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import tarkhisunLogo from "@/assets/tarkhisun-logo.png";
 
-const navItems = [
+interface NavItem {
+  title: string;
+  href: string;
+  children?: { title: string; href: string }[];
+}
+
+const navItems: NavItem[] = [
   { title: "خانه", href: "/" },
-  { title: "خدمات", href: "/services" },
+  {
+    title: "خدمات",
+    href: "/services",
+    children: [
+      { title: "اخذ کارت بازرگانی", href: "/services/business-card" },
+    ],
+  },
   { title: "نرخ ارز", href: "/currencies" },
   { title: "جستجوی تعرفه", href: "/hscode" },
   { title: "بلاگ", href: "/blog" },
@@ -15,6 +27,7 @@ const navItems = [
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
   const { pathname, hash } = useLocation();
   const [currentHash, setCurrentHash] = useState<string>(typeof window !== "undefined" ? window.location.hash : "");
 
@@ -51,6 +64,15 @@ const Header = () => {
     }
     if (href === "/") return pathname === "/" && !currentHash;
     return pathname === href || pathname.startsWith(href + "/");
+  };
+
+  const toggleMenu = () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+      setExpandedMobileItem(null);
+    } else {
+      setIsMenuOpen(true);
+    }
   };
 
   return (
@@ -106,7 +128,7 @@ const Header = () => {
             </a>
             <button
               type="button"
-              onClick={() => setIsMenuOpen((v) => !v)}
+              onClick={toggleMenu}
               className="icon-badge-soft w-10 h-10"
               aria-label={isMenuOpen ? "بستن منو" : "باز کردن منو"}
             >
@@ -119,16 +141,66 @@ const Header = () => {
         {isMenuOpen && (
           <div className="lg:hidden mx-auto max-w-6xl mt-2 glass-card p-3 animate-fade-in">
             <nav className="flex flex-col gap-1">
-              {navItems.map((item) => (
-                <a
-                  key={item.title}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`pill-row text-persian ${isActive(item.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
-                >
-                  <span>{item.title}</span>
-                </a>
-              ))}
+              {navItems.map((item) => {
+                const hasChildren = item.children && item.children.length > 0;
+                const isExpanded = expandedMobileItem === item.title;
+
+                return (
+                  <div key={item.title} className="flex flex-col gap-1">
+                    {hasChildren ? (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => setExpandedMobileItem(isExpanded ? null : item.title)}
+                          className={`pill-row text-persian ${isActive(item.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
+                        >
+                          <span>{item.title}</span>
+                          {isExpanded ? (
+                            <ChevronUp className="w-4 h-4" />
+                          ) : (
+                            <ChevronDown className="w-4 h-4" />
+                          )}
+                        </button>
+                        {isExpanded && (
+                          <div className="flex flex-col gap-1 pr-3 border-r-2 border-primary/20 mr-2">
+                            <a
+                              href={item.href}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                setExpandedMobileItem(null);
+                              }}
+                              className="pill-row text-persian text-sm"
+                            >
+                              <span>مشاهده همه خدمات</span>
+                            </a>
+                            {item.children!.map((child) => (
+                              <a
+                                key={child.title}
+                                href={child.href}
+                                onClick={() => {
+                                  setIsMenuOpen(false);
+                                  setExpandedMobileItem(null);
+                                }}
+                                className={`pill-row text-persian text-sm ${isActive(child.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
+                              >
+                                <span>{child.title}</span>
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <a
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`pill-row text-persian ${isActive(item.href) ? "!bg-gradient-to-l !from-primary !to-accent !text-primary-foreground !border-transparent" : ""}`}
+                      >
+                        <span>{item.title}</span>
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
               <a
                 href="/#contact"
                 onClick={() => setIsMenuOpen(false)}
