@@ -219,7 +219,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ماشین آلات حفاری", "واردات ماشین آلات", "ترخیص", "استاندارد", "مجوز واردات"],
     relatedPosts: [1, 2, 16, 19],
-    image: "",
+    image: "/images/blog/excavation-machinery.webp",
   },
   {
     id: 13,
