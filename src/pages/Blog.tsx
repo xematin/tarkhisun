@@ -244,8 +244,9 @@ const Blog = () => {
 
               <div className="grid lg:grid-cols-2 gap-8">
                 {currentPosts.map((post) => (
-                  <Card key={post.id} className="card-service group cursor-pointer overflow-hidden">
+                  <Card key={post.id} className="card-service group cursor-pointer overflow-hidden !p-0">
                     <div className="w-full aspect-[16/7] bg-muted overflow-hidden">
+
                       {post.image ? (
                         <img
                           src={post.image}
@@ -258,7 +259,7 @@ const Blog = () => {
                         <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
                       )}
                     </div>
-                    <CardHeader>
+                    <CardHeader className="pt-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">
                           {post.category}
@@ -282,7 +283,7 @@ const Blog = () => {
                       <CardDescription className="text-persian line-clamp-3">{post.excerpt}</CardDescription>
                     </CardHeader>
 
-                    <CardContent className="pt-0">
+                    <CardContent className="pt-0 pb-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground text-persian">
                           <User className="w-4 h-4" />
