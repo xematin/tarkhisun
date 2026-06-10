@@ -1,84 +1,42 @@
 ## هدف
-1. تغییر دکمه «مشاوره با ترخیصان‌یار» در Hero صفحه `/services/business-card` به دکمه‌ی فعال **«راهنمای کارت بازرگانی و مراحل اخذ آن»**.
-2. با کلیک، یک **Dialog** باز شود که:
-   - شماره تماس تیم ترخیصان را نمایش دهد (قابل کلیک برای تماس مستقیم).
-   - فرم کوتاهی برای دریافت شماره تماس کاربر داشته باشد (با اعتبارسنجی فرمت `09XXXXXXXXX`).
-   - با ثبت، شماره در دیتابیس ذخیره شود تا تیم با کاربر تماس بگیرد.
-3. یک **تب/پنل جدید در پنل مدیریت `TSDashboard`** به نام **«مشاوره کارت بازرگانی»** که این درخواست‌ها را مشابه «لیدها» لیست/جستجو/حذف/خروجی CSV می‌گیرد.
+گسترش محتوای مقاله «راهنمای کامل کارت بازرگانی» (`src/pages/BusinessCardGuide.tsx`) با متن‌های تخصصی‌تر و افزودن ۳ تصویر AI مرتبط برای بهبود تجربه کاربر و سئو.
 
-## معماری (مطابق سیستم موجود PHP/MySQL)
+## تصاویر AI (تولید با imagegen، کیفیت premium، ذخیره در `src/assets/`)
+هر تصویر JPG با ابعاد 1536x864 (16:9) و سپس import در کامپوننت `ArticleImage`.
 
-ذخیره‌سازی روی همان بک‌اند PHP فعلی (`public/api/...`) و جدول جدید `ts_card_consult` در MySQL. (سیستم با Supabase پر نشده، با PHP/MySQL کار می‌کند — همان الگوی `ts_leads` تکرار می‌شود.)
+1. `business-card-types.jpg` — تصویر مفهومی از انواع کارت بازرگانی: مجموعه‌ای از کارت‌های هوشمند با لوگوی اتاق بازرگانی روی میز چوبی شیک، نور گرم دفتر کار.
+2. `business-card-documents.jpg` — مدارک: پوشه‌های اداری، شناسنامه، کارت ملی، فرم‌های اتاق بازرگانی، خودکار و مهر، نمای از بالا.
+3. `business-card-process.jpg` — مراحل دریافت: تاجر ایرانی در حال امضای مدارک در دفتر اتاق بازرگانی، پس‌زمینه نقشه جهان و کانتینرهای صادراتی.
 
-### شِما جدول جدید
-```sql
-CREATE TABLE ts_card_consult (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  phone VARCHAR(15) NOT NULL,
-  source VARCHAR(50) DEFAULT 'business-card-hero',
-  ip VARCHAR(45) NULL,
-  user_agent VARCHAR(255) NULL,
-  note VARCHAR(255) NULL,
-  status ENUM('new','contacted','done','rejected') DEFAULT 'new',
-  created_at DATETIME NOT NULL,
-  updated_at DATETIME NOT NULL,
-  INDEX idx_phone (phone),
-  INDEX idx_created (created_at)
-);
-```
-> مهاجرت در `public/api/migrations/2026_06_09_card_consult.sql` ذخیره می‌شود و در `install.php` بارگذاری خواهد شد.
+(دو تصویر فعلی `business-card-office.webp` و `business-card-handshake.webp` در `public/images/blog/` حفظ می‌شوند.)
 
-### اندپوینت‌های PHP جدید
-- **`public/api/card-consult-submit.php`** (عمومی، POST): اعتبارسنجی `phone` با `ts_valid_phone`، نرمال‌سازی ارقام، ذخیره در `ts_card_consult` با IP/UA/source.
-- **`public/api/admin/card-consult-list.php`** (نیاز به ادمین، GET): pagination + جستجو روی phone، مشابه `leads.php`.
-- **`public/api/admin/card-consult-delete.php`** (POST).
-- **`public/api/admin/card-consult-export.php`** (GET → CSV).
-- **`public/api/admin/card-consult-update.php`** (POST): تغییر `status` و `note`.
+## محل قرارگیری تصاویر جدید
+- بعد از بخش «انواع کارت بازرگانی» (خط ~227): `business-card-types.jpg`
+- بعد از بخش «مدارک لازم» (خط ~372): `business-card-documents.jpg`
+- بعد از بخش «مراحل دریافت» (خط ~424): `business-card-process.jpg`
 
-## تغییرات فرانت‌اند
+## گسترش متن
+هر بخش با محتوای تخصصی و کلمات کلیدی سئو غنی می‌شود (بدون تغییر ساختار/UI):
 
-### 1) `src/components/business-card/CardConsultDialog.tsx` (جدید)
-- استفاده از `Dialog` (shadcn).
-- نمایش شماره تماس ثابت تیم (یک رشته متنی — **شماره دقیق از کاربر گرفته شود؛ به‌صورت پیش‌فرض `021-91006970` یا شماره موجود در Contact استفاده می‌شود**).
-- لینک `tel:` و دکمه «کپی شماره».
-- فرم: input شماره موبایل + Button «درخواست تماس از من».
-- اعتبارسنجی با `zod` (regex `^09\d{9}$` و نرمال‌سازی ارقام فارسی).
-- POST به `/api/card-consult-submit.php`، نمایش toast موفقیت/خطا، بستن دیالوگ.
+1. **تعریف کارت بازرگانی** — افزودن پاراگراف درباره مرجع صدور، مدت اعتبار (یک سال)، تفاوت با ثبت برند، جایگاه قانونی طبق ماده ۳ قانون مقررات صادرات و واردات.
+2. **انواع کارت بازرگانی** — افزودن توضیح کاربردی برای هر نوع، تفاوت سقف ارزی، شرایط ویژه کارت تولیدی (پروانه بهره‌برداری) و کارت موردی (مدت اعتبار ۶ ماه، یک محموله).
+3. **شرایط دریافت** — افزودن توضیح درباره مدرک تحصیلی (دیپلم متوسطه)، حساب جاری معتبر، محل ثابت کسب، گواهی پلمب دفاتر قانونی.
+4. **مدارک لازم** — افزودن مدارک تکمیلی: گواهی پلمب دفاتر، اظهارنامه مالیاتی سال قبل، اجاره‌نامه یا سند مالکیت محل کار، تأییدیه کد پستی.
+5. **مراحل دریافت** — افزودن مرحله آموزش اجباری اتاق بازرگانی (دوره مقدماتی تجارت) و توضیح فرآیند احراز هویت در سامانه جامع تجارت.
+6. **مزایا** — افزودن کارت مزیت جدید: استفاده از تخفیفات گمرکی، دسترسی به سامانه EPL، امکان ثبت سفارش در سامانه جامع تجارت.
+7. **معایب** — افزودن نکته درباره جرایم سنگین اجاره کارت طبق ماده ۱۱ قانون مبارزه با قاچاق کالا و ارز.
+8. **بخش جدید: هزینه‌های اخذ کارت بازرگانی** — بخش کاملاً جدید بعد از بخش «مراحل دریافت»: هزینه حق عضویت اتاق بازرگانی، هزینه آموزش، هزینه‌های جانبی (پلمب دفاتر، گواهی عدم سوء پیشینه)، جمع‌بندی تقریبی.
+9. **بخش جدید: سؤالات متداول (FAQ)** — قبل از بخش نتیجه‌گیری، ۶ پرسش پرتکرار با پاسخ: تفاوت کارت حقیقی و حقوقی، مدت اعتبار، امکان تمدید، اخذ بدون مدرک تحصیلی، استعلام، هزینه واقعی. (با schema.org/FAQPage در JSON-LD اگر در فایل وجود داشته باشد.)
+10. **نتیجه‌گیری** — گسترش با تأکید بیشتر روی خدمات ترخیصان و لینک داخلی به `/business-card`.
 
-### 2) `src/pages/BusinessCardService.tsx`
-- خطوط 241-246: حذف دکمه disabled فعلی، جایگزینی با دکمه فعال:
-  ```tsx
-  <button onClick={() => setConsultOpen(true)} className="px-6 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white font-bold text-persian transition-all inline-flex items-center gap-2">
-    <BookOpen className="w-4 h-4" />
-    راهنمای کارت بازرگانی و مراحل اخذ آن
-  </button>
-  ```
-- State جدید `consultOpen` و رندر `<CardConsultDialog open={consultOpen} onOpenChange={setConsultOpen} />` در انتهای کامپوننت.
+## فایل‌های تغییریافته
+- `src/pages/BusinessCardGuide.tsx` (ویرایش اصلی، افزودن import تصاویر)
+- `src/assets/business-card-types.jpg` (جدید، AI premium)
+- `src/assets/business-card-documents.jpg` (جدید، AI premium)
+- `src/assets/business-card-process.jpg` (جدید، AI premium)
 
-### 3) `src/pages/TSDashboard.tsx`
-- تبدیل ساختار فعلی (تک‌قطعه `LeadsPanel + CardsEntry`) به سیستم تب‌محور با `Tabs` از shadcn:
-  - تب 1: **لیدها** (`LeadsPanel` فعلی).
-  - تب 2: **مشاوره کارت بازرگانی** (`CardConsultPanel` جدید).
-  - تب 3: **کارت‌های مشتریان** (`CardsEntry` فعلی).
-- کامپوننت جدید `CardConsultPanel` کاملاً موازی با `LeadsPanel` (جدول، جستجو، صفحه‌بندی، حذف، CSV) با ستون‌های: شماره، تاریخ ثبت، IP، وضعیت (Select قابل تغییر inline: جدید/در حال تماس/انجام شد/رد شده)، یادداشت.
-
-## فایل‌های ایجاد/تغییر
-**ایجاد:**
-- `public/api/migrations/2026_06_09_card_consult.sql`
-- `public/api/card-consult-submit.php`
-- `public/api/admin/card-consult-list.php`
-- `public/api/admin/card-consult-delete.php`
-- `public/api/admin/card-consult-export.php`
-- `public/api/admin/card-consult-update.php`
-- `src/components/business-card/CardConsultDialog.tsx`
-
-**ویرایش:**
-- `public/api/install.php` (اجرای migration جدید)
-- `src/pages/BusinessCardService.tsx` (دکمه + دیالوگ)
-- `src/pages/TSDashboard.tsx` (تب‌بندی + پنل جدید)
-
-## خارج از محدوده
-- صحنه 3D، فرم اصلی «درخواست رایگان» موجود در صفحه، و سایر بخش‌های صفحه دست‌نخورده باقی می‌مانند.
-
-## نکته نیاز به تأیید کاربر
-**شماره تماس تیم ترخیصان** که در دیالوگ نمایش داده می‌شود چه باشد؟ اگر مشخص نکنید، از همان شماره‌ای که در بخش «تماس با ما» سایت موجود است استفاده می‌کنم.
+## نکات فنی
+- استفاده از کامپوننت موجود `ArticleImage` با `loading="lazy"` (به‌جز تصویر hero).
+- متن‌ها با `text-persian` و `<strong>` برای کلیدواژه‌ها مطابق memory پروژه.
+- لینک‌های داخلی موجود به `/business-card` حفظ می‌شوند؛ در بخش‌های جدید نیز لینک‌های مرتبط اضافه می‌شود.
+- سازگار با SSG prerender (تصاویر import شده از `src/assets`).
