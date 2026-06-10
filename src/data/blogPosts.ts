@@ -275,7 +275,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ژنراتور", "ترخیص", "بندرعباس", "استاندارد", "مجوز واردات"],
     relatedPosts: [1, 12, 2, 3],
-    image: "",
+    image: "/images/blog/generator-clearance-bandar-abbas.webp",
   },
   {
     id: 17,
