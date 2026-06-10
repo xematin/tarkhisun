@@ -259,7 +259,7 @@ const Blog = () => {
                         <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
                       )}
                     </div>
-                    <CardHeader>
+                    <CardHeader className="pt-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">
                           {post.category}
