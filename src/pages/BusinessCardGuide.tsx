@@ -9,6 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, Calendar, Clock, User, AlertCircle } from "lucide-react";
 import ArticleImage from "@/components/ArticleImage";
+import businessCardTypesImg from "@/assets/business-card-types.jpg";
+import businessCardDocumentsImg from "@/assets/business-card-documents.jpg";
+import businessCardProcessImg from "@/assets/business-card-process.jpg";
 
 const BusinessCardGuide = () => {
   useEffect(() => {
@@ -138,10 +141,13 @@ const BusinessCardGuide = () => {
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">کارت بازرگانی چیست؟</h2>
                 <p className="text-body mb-6 text-persian">
-                  <strong>کارت بازرگانی</strong> سندی است که توسط اتاق بازرگانی، صنایع، معادن و کشاورزی ایران صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات و صادرات</Link> انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است. اگر به دنبال <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی حقیقی، حقوقی یا موردی</Link> هستید، مجموعه ترخیصان به‌صورت تخصصی شما را همراهی می‌کند.
+                  <strong>کارت بازرگانی</strong> سندی است که توسط <strong>اتاق بازرگانی، صنایع، معادن و کشاورزی ایران</strong> صادر می‌شود و به دارنده آن اجازه می‌دهد تا فعالیت‌های تجاری خود را به‌ویژه در حوزه <Link to="/blog/import-export-guide-iran" className="text-accent hover:underline">واردات و صادرات</Link> انجام دهد. این کارت نشان‌دهنده مجوز قانونی برای انجام معاملات تجاری بین‌المللی است و بر اساس <strong>ماده ۳ قانون مقررات صادرات و واردات</strong>، هرگونه ورود و خروج کالا با مقاصد تجاری بدون داشتن این کارت ممنوع است. اگر به دنبال <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی حقیقی، حقوقی یا موردی</Link> هستید، مجموعه ترخیصان به‌صورت تخصصی شما را همراهی می‌کند.
                 </p>
                 <p className="text-body mb-6 text-persian">
-                  داشتن کارت بازرگانی برای تمامی اشخاص حقیقی و حقوقی که قصد ورود به عرصه تجارت خارجی را دارند، الزامی است و بدون آن امکان ثبت سفارش، <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا از گمرک</Link> و انجام فعالیت‌های صادراتی وجود ندارد.
+                  داشتن کارت بازرگانی برای تمامی اشخاص حقیقی و حقوقی که قصد ورود به عرصه تجارت خارجی را دارند، الزامی است و بدون آن امکان ثبت سفارش در <strong>سامانه جامع تجارت</strong>، <Link to="/blog/complete-guide-customs-clearance-shahid-rajaei" className="text-accent hover:underline">ترخیص کالا از گمرک</Link>، تخصیص ارز بانکی و انجام فعالیت‌های صادراتی وجود ندارد. این کارت یک سند هویتی برای فعال اقتصادی محسوب می‌شود و برخلاف تصور برخی، با <strong>ثبت برند</strong> یا <strong>پروانه کسب</strong> متفاوت است.
+                </p>
+                <p className="text-body mb-6 text-persian">
+                  <strong>مدت اعتبار کارت بازرگانی</strong> به‌صورت پیش‌فرض یک سال است و دارنده باید پیش از پایان اعتبار، نسبت به <strong>تمدید کارت بازرگانی</strong> اقدام کند. برای متقاضیانی که برای اولین بار اقدام می‌کنند، اعتبار کارت در سال اول معمولاً یک‌ساله صادر می‌شود و در سال‌های بعد بر اساس عملکرد تجاری دارنده تا ۵ سال نیز قابل تمدید است. در صورت عدم تمدید به‌موقع، تمامی فعالیت‌های تجاری دارنده در گمرک و سامانه جامع تجارت متوقف می‌شود.
                 </p>
               </section>
 
@@ -194,8 +200,14 @@ const BusinessCardGuide = () => {
                 </div>
 
                 <p className="text-body mb-6 text-persian">
-                  انتخاب نوع کارت بازرگانی بستگی به ماهیت فعالیت تجاری شما دارد. برای راهنمایی دقیق‌تر در <Link to="/business-card" className="text-accent hover:underline">انتخاب و اخذ کارت بازرگانی مناسب</Link> با کارشناسان ترخیصان مشورت کنید.
+                  انتخاب نوع کارت بازرگانی بستگی به ماهیت فعالیت تجاری شما دارد. <strong>سقف ارزی</strong>، نوع مدارک و حتی هزینه صدور برای هر دسته متفاوت است؛ برای مثال کارت بازرگانی موردی فقط برای یک محموله مشخص و حداکثر تا ۶ ماه اعتبار دارد، در حالی که کارت حقوقی برای فعالیت مستمر و چندساله طراحی شده است. برای راهنمایی دقیق‌تر در <Link to="/business-card" className="text-accent hover:underline">انتخاب و اخذ کارت بازرگانی مناسب</Link> با کارشناسان ترخیصان مشورت کنید.
                 </p>
+
+                <ArticleImage
+                  src={businessCardTypesImg}
+                  alt="انواع کارت بازرگانی حقیقی، حقوقی، تولیدی و موردی صادره از اتاق بازرگانی"
+                  caption="انواع کارت بازرگانی بسته به ماهیت فعالیت و نوع متقاضی متفاوت است"
+                />
 
                 <h3 className="heading-tertiary mb-4 mt-8 text-persian">تقسیم‌بندی بر اساس نوع درخواست</h3>
                 <div className="grid md:grid-cols-3 gap-4">
@@ -297,8 +309,14 @@ const BusinessCardGuide = () => {
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مدارک لازم برای صدور کارت بازرگانی</h2>
                 <p className="text-body mb-6 text-persian">
-                  جمع‌آوری و تنظیم صحیح مدارک، مهم‌ترین گام برای <Link to="/business-card" className="text-accent hover:underline">دریافت کارت بازرگانی بدون ریجکتی</Link> است. در ادامه فهرست مدارک مورد نیاز برای هر دو گروه حقیقی و حقوقی آمده است.
+                  جمع‌آوری و تنظیم صحیح مدارک، مهم‌ترین گام برای <Link to="/business-card" className="text-accent hover:underline">دریافت کارت بازرگانی بدون ریجکتی</Link> است. در ادامه فهرست کامل مدارک مورد نیاز برای هر دو گروه حقیقی و حقوقی آمده است. توجه داشته باشید که علاوه بر مدارک پایه، اتاق بازرگانی معمولاً مدارکی نظیر <strong>گواهی پلمب دفاتر قانونی</strong>، <strong>اظهارنامه مالیاتی سال قبل</strong>، <strong>اجاره‌نامه یا سند مالکیت محل کار</strong> و <strong>تأییدیه کد پستی محل اقامت و کسب</strong> را نیز مطالبه می‌کند.
                 </p>
+
+                <ArticleImage
+                  src={businessCardDocumentsImg}
+                  alt="مدارک لازم برای اخذ کارت بازرگانی شامل شناسنامه، کارت ملی، فرم‌ها و گواهی‌ها"
+                  caption="جمع‌آوری دقیق و کامل مدارک، کلید دریافت کارت بازرگانی بدون ریجکت است"
+                />
                 
                 <Card className="card-service mb-6">
                   <CardHeader>
