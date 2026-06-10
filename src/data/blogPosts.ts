@@ -149,7 +149,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["کارت بازرگانی", "کد اقتصادی", "واردات", "صادرات", "مجوز تجاری"],
     relatedPosts: [5, 9, 6, 1],
-    image: "",
+    image: "/images/blog/business-card-commercial.webp",
   },
   {
     id: 8,
