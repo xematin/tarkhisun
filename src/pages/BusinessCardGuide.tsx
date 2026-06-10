@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2, FileText, Calendar, Clock, User, AlertCircle } from "lucide-react";
 import ArticleImage from "@/components/ArticleImage";
-import businessCardTypesImg from "@/assets/business-card-types.jpg";
+import businessCardTypesImg from "@/assets/business-card-types.webp";
 import businessCardDocumentsImg from "@/assets/business-card-documents.jpg";
 import businessCardProcessImg from "@/assets/business-card-process.jpg";
 
