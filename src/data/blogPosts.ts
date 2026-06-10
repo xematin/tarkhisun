@@ -233,7 +233,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["کمیسیون ماده 1", "اعتراض گمرکی", "ارزش گمرکی", "قوانین گمرک"],
     relatedPosts: [3, 4, 1, 2],
-    image: "",
+    image: "/images/blog/customs-article-1-commission.webp",
   },
   {
     id: 14,
