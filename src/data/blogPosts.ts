@@ -109,7 +109,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["واردات کالا به ایران", "واردات از چین", "واردات از امارات", "واردات از ترکیه", "مسیر واردات ۱۴۰۴"],
     relatedPosts: [17, 27, 6, 9],
-    image: "",
+    image: "/images/blog/import-routes-iran.webp",
   },
   {
     id: 30,
