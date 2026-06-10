@@ -177,7 +177,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["صادرات", "واردات", "تجارت خارجی", "مدارک واردات", "ثبت سفارش"],
     relatedPosts: [1, 5, 7, 6],
-    image: "",
+    image: "/images/blog/import-export-guide.webp",
   },
   {
     id: 10,
