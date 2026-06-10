@@ -283,7 +283,7 @@ const Blog = () => {
                       <CardDescription className="text-persian line-clamp-3">{post.excerpt}</CardDescription>
                     </CardHeader>
 
-                    <CardContent className="pt-0">
+                    <CardContent className="pt-0 pb-6">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 text-sm text-muted-foreground text-persian">
                           <User className="w-4 h-4" />
