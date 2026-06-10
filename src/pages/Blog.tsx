@@ -244,8 +244,9 @@ const Blog = () => {
 
               <div className="grid lg:grid-cols-2 gap-8">
                 {currentPosts.map((post) => (
-                  <Card key={post.id} className="card-service group cursor-pointer overflow-hidden">
+                  <Card key={post.id} className="card-service group cursor-pointer overflow-hidden !p-0">
                     <div className="w-full aspect-[16/7] bg-muted overflow-hidden">
+
                       {post.image ? (
                         <img
                           src={post.image}
