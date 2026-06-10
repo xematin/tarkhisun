@@ -40,7 +40,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["کد HS", "تعرفه گمرکی", "کد کالا", "طبقه‌بندی کالا"],
     relatedPosts: [3, 4, 1, 19],
-    image: "",
+    image: "/images/blog/hs-code-guide.webp",
   },
   {
     id: 3,
