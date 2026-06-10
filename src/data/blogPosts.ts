@@ -163,7 +163,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ارز سنا", "ارز نیمایی", "نرخ ارز", "واردات", "تخصیص ارز"],
     relatedPosts: [4, 3, 9, 1],
-    image: "",
+    image: "/images/blog/sana-nima-currencies.webp",
   },
   {
     id: 9,
