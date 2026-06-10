@@ -441,6 +441,114 @@ const BusinessCardGuide = () => {
                 </div>
               </section>
 
+              <ArticleImage
+                src={businessCardProcessImg}
+                alt="مراحل اخذ کارت بازرگانی در اتاق بازرگانی ایران - امضای مدارک و ثبت نام"
+                caption="مراحل اخذ کارت بازرگانی با همراهی کارشناس ترخیصان سریع‌تر و بدون ریجکت طی می‌شود"
+              />
+
+              {/* Costs Section */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">هزینه‌های اخذ کارت بازرگانی</h2>
+                <p className="text-body mb-6 text-persian">
+                  یکی از پرتکرارترین سؤالات متقاضیان درباره <strong>هزینه اخذ کارت بازرگانی</strong> است. هزینه‌ها به سه دسته تقسیم می‌شود: حق عضویت اتاق بازرگانی، هزینه‌های جانبی صدور، و دستمزد کارگزار یا مشاور (در صورت استفاده از خدمات تخصصی مانند <Link to="/business-card" className="text-accent hover:underline">خدمات اخذ کارت بازرگانی ترخیصان</Link>).
+                </p>
+                <div className="grid md:grid-cols-2 gap-4 mb-6">
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>حق عضویت اتاق بازرگانی</strong></h3>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        بسته به نوع کارت (حقیقی، حقوقی یا تولیدی) و اتاق محل ثبت، سالانه پرداخت می‌شود و معمولاً بیشترین سهم از هزینه را تشکیل می‌دهد.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>هزینه آموزش اجباری</strong></h3>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        گذراندن دوره مقدماتی تجارت برای متقاضیان جدید الزامی است و هزینه‌ای جداگانه برای صدور گواهی پایان دوره دریافت می‌شود.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>پلمب دفاتر قانونی</strong></h3>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        هزینه پلمب دفاتر روزنامه و کل در اداره ثبت شرکت‌ها، به‌علاوه هزینه چاپ و تهیه دفاتر.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>گواهی‌های جانبی</strong></h3>
+                      <p className="text-sm text-muted-foreground text-persian">
+                        گواهی عدم سوء پیشینه، تأییدیه کد پستی، استعلام بانکی و هزینه‌های دفترخانه‌ای از موارد متغیر این بخش هستند.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <p className="text-body text-persian">
+                  چون نرخ‌های اتاق بازرگانی هر سال به‌روزرسانی می‌شود، برای دریافت برآورد دقیق و به‌روز مناسب با نوع فعالیت خود، با مشاوران ترخیصان تماس بگیرید تا فهرست کامل هزینه‌ها بر اساس آخرین تعرفه‌های اتاق بازرگانی به شما ارائه شود.
+                </p>
+              </section>
+
+              {/* FAQ Section */}
+              <section className="mb-12">
+                <h2 className="heading-secondary mb-6 text-persian">سؤالات متداول درباره کارت بازرگانی</h2>
+                <div className="space-y-4">
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>تفاوت کارت بازرگانی حقیقی و حقوقی چیست؟</strong></h3>
+                      <p className="text-body text-persian">
+                        کارت حقیقی به نام یک شخص حقیقی صادر می‌شود و دارنده آن، خود مسئول تمامی تعهدات گمرکی و مالیاتی است. کارت حقوقی به نام یک شرکت ثبت‌شده با شناسه ملی صادر می‌شود و مسئولیت‌ها بر عهده شخصیت حقوقی است. برای فعالیت‌های سازمانی و بلندمدت، <Link to="/business-card" className="text-accent hover:underline">اخذ کارت بازرگانی حقوقی</Link> توصیه می‌شود.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>مدت اعتبار کارت بازرگانی چقدر است؟</strong></h3>
+                      <p className="text-body text-persian">
+                        کارت بازرگانی معمولی یک سال اعتبار دارد و قابل تمدید است. کارت بازرگانی موردی فقط برای یک محموله و حداکثر ۶ ماه صادر می‌شود.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>آیا بدون مدرک تحصیلی می‌توان کارت بازرگانی گرفت؟</strong></h3>
+                      <p className="text-body text-persian">
+                        بله؛ حداقل مدرک مورد نیاز برای اشخاص حقیقی <strong>دیپلم متوسطه</strong> است و نیازی به مدرک دانشگاهی نیست. در صورت نداشتن دیپلم، باید پیش از اقدام، گواهی معادل دریافت کنید.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>تمدید کارت بازرگانی چگونه انجام می‌شود؟</strong></h3>
+                      <p className="text-body text-persian">
+                        برای تمدید کارت بازرگانی باید پیش از اتمام اعتبار، اظهارنامه مالیاتی سال قبل، مفاصاحساب بیمه و سایر مدارک به‌روز را به اتاق بازرگانی ارائه دهید. عدم تمدید به‌موقع موجب تعلیق فعالیت‌های گمرکی شما خواهد شد.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>آیا اجاره دادن کارت بازرگانی قانونی است؟</strong></h3>
+                      <p className="text-body text-persian">
+                        خیر؛ بر اساس <strong>ماده ۱۱ قانون مبارزه با قاچاق کالا و ارز</strong>، اجاره یا واگذاری کارت بازرگانی به دیگران جرم محسوب شده و علاوه بر ابطال دائمی کارت، جرایم سنگین مالی و کیفری برای دارنده اصلی به همراه دارد.
+                      </p>
+                    </CardContent>
+                  </Card>
+                  <Card className="card-service">
+                    <CardContent className="pt-6">
+                      <h3 className="text-persian mb-2"><strong>چه مدت زمانی برای اخذ کارت بازرگانی نیاز است؟</strong></h3>
+                      <p className="text-body text-persian">
+                        با ارائه کامل مدارک و عدم وجود نقص، فرآیند صدور کارت بازرگانی برای متقاضیان حقیقی بین ۷ تا ۱۴ روز کاری و برای اشخاص حقوقی ۱۵ تا ۳۰ روز کاری به طول می‌انجامد. همراهی <Link to="/business-card" className="text-accent hover:underline">کارشناس ترخیصان</Link> این زمان را به‌طور قابل توجهی کاهش می‌دهد.
+                      </p>
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
+
+
+
               {/* Benefits Section */}
               <section className="mb-12">
                 <h2 className="heading-secondary mb-6 text-persian">مزایای داشتن کارت بازرگانی</h2>
