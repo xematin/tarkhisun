@@ -285,6 +285,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             ) : items.length === 0 ? (
               <p className="py-10 text-center text-muted-foreground text-persian">هنوز کارتی ثبت نشده.</p>
             ) : (
+              <div className="ts-stack-md">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -304,14 +305,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                       .reduce((s, e) => s + (Number(e.amount) || 0), 0);
                     return (
                       <TableRow key={r.id}>
-                        <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                        <TableCell data-label="نام کارت" className="text-persian font-medium align-top md:!text-sm text-base md:!font-medium !font-bold">{r.name}</TableCell>
+                        <TableCell data-label="موجودی کل (دلار)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {usdTotal > 0 ? `${usdTotal.toLocaleString("fa-IR")} دلار` : "—"}
                         </TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                        <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
-                        <TableCell className="text-persian align-top min-w-[240px]">
+                        <TableCell data-label="سکشن‌ها" className="text-persian align-top md:min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
                             <div className="flex flex-col gap-1.5 text-sm">
                               {r.entries.map((e) => {
@@ -320,7 +321,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                                   ? (Number(e.unit_price_irt) || (Number(e.total_irt) / amt))
                                   : 0;
                                 return (
-                                  <div key={e.id} className="flex justify-between gap-3">
+                                  <div key={e.id} className="flex flex-wrap justify-between gap-x-3 gap-y-0.5">
                                     <span className="font-medium">{e.title}</span>
                                     <span className="tabular-nums text-muted-foreground">
                                       {fmtMoney(e.amount, e.currency)}
@@ -334,7 +335,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ) : <span className="text-muted-foreground text-sm">—</span>}
                         </TableCell>
-                        <TableCell className="text-persian text-sm max-w-sm align-top hidden md:table-cell">
+                        <TableCell data-label="کاربران" className="text-persian text-sm md:max-w-sm align-top hidden md:table-cell">
                           {r.entries && r.entries.length > 0 && r.entries.some(e => e.users.length > 0) ? (
                             <div className="flex flex-col gap-2">
                               {r.entries.filter(e => e.users.length > 0).map(e => (
@@ -352,27 +353,33 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ) : "—"}
                         </TableCell>
-                        <TableCell className="align-top">
-                          <div className="grid grid-cols-3 gap-1 justify-end" style={{maxWidth: 160}}>
-                            <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها">
+                        <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
+                          <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[160px]">
+                            <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
                               <FileText className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">گزارش</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران">
+                            <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران" className="md:!justify-center justify-start gap-1.5 h-9">
                               <DollarSign className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">قیمت دلار</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
+                            <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه" className="md:!justify-center justify-start gap-1.5 h-9">
                               <History className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">تاریخچه</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها">
+                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Wallet className="w-4 h-4 text-accent" />
+                              <span className="md:hidden text-persian text-[11px]">هزینه</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
+                            <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Pencil className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">ویرایش</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
+                            <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Trash2 className="w-4 h-4 text-destructive" />
+                              <span className="md:hidden text-persian text-[11px]">حذف</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600">
+                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 h-9">
                               <Banknote className="w-4 h-4 ml-1" />
                               <span className="text-persian text-xs">پرداخت</span>
                             </Button>
@@ -383,6 +390,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                   })}
                 </TableBody>
               </Table>
+              </div>
             )}
 
             <CardDialog
@@ -1727,7 +1735,7 @@ const UsersManagementPanel = ({
         {loading ? (
           <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -1743,23 +1751,27 @@ const UsersManagementPanel = ({
                   <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کاربری یافت نشد.</TableCell></TableRow>
                 ) : filtered.map(u => (
                   <TableRow key={u.id}>
-                    <TableCell className="text-persian">{u.first_name}</TableCell>
-                    <TableCell className="text-persian">{u.last_name}</TableCell>
-                    <TableCell className="text-persian">@{u.username}</TableCell>
-                    <TableCell className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
-                    <TableCell>
-                      <div className="flex justify-center gap-1.5 flex-wrap">
-                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها">
+                    <TableCell data-label="نام" className="text-persian">{u.first_name}</TableCell>
+                    <TableCell data-label="نام خانوادگی" className="text-persian">{u.last_name}</TableCell>
+                    <TableCell data-label="نام کاربری" className="text-persian">@{u.username}</TableCell>
+                    <TableCell data-label="تاریخ ساخت" className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
+                    <TableCell data-label="عملیات">
+                      <div className="flex md:justify-center gap-1.5 flex-wrap">
+                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها" className="gap-1.5">
                           <Wallet className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">پرداختی‌ها</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها">
+                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها" className="gap-1.5">
                           <FileText className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">کوتاژها</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش">
+                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش" className="gap-1.5">
                           <Pencil className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">ویرایش</span>
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف">
+                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف" className="gap-1.5">
                           <Trash2 className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">حذف</span>
                         </Button>
                       </div>
                     </TableCell>
@@ -2209,7 +2221,7 @@ const AllPaymentsPanel = ({
         ) : filtered.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی برای نمایش وجود ندارد.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -2226,15 +2238,15 @@ const AllPaymentsPanel = ({
               <TableBody>
                 {filtered.map(p => (
                   <TableRow key={p.id}>
-                    <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
-                    <TableCell className="text-persian">
+                    <TableCell data-label="کارت" className="text-persian font-medium">{p.card_name}</TableCell>
+                    <TableCell data-label="کاربر" className="text-persian">
                       <div className="font-medium">{p.first_name} {p.last_name}</div>
                       <div className="text-xs text-muted-foreground">@{p.username}</div>
                     </TableCell>
-                    <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
-                    <TableCell className="text-persian text-xs tabular-nums whitespace-nowrap">{toJalali(p.created_at)}</TableCell>
-                    <TableCell>{statusBadge(p.status)}</TableCell>
-                    <TableCell>
+                    <TableCell data-label="مبلغ (تومان)" className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs tabular-nums whitespace-nowrap">{toJalali(p.created_at)}</TableCell>
+                    <TableCell data-label="وضعیت">{statusBadge(p.status)}</TableCell>
+                    <TableCell data-label="فیش">
                       {p.receipt_path ? (
                         isImage(p.receipt_path) ? (
                           <button type="button" onClick={() => setPreview(p.receipt_path)} className="block" title="نمایش فیش">
@@ -2249,16 +2261,18 @@ const AllPaymentsPanel = ({
                         <span className="text-muted-foreground text-xs text-persian">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>
+                    <TableCell data-label="توضیح" className="text-persian text-xs md:max-w-[200px] md:truncate" title={p.note || ""}>
                       {p.note || "—"}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1 justify-center">
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش">
+                    <TableCell data-label="عملیات">
+                      <div className="flex gap-1 md:justify-center">
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش" className="gap-1.5">
                           <Pencil className="w-3.5 h-3.5" />
+                          <span className="md:hidden text-persian text-xs">ویرایش</span>
                         </Button>
-                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف">
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف" className="gap-1.5">
                           <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                          <span className="md:hidden text-persian text-xs">حذف</span>
                         </Button>
                       </div>
                     </TableCell>
@@ -2910,7 +2924,7 @@ const CardAdminPaymentsPanel = ({
         ) : filtered.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی ثبت نشده.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -2926,14 +2940,14 @@ const CardAdminPaymentsPanel = ({
               <TableBody>
                 {filtered.map(p => (
                   <TableRow key={p.id}>
-                    <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
-                    <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
-                    <TableCell className="text-persian text-xs">
+                    <TableCell data-label="کارت" className="text-persian font-medium">{p.card_name}</TableCell>
+                    <TableCell data-label="مبلغ (تومان)" className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums font-medium">{p.pay_date_jalali || toJalali(p.created_at || p.updated_at || "")}</div>
                       {p.pay_date_gregorian && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_gregorian}</div>}
                     </TableCell>
-                    <TableCell>{statusBadge(p.status)}</TableCell>
-                    <TableCell>
+                    <TableCell data-label="وضعیت">{statusBadge(p.status)}</TableCell>
+                    <TableCell data-label="فیش">
                       {p.receipt_path ? (
                         isImage(p.receipt_path) ? (
                           <button onClick={() => setPreview(p.receipt_path)}><img src={p.receipt_path!} alt="فیش" className="w-12 h-12 object-cover rounded border" /></button>
@@ -2942,12 +2956,12 @@ const CardAdminPaymentsPanel = ({
                         )
                       ) : <span className="text-muted-foreground text-xs">—</span>}
                     </TableCell>
-                    <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>{p.note || "—"}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش"><Pencil className="w-4 h-4" /></Button>
-                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <TableCell data-label="یادداشت" className="text-persian text-xs md:max-w-[200px] md:truncate" title={p.note || ""}>{p.note || "—"}</TableCell>
+                    <TableCell data-label="عملیات">
+                      <div className="flex gap-1 flex-wrap">
+                        {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600 gap-1.5">✓ <span className="md:hidden text-persian text-xs">تایید</span></Button>}
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش" className="gap-1.5"><Pencil className="w-4 h-4" /><span className="md:hidden text-persian text-xs">ویرایش</span></Button>
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف" className="gap-1.5"><Trash2 className="w-4 h-4 text-destructive" /><span className="md:hidden text-persian text-xs">حذف</span></Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -3158,7 +3172,7 @@ const KotajItemsSearchPanel = ({
         ) : items.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">قلمی یافت نشد.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -3175,14 +3189,14 @@ const KotajItemsSearchPanel = ({
               <TableBody>
                 {items.map(r => (
                   <TableRow key={r.id}>
-                    <TableCell className="text-persian font-medium">{r.name}</TableCell>
-                    <TableCell className="tabular-nums">{r.value_usd.toLocaleString("fa-IR")}</TableCell>
-                    <TableCell className="tabular-nums text-xs">{r.unit_price_irt.toLocaleString("fa-IR")}</TableCell>
-                    <TableCell className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
-                    <TableCell className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
-                    <TableCell className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
-                    <TableCell className="text-persian text-xs">#{r.kotaj_number}</TableCell>
-                    <TableCell className="text-persian text-xs">
+                    <TableCell data-label="قلم" className="text-persian font-medium">{r.name}</TableCell>
+                    <TableCell data-label="دلار" className="tabular-nums">{r.value_usd.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell data-label="قیمت هر دلار" className="tabular-nums text-xs">{r.unit_price_irt.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell data-label="جمع (تومان)" className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
+                    <TableCell data-label="کارت / سکشن" className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
+                    <TableCell data-label="کاربر" className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
+                    <TableCell data-label="کوتاژ" className="text-persian text-xs">#{r.kotaj_number}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums">{r.kotaj_date_gregorian || "—"}</div>
                       <div className="text-muted-foreground opacity-70 tabular-nums">{r.kotaj_date_jalali || ""}</div>
                     </TableCell>
