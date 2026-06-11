@@ -285,6 +285,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             ) : items.length === 0 ? (
               <p className="py-10 text-center text-muted-foreground text-persian">هنوز کارتی ثبت نشده.</p>
             ) : (
+              <div className="ts-stack-md">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -304,14 +305,14 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                       .reduce((s, e) => s + (Number(e.amount) || 0), 0);
                     return (
                       <TableRow key={r.id}>
-                        <TableCell className="text-persian font-medium align-top">{r.name}</TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                        <TableCell data-label="نام کارت" className="text-persian font-medium align-top md:!text-sm text-base md:!font-medium !font-bold">{r.name}</TableCell>
+                        <TableCell data-label="موجودی کل (دلار)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {usdTotal > 0 ? `${usdTotal.toLocaleString("fa-IR")} دلار` : "—"}
                         </TableCell>
-                        <TableCell className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
+                        <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
-                        <TableCell className="text-persian align-top min-w-[240px]">
+                        <TableCell data-label="سکشن‌ها" className="text-persian align-top md:min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
                             <div className="flex flex-col gap-1.5 text-sm">
                               {r.entries.map((e) => {
@@ -320,7 +321,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                                   ? (Number(e.unit_price_irt) || (Number(e.total_irt) / amt))
                                   : 0;
                                 return (
-                                  <div key={e.id} className="flex justify-between gap-3">
+                                  <div key={e.id} className="flex flex-wrap justify-between gap-x-3 gap-y-0.5">
                                     <span className="font-medium">{e.title}</span>
                                     <span className="tabular-nums text-muted-foreground">
                                       {fmtMoney(e.amount, e.currency)}
@@ -334,7 +335,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ) : <span className="text-muted-foreground text-sm">—</span>}
                         </TableCell>
-                        <TableCell className="text-persian text-sm max-w-sm align-top hidden md:table-cell">
+                        <TableCell data-label="کاربران" className="text-persian text-sm md:max-w-sm align-top hidden md:table-cell">
                           {r.entries && r.entries.length > 0 && r.entries.some(e => e.users.length > 0) ? (
                             <div className="flex flex-col gap-2">
                               {r.entries.filter(e => e.users.length > 0).map(e => (
@@ -352,27 +353,33 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ) : "—"}
                         </TableCell>
-                        <TableCell className="align-top">
-                          <div className="grid grid-cols-3 gap-1 justify-end" style={{maxWidth: 160}}>
-                            <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها">
+                        <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
+                          <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[160px]">
+                            <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
                               <FileText className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">گزارش</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران">
+                            <Button size="sm" variant="ghost" onClick={() => setPricesFor(r)} title="قیمت دلار کاربران" className="md:!justify-center justify-start gap-1.5 h-9">
                               <DollarSign className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">قیمت دلار</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه">
+                            <Button size="sm" variant="ghost" onClick={() => setLogsFor(r)} title="تاریخچه" className="md:!justify-center justify-start gap-1.5 h-9">
                               <History className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">تاریخچه</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها">
+                            <Button size="sm" variant="ghost" onClick={() => setKotajCostFor(r)} title="هزینه کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Wallet className="w-4 h-4 text-accent" />
+                              <span className="md:hidden text-persian text-[11px]">هزینه</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش">
+                            <Button size="sm" variant="ghost" onClick={() => { setEditing(r); setOpen(true); }} title="ویرایش" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Pencil className="w-4 h-4" />
+                              <span className="md:hidden text-persian text-[11px]">ویرایش</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
+                            <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Trash2 className="w-4 h-4 text-destructive" />
+                              <span className="md:hidden text-persian text-[11px]">حذف</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600">
+                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 h-9">
                               <Banknote className="w-4 h-4 ml-1" />
                               <span className="text-persian text-xs">پرداخت</span>
                             </Button>
@@ -383,6 +390,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                   })}
                 </TableBody>
               </Table>
+              </div>
             )}
 
             <CardDialog
