@@ -106,11 +106,13 @@ const TSDashboard = () => {
           {state === "login" && <LoginForm onDone={refreshAuth} />}
           {state === "auth" && (
             <Tabs defaultValue="leads" className="space-y-6">
-              <TabsList className="text-persian">
-                <TabsTrigger value="leads">لیدها</TabsTrigger>
-                <TabsTrigger value="card-consult">مشاوره کارت بازرگانی</TabsTrigger>
-                <TabsTrigger value="cards">کارت‌های مشتریان</TabsTrigger>
-              </TabsList>
+              <div className="overflow-x-auto -mx-2 px-2 pb-1">
+                <TabsList className="panel-3d-tabs h-12 md:h-14 w-max md:w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)] gap-1 flex-nowrap md:flex-wrap text-persian">
+                  <TabsTrigger value="leads" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">لیدها</TabsTrigger>
+                  <TabsTrigger value="card-consult" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">مشاوره کارت بازرگانی</TabsTrigger>
+                  <TabsTrigger value="cards" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">کارت‌های مشتریان</TabsTrigger>
+                </TabsList>
+              </div>
               <TabsContent value="leads"><LeadsPanel /></TabsContent>
               <TabsContent value="card-consult"><CardConsultPanel /></TabsContent>
               <TabsContent value="cards"><CardsEntry /></TabsContent>
