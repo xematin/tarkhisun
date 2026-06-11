@@ -2221,7 +2221,7 @@ const AllPaymentsPanel = ({
         ) : filtered.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی برای نمایش وجود ندارد.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -2238,15 +2238,15 @@ const AllPaymentsPanel = ({
               <TableBody>
                 {filtered.map(p => (
                   <TableRow key={p.id}>
-                    <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
-                    <TableCell className="text-persian">
+                    <TableCell data-label="کارت" className="text-persian font-medium">{p.card_name}</TableCell>
+                    <TableCell data-label="کاربر" className="text-persian">
                       <div className="font-medium">{p.first_name} {p.last_name}</div>
                       <div className="text-xs text-muted-foreground">@{p.username}</div>
                     </TableCell>
-                    <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
-                    <TableCell className="text-persian text-xs tabular-nums whitespace-nowrap">{toJalali(p.created_at)}</TableCell>
-                    <TableCell>{statusBadge(p.status)}</TableCell>
-                    <TableCell>
+                    <TableCell data-label="مبلغ (تومان)" className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs tabular-nums whitespace-nowrap">{toJalali(p.created_at)}</TableCell>
+                    <TableCell data-label="وضعیت">{statusBadge(p.status)}</TableCell>
+                    <TableCell data-label="فیش">
                       {p.receipt_path ? (
                         isImage(p.receipt_path) ? (
                           <button type="button" onClick={() => setPreview(p.receipt_path)} className="block" title="نمایش فیش">
@@ -2261,16 +2261,18 @@ const AllPaymentsPanel = ({
                         <span className="text-muted-foreground text-xs text-persian">—</span>
                       )}
                     </TableCell>
-                    <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>
+                    <TableCell data-label="توضیح" className="text-persian text-xs md:max-w-[200px] md:truncate" title={p.note || ""}>
                       {p.note || "—"}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1 justify-center">
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش">
+                    <TableCell data-label="عملیات">
+                      <div className="flex gap-1 md:justify-center">
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش" className="gap-1.5">
                           <Pencil className="w-3.5 h-3.5" />
+                          <span className="md:hidden text-persian text-xs">ویرایش</span>
                         </Button>
-                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف">
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف" className="gap-1.5">
                           <Trash2 className="w-3.5 h-3.5 text-destructive" />
+                          <span className="md:hidden text-persian text-xs">حذف</span>
                         </Button>
                       </div>
                     </TableCell>
@@ -2922,7 +2924,7 @@ const CardAdminPaymentsPanel = ({
         ) : filtered.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">پرداختی ثبت نشده.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -2938,14 +2940,14 @@ const CardAdminPaymentsPanel = ({
               <TableBody>
                 {filtered.map(p => (
                   <TableRow key={p.id}>
-                    <TableCell className="text-persian font-medium">{p.card_name}</TableCell>
-                    <TableCell className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
-                    <TableCell className="text-persian text-xs">
+                    <TableCell data-label="کارت" className="text-persian font-medium">{p.card_name}</TableCell>
+                    <TableCell data-label="مبلغ (تومان)" className="tabular-nums font-bold">{fmtToman(p.amount_irt)}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums font-medium">{p.pay_date_jalali || toJalali(p.created_at || p.updated_at || "")}</div>
                       {p.pay_date_gregorian && <div className="text-muted-foreground opacity-70 tabular-nums">{p.pay_date_gregorian}</div>}
                     </TableCell>
-                    <TableCell>{statusBadge(p.status)}</TableCell>
-                    <TableCell>
+                    <TableCell data-label="وضعیت">{statusBadge(p.status)}</TableCell>
+                    <TableCell data-label="فیش">
                       {p.receipt_path ? (
                         isImage(p.receipt_path) ? (
                           <button onClick={() => setPreview(p.receipt_path)}><img src={p.receipt_path!} alt="فیش" className="w-12 h-12 object-cover rounded border" /></button>
@@ -2954,12 +2956,12 @@ const CardAdminPaymentsPanel = ({
                         )
                       ) : <span className="text-muted-foreground text-xs">—</span>}
                     </TableCell>
-                    <TableCell className="text-persian text-xs max-w-[200px] truncate" title={p.note || ""}>{p.note || "—"}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600">✓</Button>}
-                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش"><Pencil className="w-4 h-4" /></Button>
-                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف"><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                    <TableCell data-label="یادداشت" className="text-persian text-xs md:max-w-[200px] md:truncate" title={p.note || ""}>{p.note || "—"}</TableCell>
+                    <TableCell data-label="عملیات">
+                      <div className="flex gap-1 flex-wrap">
+                        {p.status !== "confirmed" && <Button size="sm" variant="ghost" onClick={() => changeStatus(p.id, "confirmed")} title="تایید" className="text-emerald-600 gap-1.5">✓ <span className="md:hidden text-persian text-xs">تایید</span></Button>}
+                        <Button size="sm" variant="ghost" onClick={() => openEdit(p)} title="ویرایش" className="gap-1.5"><Pencil className="w-4 h-4" /><span className="md:hidden text-persian text-xs">ویرایش</span></Button>
+                        <Button size="sm" variant="ghost" onClick={() => setConfirmDel(p)} title="حذف" className="gap-1.5"><Trash2 className="w-4 h-4 text-destructive" /><span className="md:hidden text-persian text-xs">حذف</span></Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -3170,7 +3172,7 @@ const KotajItemsSearchPanel = ({
         ) : items.length === 0 ? (
           <p className="py-8 text-center text-muted-foreground text-persian text-sm">قلمی یافت نشد.</p>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -3187,14 +3189,14 @@ const KotajItemsSearchPanel = ({
               <TableBody>
                 {items.map(r => (
                   <TableRow key={r.id}>
-                    <TableCell className="text-persian font-medium">{r.name}</TableCell>
-                    <TableCell className="tabular-nums">{r.value_usd.toLocaleString("fa-IR")}</TableCell>
-                    <TableCell className="tabular-nums text-xs">{r.unit_price_irt.toLocaleString("fa-IR")}</TableCell>
-                    <TableCell className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
-                    <TableCell className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
-                    <TableCell className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
-                    <TableCell className="text-persian text-xs">#{r.kotaj_number}</TableCell>
-                    <TableCell className="text-persian text-xs">
+                    <TableCell data-label="قلم" className="text-persian font-medium">{r.name}</TableCell>
+                    <TableCell data-label="دلار" className="tabular-nums">{r.value_usd.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell data-label="قیمت هر دلار" className="tabular-nums text-xs">{r.unit_price_irt.toLocaleString("fa-IR")}</TableCell>
+                    <TableCell data-label="جمع (تومان)" className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
+                    <TableCell data-label="کارت / سکشن" className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
+                    <TableCell data-label="کاربر" className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
+                    <TableCell data-label="کوتاژ" className="text-persian text-xs">#{r.kotaj_number}</TableCell>
+                    <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums">{r.kotaj_date_gregorian || "—"}</div>
                       <div className="text-muted-foreground opacity-70 tabular-nums">{r.kotaj_date_jalali || ""}</div>
                     </TableCell>
