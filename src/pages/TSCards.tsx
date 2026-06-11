@@ -1735,7 +1735,7 @@ const UsersManagementPanel = ({
         {loading ? (
           <div className="flex justify-center py-8"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto ts-stack-md">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -1751,23 +1751,27 @@ const UsersManagementPanel = ({
                   <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کاربری یافت نشد.</TableCell></TableRow>
                 ) : filtered.map(u => (
                   <TableRow key={u.id}>
-                    <TableCell className="text-persian">{u.first_name}</TableCell>
-                    <TableCell className="text-persian">{u.last_name}</TableCell>
-                    <TableCell className="text-persian">@{u.username}</TableCell>
-                    <TableCell className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
-                    <TableCell>
-                      <div className="flex justify-center gap-1.5 flex-wrap">
-                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها">
+                    <TableCell data-label="نام" className="text-persian">{u.first_name}</TableCell>
+                    <TableCell data-label="نام خانوادگی" className="text-persian">{u.last_name}</TableCell>
+                    <TableCell data-label="نام کاربری" className="text-persian">@{u.username}</TableCell>
+                    <TableCell data-label="تاریخ ساخت" className="text-persian text-xs text-muted-foreground">{u.created_at ? toJalali(u.created_at) : "—"}</TableCell>
+                    <TableCell data-label="عملیات">
+                      <div className="flex md:justify-center gap-1.5 flex-wrap">
+                        <Button variant="outline" size="sm" onClick={() => openPayments(u)} title="گزارش پرداختی‌ها" className="gap-1.5">
                           <Wallet className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">پرداختی‌ها</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها">
+                        <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها" className="gap-1.5">
                           <FileText className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">کوتاژها</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش">
+                        <Button variant="outline" size="sm" onClick={() => openEdit(u)} title="ویرایش" className="gap-1.5">
                           <Pencil className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">ویرایش</span>
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف">
+                        <Button variant="destructive" size="sm" onClick={() => remove(u)} title="حذف" className="gap-1.5">
                           <Trash2 className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">حذف</span>
                         </Button>
                       </div>
                     </TableCell>
