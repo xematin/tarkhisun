@@ -28,8 +28,19 @@ const RelatedArticles = ({ currentPostId, limit = 3 }: RelatedArticlesProps) => 
               to={`/blog/${post.slug}`}
               className="group"
             >
-              <Card className="h-full transition-all duration-300 hover:shadow-lg hover:border-primary/50">
-                <CardHeader>
+              <Card className="h-full overflow-hidden !p-0 transition-all duration-300 hover:shadow-lg hover:border-primary/50">
+                {post.image ? (
+                  <div className="w-full aspect-[3/2] bg-muted overflow-hidden">
+                    <img
+                      src={post.image}
+                      alt={post.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                ) : null}
+                <CardHeader className="pt-5">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                     <span className="px-2 py-1 bg-primary/10 text-primary rounded-md font-medium">
                       {post.category}
