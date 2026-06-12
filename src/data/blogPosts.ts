@@ -54,7 +54,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه گمرکی", "حقوق گمرکی", "عوارض گمرکی", "محاسبه تعرفه"],
     relatedPosts: [2, 4, 1, 13],
-    image: "",
+    image: "/images/blog/customs-tariff.webp",
   },
   {
     id: 4,
