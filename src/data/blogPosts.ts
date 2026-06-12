@@ -458,7 +458,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["شرکت ترخیص کالا", "ترخیص‌کار", "ترخیص کالا از گمرک", "خدمات ترخیص"],
     relatedPosts: [1, 20, 17, 2],
-    image: "",
+    image: "/images/blog/customs-clearance-company.webp",
   },
   {
     id: 27,
