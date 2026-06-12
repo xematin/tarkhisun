@@ -68,7 +68,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["نرخ ارز", "ارز گمرکی", "محاسبه حقوق", "هزینه واردات"],
     relatedPosts: [3, 2, 8, 1],
-    image: "",
+    image: "/images/blog/customs-exchange-rate.webp",
   },
   {
     id: 5,
