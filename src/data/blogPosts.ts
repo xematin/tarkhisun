@@ -339,7 +339,7 @@ export const blogPosts: BlogPost[] = [
       "واردات بندرعباس",
     ],
     relatedPosts: [1, 2, 3, 4],
-    image: "",
+    image: "/images/blog/bandar-abbas-clearance.webp",
   },
   {
     id: 21,
