@@ -122,7 +122,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه واردات خودرو برقی", "خودرو هیبریدی", "حقوق گمرکی ۴ درصد", "واردات خودرو ۱۴۰۴"],
     relatedPosts: [3, 24, 2, 31],
-    image: "",
+    image: "/images/blog/electric-hybrid-car-tariff.webp",
   },
   {
     id: 31,
