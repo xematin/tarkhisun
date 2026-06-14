@@ -471,7 +471,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["حمل و نقل بین‌المللی", "حمل دریایی", "حمل هوایی", "فورواردر"],
     relatedPosts: [6, 14, 10, 17],
-    image: "",
+    image: "/images/blog/international-shipping-guide.webp",
   },
   {
     id: 28,
