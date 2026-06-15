@@ -205,7 +205,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ته لنجی", "ملوانی", "واردات غیررسمی", "دبی", "ریسک قانونی"],
     relatedPosts: [17, 1, 9, 13],
-    image: "",
+    image: "/images/blog/tah-lanji-import.webp",
   },
   {
     id: 12,
@@ -247,7 +247,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ترانزیت", "کویت", "افغانستان", "TIR", "حمل بین‌المللی"],
     relatedPosts: [15, 10, 6, 17],
-    image: "",
+    image: "/images/blog/kuwait-afghanistan-transit.webp",
   },
   {
     id: 15,
@@ -261,7 +261,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["اسلام قلعه", "گذرگاه مرزی", "افغانستان", "صادرات", "واردات"],
     relatedPosts: [14, 9, 1, 10],
-    image: "",
+    image: "/images/blog/islam-qala.webp",
   },
   {
     id: 16,
@@ -303,7 +303,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["مخزن آب", "تانکر", "ترخیص", "استاندارد", "مجوز بهداشتی"],
     relatedPosts: [1, 16, 2, 12],
-    image: "",
+    image: "/images/blog/water-tank-clearance.webp",
   },
   {
     id: 19,
@@ -317,7 +317,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["قطعات یدکی", "خودرو", "ترخیص", "واردات", "استاندارد"],
     relatedPosts: [1, 2, 12, 16],
-    image: "",
+    image: "/images/blog/car-parts-import.webp",
   },
   {
     id: 20,
@@ -484,7 +484,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["شرکت بازرگانی", "ثبت شرکت بازرگانی", "کارت بازرگانی", "واردات صادرات"],
     relatedPosts: [7, 23, 9, 5],
-    image: "",
+    image: "/images/blog/trading-company.webp",
   },
   {
     id: 32,
