@@ -21,3 +21,4 @@ Disallow: /api/
 
 # Sitemap location
 Sitemap: https://tarkhisun.com/sitemap.xml
+Sitemap: https://tarkhisun.com/rss.xml
