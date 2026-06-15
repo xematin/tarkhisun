@@ -1629,6 +1629,11 @@ const UsersManagementPanel = ({
     first_name: "", last_name: "", username: "", password: "",
   });
   const [saving, setSaving] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createForm, setCreateForm] = useState<{ first_name: string; last_name: string; username: string; password: string; password2: string }>({
+    first_name: "", last_name: "", username: "", password: "", password2: "",
+  });
+  const [creating, setCreating] = useState(false);
   const [payUser, setPayUser] = useState<CardUser | null>(null);
   const [payData, setPayData] = useState<any>(null);
   const [payLoading, setPayLoading] = useState(false);
@@ -1684,6 +1689,37 @@ const UsersManagementPanel = ({
     }
   };
 
+  const createUser = async () => {
+    const f = createForm;
+    if (!f.first_name.trim() || !f.last_name.trim()) {
+      toast({ title: "خطا", description: "نام و نام خانوادگی الزامی است", variant: "destructive" }); return;
+    }
+    if (!/^[A-Za-z0-9_.\-]{3,64}$/.test(f.username)) {
+      toast({ title: "خطا", description: "نام کاربری نامعتبر است (حداقل ۳ کاراکتر، حروف/اعداد لاتین)", variant: "destructive" }); return;
+    }
+    if (f.password.length < 6) {
+      toast({ title: "خطا", description: "رمز عبور حداقل ۶ کاراکتر باشد", variant: "destructive" }); return;
+    }
+    if (f.password !== f.password2) {
+      toast({ title: "خطا", description: "رمز عبور و تکرار آن یکسان نیستند", variant: "destructive" }); return;
+    }
+    setCreating(true);
+    try {
+      await api("/api/admin/card-user-create.php", {
+        method: "POST",
+        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password }),
+      });
+      toast({ title: "کاربر ساخته شد" });
+      setCreateOpen(false);
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setCreating(false);
+    }
+  };
+
+
   const remove = async (u: CardUser) => {
     if (!confirm(`حذف کاربر ${u.first_name} ${u.last_name}؟`)) return;
     try {
@@ -1724,6 +1760,10 @@ const UsersManagementPanel = ({
                 className="w-full sm:w-56 pr-8 text-persian"
               />
             </div>
+            <Button variant="default" size="sm" onClick={() => { setCreateForm({ first_name: "", last_name: "", username: "", password: "", password2: "" }); setCreateOpen(true); }} className="gap-1.5">
+              <Plus className="h-4 w-4" />
+              <span className="text-persian">افزودن</span>
+            </Button>
             <Button variant="outline" size="sm" onClick={load} disabled={loading}>
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             </Button>
@@ -1812,6 +1852,43 @@ const UsersManagementPanel = ({
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <Dialog open={createOpen} onOpenChange={(o) => !creating && setCreateOpen(o)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">افزودن کاربر جدید</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div>
+                <Label className="text-persian">نام</Label>
+                <Input value={createForm.first_name} onChange={e => setCreateForm(f => ({ ...f, first_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام خانوادگی</Label>
+                <Input value={createForm.last_name} onChange={e => setCreateForm(f => ({ ...f, last_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام کاربری</Label>
+                <Input value={createForm.username} onChange={e => setCreateForm(f => ({ ...f, username: e.target.value }))} dir="ltr" placeholder="latin letters / digits" />
+              </div>
+              <div>
+                <Label className="text-persian">تعیین رمز عبور</Label>
+                <Input type="text" value={createForm.password} onChange={e => setCreateForm(f => ({ ...f, password: e.target.value }))} dir="ltr" placeholder="حداقل ۶ کاراکتر" />
+              </div>
+              <div>
+                <Label className="text-persian">تایید رمز عبور</Label>
+                <Input type="text" value={createForm.password2} onChange={e => setCreateForm(f => ({ ...f, password2: e.target.value }))} dir="ltr" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={creating}>انصراف</Button>
+              <Button onClick={createUser} disabled={creating}>
+                {creating && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
+                افزودن
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+
 
         <Dialog open={!!payUser} onOpenChange={(o) => !o && setPayUser(null)}>
           <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">

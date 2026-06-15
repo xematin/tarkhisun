@@ -6,7 +6,7 @@
     <atom:link href="https://tarkhisun.com/rss.xml" rel="self" type="application/rss+xml" />
     <description>آخرین مقالات و راهنمای ترخیص کالا، گمرک، تعرفه و تجارت بین‌الملل از ترخیصان</description>
     <language>fa-IR</language>
-    <lastBuildDate>Mon, 15 Jun 2026 12:42:47 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 14:09:53 GMT</lastBuildDate>
     <generator>tarkhisun-sitemap-generator</generator>
     <item>
       <title>لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام</title>
@@ -15,7 +15,7 @@
       <pubDate>Tue, 20 Jan 2026 08:00:00 GMT</pubDate>
       <description>تحلیل جامع لایحه بودجه ۱۴۰۵: ارقام کلان ۱۴,۴۴۱ هزار میلیارد ریال، تعرفه گمرکی، مالیات، یارانه‌ها و حقوق کارکنان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/budget-1405.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/budget-1405-guide.webp" type="image/webp" />
       <category>قوانین و مقررات</category>
       <category>لایحه بودجه ۱۴۰۵</category>
       <category>بودجه ۱۴۰۵</category>
@@ -30,7 +30,7 @@
       <pubDate>Thu, 15 Jan 2026 08:00:00 GMT</pubDate>
       <description>راهنمای کامل تعرفه‌های گمرکی ۱۴۰۵ براساس لایحه بودجه: حقوق ورودی خودرو برقی ۴٪، هیبریدی ۱۵٪، تعرفه گوشی ۴۰٪ و نرخ ارز ۹۴,۳۰۰ تومان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/customs-tariff-2025.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/customs-tariff-2025-guide.webp" type="image/webp" />
       <category>تعرفه و مالیات</category>
       <category>تعرفه گمرکی ۱۴۰۵</category>
       <category>لایحه بودجه ۱۴۰۵</category>
@@ -45,7 +45,7 @@
       <pubDate>Sat, 19 Apr 2025 08:00:00 GMT</pubDate>
       <description>راهنمای کامل تعرفه واردات خودرو برقی و هیبریدی در سال ۱۴۰۴ با حقوق گمرکی ۴ درصد، شرایط واردات و مدارک لازم</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/electric-hybrid-car-tariff.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/electric-car-tariff-guide.webp" type="image/webp" />
       <category>تعرفه و مالیات</category>
       <category>تعرفه واردات خودرو برقی</category>
       <category>خودرو هیبریدی</category>
@@ -59,7 +59,7 @@
       <pubDate>Mon, 14 Apr 2025 08:00:00 GMT</pubDate>
       <description>راهنمای کامل مقایسه مسیرهای واردات از چین، امارات و ترکیه به ایران با هزینه‌ها، زمان حمل و مزایای هر مسیر</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/import-routes-iran.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/import-routes-iran-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>واردات کالا به ایران</category>
       <category>واردات از چین</category>
@@ -74,7 +74,7 @@
       <pubDate>Tue, 16 Dec 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع شرکت بازرگانی: تعریف، انواع، مراحل ثبت، مجوزها، سرمایه لازم و خدمات شرکت‌های بازرگانی در ایران</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/trading-company.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/trading-company-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>شرکت بازرگانی</category>
       <category>ثبت شرکت بازرگانی</category>
@@ -102,7 +102,7 @@
       <pubDate>Tue, 16 Dec 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع شرکت ترخیص کالا: تعریف، خدمات، مزایا، نحوه انتخاب و معیارهای شرکت ترخیص‌کار معتبر در ایران</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/customs-clearance-company.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/customs-clearance-company-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>شرکت ترخیص کالا</category>
       <category>ترخیص‌کار</category>
@@ -116,7 +116,7 @@
       <pubDate>Tue, 16 Dec 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع مشاوره بازرگانی: تعریف، انواع خدمات، مزایا، نحوه انتخاب مشاور و اهمیت مشاوره در تجارت بین‌المللی</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/business-consulting.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/business-consulting-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>مشاوره بازرگانی</category>
       <category>مشاوره تجارت</category>
@@ -130,7 +130,7 @@
       <pubDate>Wed, 10 Dec 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع سامانه خودروهای وارداتی: نحوه ثبت‌نام، پیگیری وضعیت خودرو، مدارک لازم، کد رهگیری و تمام مراحل واردات خودرو به ایران</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/imported-car-system.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/imported-car-system-guide.webp" type="image/webp" />
       <category>سیستم‌های گمرکی</category>
       <category>سامانه خودروهای وارداتی</category>
       <category>ثبت‌نام خودرو وارداتی</category>
@@ -147,7 +147,7 @@
       <pubDate>Wed, 10 Dec 2025 08:00:00 GMT</pubDate>
       <description>راهنمای کامل کارت صادراتی: تعریف، تفاوت با کارت بازرگانی، مدارک لازم، شرایط دریافت و مراحل صدور فوری در سال ۱۴۰۴ برای صادرکنندگان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/export-card.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/export-card-complete-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>کارت صادراتی</category>
       <category>تفاوت کارت صادراتی و بازرگانی</category>
@@ -164,7 +164,7 @@
       <pubDate>Tue, 18 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترخیص موبایل و رجیستری گوشی از گمرک: مراحل رجیستری آنلاین و حضوری، مدارک لازم، حقوق گمرکی، هزینه‌ها، نکات مهم و راهکارهای عملی واردات موبایل</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/mobile-registry-clearance.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/mobile-phone-customs-clearance-registry-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>ترخیص موبایل</category>
       <category>رجیستری موبایل</category>
@@ -184,7 +184,7 @@
       <pubDate>Tue, 18 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترخیص لوازم خانگی از گمرک بندرعباس: انواع لوازم خانگی، مدارک لازم، کد تعرفه، حقوق گمرکی، استانداردها، مجوزهای لازم و نکات کلیدی واردات</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/home-appliances-clearance.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/home-appliances-clearance-bandar-abbas-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>ترخیص لوازم خانگی</category>
       <category>گمرک بندرعباس</category>
@@ -203,7 +203,7 @@
       <pubDate>Sat, 18 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع و گام‌به‌گام ترخیص کالا از بندرعباس: تمام مراحل ترخیص، مدارک لازم، هزینه‌ها، زمان ترخیص، نکات کلیدی و راهکارهای عملی برای سرعت‌بخشی به فرآیند</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/bandar-abbas-clearance.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/bandar-abbas-comprehensive-clearance-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>صفر تا صد ترخیص کالا</category>
       <category>بندرعباس</category>
@@ -220,7 +220,7 @@
       <pubDate>Fri, 14 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترخیص قطعات یدکی خودرو از گمرک: انواع قطعات، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها، مجوزهای لازم و نکات کلیدی خرید و ترخیص</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/car-parts-import.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/car-parts-import-customs-clearance-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>قطعات یدکی</category>
       <category>خودرو</category>
@@ -235,7 +235,7 @@
       <pubDate>Tue, 11 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای کامل ترخیص مخزن ذخیره آب، تانکر و منبع آب از گمرک بندرعباس: مدارک لازم، کد تعرفه، حقوق گمرکی، استانداردها، مجوزهای بهداشت و محیط زیست</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/water-tank-clearance.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/water-tank-clearance-bandar-abbas-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>مخزن آب</category>
       <category>تانکر</category>
@@ -250,7 +250,7 @@
       <pubDate>Sun, 09 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع واردات کالا از دبی به بندرعباس: روش‌های حمل دریایی و هوایی، مدارک لازم، هزینه‌ها، زمان حمل، فرآیند ترخیص و نکات حقوقی واردات از امارات</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/dubai-to-abbas.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/dubai-to-abbas-import-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>واردات از دبی</category>
       <category>بندرعباس</category>
@@ -265,7 +265,7 @@
       <pubDate>Thu, 06 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترخیص ژنراتور از گمرک بندرعباس: انواع ژنراتور، مدارک لازم، کد تعرفه، حقوق و عوارض گمرکی، استانداردها و مجوزهای لازم برای واردات</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/generator-clearance-bandar-abbas.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/generator-clearance-bandar-abbas-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>ژنراتور</category>
       <category>ترخیص</category>
@@ -280,7 +280,7 @@
       <pubDate>Mon, 03 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع گذرگاه مرزی اسلام قلعه: موقعیت جغرافیایی، خدمات گمرکی، مدارک صادرات و واردات، تعرفه‌ها، ساعات کاری و نکات مهم تجارت با افغانستان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/islam-qala.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/islam-qala-border-crossing-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>اسلام قلعه</category>
       <category>گذرگاه مرزی</category>
@@ -295,7 +295,7 @@
       <pubDate>Sat, 01 Nov 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترانزیت کالا از کویت به افغانستان: مسیرهای حمل، مدارک لازم، کنوانسیون TIR، هزینه‌ها، زمان حمل، گمرکات عبوری و نکات حقوقی</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/kuwait-afghanistan-transit.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/kuwait-afghanistan-transit-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>ترانزیت</category>
       <category>کویت</category>
@@ -310,7 +310,7 @@
       <pubDate>Thu, 30 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع کمیسیون ماده یک: نحوه اعتراض به ارزش گمرکی، مدارک لازم، فرآیند رسیدگی، آرای صادره و استراتژی‌های موفقیت در دفاع از حقوق واردکنندگان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/customs-article-1-commission.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/customs-article-1-commission-guide.webp" type="image/webp" />
       <category>قوانین گمرکی</category>
       <category>کمیسیون ماده 1</category>
       <category>اعتراض گمرکی</category>
@@ -324,7 +324,7 @@
       <pubDate>Tue, 28 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع ترخیص ماشین آلات حفاری: انواع ماشین آلات، مدارک لازم، کد تعرفه HS، حقوق گمرکی، استانداردها، مجوزهای لازم و نکات کلیدی خرید و واردات</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/excavation-machinery.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/excavation-machinery-import-guide.webp" type="image/webp" />
       <category>راهنمای ترخیص</category>
       <category>ماشین آلات حفاری</category>
       <category>واردات ماشین آلات</category>
@@ -339,7 +339,7 @@
       <pubDate>Sun, 26 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع واردات ته‌لنجی: تعریف، تفاوت با واردات رسمی، فرآیند حمل از دبی، ریسک‌های حقوقی، جرایم قاچاق، مشکلات گمرکی و راهکارهای قانونی واردات</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/tah-lanji-import.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/tah-lanji-import-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>ته لنجی</category>
       <category>ملوانی</category>
@@ -369,7 +369,7 @@
       <pubDate>Tue, 14 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع صادرات و واردات کالا در ایران: مراحل، مدارک، مجوزها، ثبت سفارش، ترخیص گمرکی و نکات مهم برای فعالیت در تجارت خارجی</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/import-export-guide.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/import-export-guide-iran.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>صادرات</category>
       <category>واردات</category>
@@ -384,7 +384,7 @@
       <pubDate>Tue, 14 Oct 2025 08:00:00 GMT</pubDate>
       <description>بررسی جامع تفاوت ارز سنا و نیمایی: تعریف، نحوه تخصیص، نرخ‌ها، مزایا و معایب، کالاهای مشمول و تأثیر بر هزینه واردات برای بازرگانان</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/sana-nima-currencies.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/sana-nima-exchange-rate-difference-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>ارز سنا</category>
       <category>ارز نیمایی</category>
@@ -399,7 +399,7 @@
       <pubDate>Tue, 14 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع کارت بازرگانی: تعریف، انواع، شرایط دریافت، مدارک لازم، فرآیند صدور، هزینه‌ها و تفاوت با کد اقتصادی برای فعالیت در تجارت خارجی</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/business-card-commercial.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/business-card-complete-guide.webp" type="image/webp" />
       <category>تجارت بین‌الملل</category>
       <category>کارت بازرگانی</category>
       <category>کد اقتصادی</category>
@@ -429,7 +429,7 @@
       <pubDate>Tue, 14 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای گام‌به‌گام استفاده از سامانه جامع تجارت: ثبت‌نام، احراز هویت، ثبت سفارش، صدور مجوزها، پیگیری ترخیص و تمام خدمات الکترونیک تجارت خارجی</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/ntsw-guide.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/ntsw-complete-guide.webp" type="image/webp" />
       <category>سیستم‌های گمرکی</category>
       <category>سامانه جامع تجارت</category>
       <category>NTSW</category>
@@ -443,7 +443,7 @@
       <pubDate>Wed, 08 Oct 2025 08:00:00 GMT</pubDate>
       <description>راهنمای جامع نرخ ارز گمرکی: تعریف، روش‌های تعیین، تفاوت با نرخ بازار، نحوه محاسبه حقوق ورودی و تأثیر بر هزینه نهایی واردات کالا به ایران</description>
       <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/customs-exchange-rate.webp" type="image/webp" />
+      <enclosure url="https://tarkhisun.com/images/blog/customs-exchange-rate-guide.webp" type="image/webp" />
       <category>تعرفه و مالیات</category>
       <category>نرخ ارز</category>
       <category>ارز گمرکی</category>
