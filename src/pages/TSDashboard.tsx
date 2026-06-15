@@ -24,8 +24,8 @@ interface LeadRow {
   last_seen: string;
   search_count: number;
   ip: string | null;
-  note: string | null;
-  status: "new" | "contacted" | "done" | "rejected";
+  note?: string | null;
+  status?: "new" | "contacted" | "done" | "rejected";
   recent_queries?: { query: string; created_at: string }[];
 }
 interface LogRow { id: number; query: string; created_at: string; }
