@@ -1289,11 +1289,20 @@ const BillingDialog = ({
           )}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="gap-2 flex-wrap">
+          <Button
+            onClick={() => downloadBillingPdf(card.name, timeline, {
+              kotajToman, paid, pending: byStatus.pending || 0, balance,
+            })}
+            disabled={loading}
+            className="text-persian bg-gradient-to-l from-primary to-accent text-primary-foreground hover:opacity-90 shadow-md"
+          >
+            <Download className="w-4 h-4 ml-1" /> دانلود PDF
+          </Button>
           <Button variant="outline" onClick={() => window.print()} className="text-persian">
             <Printer className="w-4 h-4 ml-1" /> چاپ
           </Button>
-          <Button onClick={onClose} className="text-persian">بستن</Button>
+          <Button variant="ghost" onClick={onClose} className="text-persian">بستن</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
