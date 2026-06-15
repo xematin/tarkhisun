@@ -1853,6 +1853,43 @@ const UsersManagementPanel = ({
           </DialogContent>
         </Dialog>
 
+        <Dialog open={createOpen} onOpenChange={(o) => !creating && setCreateOpen(o)}>
+          <DialogContent className="panel-fa max-w-md">
+            <DialogHeader><DialogTitle className="text-persian">افزودن کاربر جدید</DialogTitle></DialogHeader>
+            <div className="space-y-3">
+              <div>
+                <Label className="text-persian">نام</Label>
+                <Input value={createForm.first_name} onChange={e => setCreateForm(f => ({ ...f, first_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام خانوادگی</Label>
+                <Input value={createForm.last_name} onChange={e => setCreateForm(f => ({ ...f, last_name: e.target.value }))} className="text-persian" />
+              </div>
+              <div>
+                <Label className="text-persian">نام کاربری</Label>
+                <Input value={createForm.username} onChange={e => setCreateForm(f => ({ ...f, username: e.target.value }))} dir="ltr" placeholder="latin letters / digits" />
+              </div>
+              <div>
+                <Label className="text-persian">تعیین رمز عبور</Label>
+                <Input type="text" value={createForm.password} onChange={e => setCreateForm(f => ({ ...f, password: e.target.value }))} dir="ltr" placeholder="حداقل ۶ کاراکتر" />
+              </div>
+              <div>
+                <Label className="text-persian">تایید رمز عبور</Label>
+                <Input type="text" value={createForm.password2} onChange={e => setCreateForm(f => ({ ...f, password2: e.target.value }))} dir="ltr" />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={creating}>انصراف</Button>
+              <Button onClick={createUser} disabled={creating}>
+                {creating && <Loader2 className="h-4 w-4 animate-spin ml-2" />}
+                افزودن
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+
+
         <Dialog open={!!payUser} onOpenChange={(o) => !o && setPayUser(null)}>
           <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">
             <DialogHeader>
