@@ -330,7 +330,7 @@ const LeadsPanel = () => {
               <TableBody>
                 {items.map((r) => {
                   const d = drafts[r.id] || {};
-                  const curStatus = (d.status ?? r.status) as LeadRow["status"];
+                  const curStatus = (d.status ?? r.status ?? "new") as LeadRow["status"];
                   const dirty = (d.status !== undefined && d.status !== r.status) ||
                                 (d.note !== undefined && d.note !== (r.note ?? ""));
                   return (
@@ -351,6 +351,7 @@ const LeadsPanel = () => {
                         <Select
                           value={curStatus}
                           onValueChange={(v) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], status: v } }))}
+                          disabled={r.status === undefined}
                         >
                           <SelectTrigger className="h-8 w-32 text-persian">
                             <SelectValue>
