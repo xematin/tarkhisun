@@ -284,7 +284,10 @@ const Blog = () => {
                       </CardTitle>
 
 
-                      <CardDescription className="text-persian line-clamp-3">{post.excerpt}</CardDescription>
+                      <CardDescription
+                        className="text-persian line-clamp-3"
+                        style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}
+                      >{post.excerpt}</CardDescription>
                     </CardHeader>
 
                     <CardContent className="pt-0 pb-6">
