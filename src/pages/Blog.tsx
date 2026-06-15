@@ -276,9 +276,13 @@ const Blog = () => {
                         </div>
                       </div>
 
-                      <CardTitle className="text-xl group-hover:text-accent transition-colors text-persian">
+                      <CardTitle
+                        className="text-xl group-hover:text-accent transition-colors text-persian"
+                        style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}
+                      >
                         {post.title}
                       </CardTitle>
+
 
                       <CardDescription className="text-persian line-clamp-3">{post.excerpt}</CardDescription>
                     </CardHeader>
