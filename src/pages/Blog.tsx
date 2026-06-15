@@ -264,12 +264,12 @@ const Blog = () => {
                         <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">
                           {post.category}
                         </span>
-                        <div className="flex items-center gap-4 text-xs text-muted-foreground text-persian">
-                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground text-persian">
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                             <Calendar className="w-3 h-3" />
                             {post.date}
                           </div>
-                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                             <Clock className="w-3 h-3" />
                             {post.readTime}
                           </div>
@@ -292,7 +292,7 @@ const Blog = () => {
 
                     <CardContent className="pt-0 pb-6">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground text-persian" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
+                        <div className="flex items-center gap-2 text-base text-muted-foreground text-persian" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                           <User className="w-4 h-4" />
                           {post.author}
                         </div>
