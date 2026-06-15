@@ -228,11 +228,12 @@ const LeadsPanel = () => {
       const res = await api<{ items: LeadRow[]; total: number }>(
         `/api/admin/leads.php?page=${page}&limit=${limit}&q=${encodeURIComponent(q)}`
       );
-      const list = status ? res.items.filter(r => r.status === status) : res.items;
-      setItems(list); setTotal(res.total);
+      const list = (res.items || []).filter(r => !status || r.status === status);
+      setItems(list); setTotal(res.total || 0);
       setDrafts({});
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+      setItems([]); setTotal(0);
     } finally { setLoading(false); }
   }, [page, q, status, toast]);
 
