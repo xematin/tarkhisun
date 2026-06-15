@@ -69,7 +69,6 @@ const AppContent = () => {
 
   return (
     <Suspense fallback={<div className="flex items-center justify-center min-h-screen text-persian">در حال بارگذاری...</div>}>
-      <AutoBlogSEO />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/blog" element={<Blog />} />
