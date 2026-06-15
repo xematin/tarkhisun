@@ -39,6 +39,14 @@
   src: url('/__l5e/assets-v1/732b034d-185c-4c99-b118-2c80d66c9e55/Yekan-Bakh-FaNum-Regular.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/__l5e/assets-v1/11dde941-7077-4451-b21d-1e80a29002d0/Yekan-Bakh-FaNum-Bold.woff') format('woff');
+}
+
 
 
 @tailwind base;
