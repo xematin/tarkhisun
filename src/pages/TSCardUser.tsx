@@ -3,6 +3,8 @@ import { Helmet } from "react-helmet-async";
 import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload, Receipt, Printer } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { downloadBillingPdf } from "@/lib/billing-pdf";
+import { downloadAllBillingPdf, type BillingCardBundle } from "@/lib/billing-pdf-all";
+import type { BillingTimelineEntry } from "@/lib/billing-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
