@@ -3,6 +3,8 @@ import { Helmet } from "react-helmet-async";
 import { Loader2, LogOut, CreditCard, Plus, Trash2, FileText, ChevronDown, ChevronUp, Pencil, Download, Search, Wallet, CheckCircle2, Upload, Receipt, Printer } from "lucide-react";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { downloadBillingPdf } from "@/lib/billing-pdf";
+import { downloadAllBillingPdf, type BillingCardBundle } from "@/lib/billing-pdf-all";
+import type { BillingTimelineEntry } from "@/lib/billing-pdf";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -115,6 +117,7 @@ const TSCardUser = () => {
   const { toast } = useToast();
   const [state, setState] = useState<State>("loading");
   const [me, setMe] = useState<MeUser | null>(null);
+  const [overallOpen, setOverallOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     setState("loading");
@@ -140,8 +143,15 @@ const TSCardUser = () => {
               <CreditCard className="w-5 h-5" /> پنل کارت
             </h1>
             {state === "auth" && me && (
-              <div className="flex items-center gap-3 text-sm text-persian">
-                <span className="opacity-80">{me.first_name} {me.last_name}</span>
+              <div className="flex items-center gap-2 text-sm text-persian">
+                <span className="opacity-80 hidden sm:inline">{me.first_name} {me.last_name}</span>
+                <Button
+                  size="sm"
+                  onClick={() => setOverallOpen(true)}
+                  className="text-persian bg-gradient-to-l from-primary to-accent text-primary-foreground hover:opacity-90 shadow-sm"
+                >
+                  <Receipt className="w-4 h-4 ml-1" /> صورتحساب
+                </Button>
                 <Button
                   variant="ghost" size="sm"
                   onClick={async () => {
@@ -164,8 +174,17 @@ const TSCardUser = () => {
           {state === "login" && <LoginForm onDone={refresh} />}
           {state === "auth" && <MyCards toast={toast} />}
         </main>
+        {state === "auth" && me && (
+          <OverallBillingDialog
+            open={overallOpen}
+            onClose={() => setOverallOpen(false)}
+            toast={toast}
+            userName={`${me.first_name} ${me.last_name}`.trim() || me.username}
+          />
+        )}
       </div>
     </>
+
   );
 };
 
@@ -1309,6 +1328,305 @@ const BillingDialog = ({
   );
 };
 
+// ============================================================
+// Overall billing dialog — all cards, expandable timeline, full PDF
+// ============================================================
+interface OverallCardData {
+  card: MyCard;
+  timeline: BillingTimelineEntry[];
+  totals: { kotajToman: number; paid: number; pending: number; balance: number };
+}
+
+const OverallBillingDialog = ({
+  open, onClose, toast, userName,
+}: {
+  open: boolean;
+  onClose: () => void;
+  toast: ReturnType<typeof useToast>["toast"];
+  userName: string;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<OverallCardData[]>([]);
+  const [openCards, setOpenCards] = useState<Set<number>>(new Set());
+  const [expandedKotaj, setExpandedKotaj] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    setLoading(true);
+    setOpenCards(new Set());
+    setExpandedKotaj(new Set());
+    (async () => {
+      try {
+        const r = await api<{ items: MyCard[] }>("/api/cards/my-cards.php");
+        const cards = r.items || [];
+        const bundles = await Promise.all(cards.map(async (c) => {
+          const [p, k] = await Promise.all([
+            api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${c.id}`),
+            api<{ items: Kotaj[] }>(`/api/cards/kotaj-list.php?card_id=${c.id}`),
+          ]);
+          const payments = p.items || [];
+          const kotajs = k.items || [];
+          const timeline: BillingTimelineEntry[] = [
+            ...kotajs.map<BillingTimelineEntry>(kt => ({ kind: "kotaj", date: kt.created_at, data: kt })),
+            ...payments.map<BillingTimelineEntry>(pp => ({ kind: "payment", date: pp.created_at, data: pp })),
+          ].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+          const kotajToman = c.kotaj_toman_total ?? kotajs.reduce((s, x) => s + (x.toman_total || 0), 0);
+          const paid = c.payments_toman_total ?? payments
+            .filter(x => (x.status || "").toLowerCase() === "confirmed")
+            .reduce((s, x) => s + x.amount_irt, 0);
+          const pending = payments
+            .filter(x => (x.status || "pending").toLowerCase() === "pending")
+            .reduce((s, x) => s + x.amount_irt, 0);
+          const balance = paid - kotajToman;
+          return { card: c, timeline, totals: { kotajToman, paid, pending, balance } } as OverallCardData;
+        }));
+        if (!cancelled) setData(bundles);
+      } catch (e) {
+        if (!cancelled) toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [open, toast]);
+
+  const toggleCard = (id: number) => {
+    setOpenCards(prev => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id); else n.add(id);
+      return n;
+    });
+  };
+  const toggleKotaj = (key: string) => {
+    setExpandedKotaj(prev => {
+      const n = new Set(prev);
+      if (n.has(key)) n.delete(key); else n.add(key);
+      return n;
+    });
+  };
+
+  const grand = data.reduce(
+    (a, c) => ({
+      kotajToman: a.kotajToman + c.totals.kotajToman,
+      paid: a.paid + c.totals.paid,
+      pending: a.pending + c.totals.pending,
+      balance: a.balance + c.totals.balance,
+    }),
+    { kotajToman: 0, paid: 0, pending: 0, balance: 0 },
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent dir="rtl" className="max-w-4xl panel-fa max-h-[92vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-persian text-right flex items-center gap-2">
+            <Receipt className="w-5 h-5" /> صورتحساب کلی — {userName}
+          </DialogTitle>
+        </DialogHeader>
+
+        {loading ? (
+          <div className="py-12 text-center"><Loader2 className="w-6 h-6 animate-spin inline text-primary" /></div>
+        ) : (
+          <div className="space-y-4">
+            {/* Grand totals */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-persian">
+              <div className="border rounded-md p-2 bg-muted/30">
+                <div className="text-[11px] text-muted-foreground">مجموع هزینه کوتاژها</div>
+                <div className="text-sm font-bold tabular-nums">{fmtToman(grand.kotajToman)}</div>
+              </div>
+              <div className="border rounded-md p-2 bg-emerald-500/10">
+                <div className="text-[11px] text-muted-foreground">مجموع پرداختی</div>
+                <div className="text-sm font-bold tabular-nums text-emerald-700">{fmtToman(grand.paid)}</div>
+              </div>
+              <div className="border rounded-md p-2 bg-amber-500/10">
+                <div className="text-[11px] text-muted-foreground">در انتظار تایید</div>
+                <div className="text-sm font-bold tabular-nums text-amber-700">{fmtToman(grand.pending)}</div>
+              </div>
+              <div className={`border rounded-md p-2 ${grand.balance >= 0 ? "bg-sky-500/10" : "bg-destructive/10"}`}>
+                <div className="text-[11px] text-muted-foreground">{grand.balance >= 0 ? "بستانکار کلی" : "بدهکار کلی"}</div>
+                <div className={`text-sm font-bold tabular-nums ${grand.balance >= 0 ? "text-sky-700" : "text-destructive"}`}>
+                  {fmtToman(Math.abs(grand.balance))}
+                </div>
+              </div>
+            </div>
+
+            {/* Cards list */}
+            {data.length === 0 ? (
+              <p className="text-center py-10 text-muted-foreground text-persian text-sm">کارتی برای نمایش وجود ندارد.</p>
+            ) : (
+              <div className="space-y-2">
+                {data.map(({ card, timeline, totals }) => {
+                  const isOpen = openCards.has(card.id);
+                  return (
+                    <div key={card.id} className="border rounded-lg overflow-hidden bg-card">
+                      <button
+                        type="button"
+                        onClick={() => toggleCard(card.id)}
+                        className="w-full flex items-center gap-2 p-3 hover:bg-muted/40 transition-colors text-right"
+                      >
+                        {isOpen ? <ChevronUp className="w-4 h-4 shrink-0" /> : <ChevronDown className="w-4 h-4 shrink-0" />}
+                        <CreditCard className="w-4 h-4 text-primary shrink-0" />
+                        <div className="flex-1 font-bold text-persian text-sm">{card.name}</div>
+                        <div className="hidden sm:flex items-center gap-2 text-[11px] text-persian">
+                          <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-700 tabular-nums">
+                            کوتاژ: {fmtToman(totals.kotajToman)}
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 tabular-nums">
+                            پرداختی: {fmtToman(totals.paid)}
+                          </span>
+                          <span className={`px-2 py-0.5 rounded tabular-nums ${totals.balance >= 0 ? "bg-sky-500/10 text-sky-700" : "bg-destructive/10 text-destructive"}`}>
+                            {totals.balance >= 0 ? "بستانکار" : "بدهکار"}: {fmtToman(Math.abs(totals.balance))}
+                          </span>
+                        </div>
+                      </button>
+
+                      {/* Mobile summary */}
+                      <div className="sm:hidden grid grid-cols-3 gap-1 px-3 pb-2 text-[10px] text-persian">
+                        <span className="px-2 py-1 rounded bg-indigo-500/10 text-indigo-700 tabular-nums text-center">
+                          کوتاژ {fmtToman(totals.kotajToman)}
+                        </span>
+                        <span className="px-2 py-1 rounded bg-emerald-500/10 text-emerald-700 tabular-nums text-center">
+                          پرداخت {fmtToman(totals.paid)}
+                        </span>
+                        <span className={`px-2 py-1 rounded tabular-nums text-center ${totals.balance >= 0 ? "bg-sky-500/10 text-sky-700" : "bg-destructive/10 text-destructive"}`}>
+                          {totals.balance >= 0 ? "+" : "-"}{fmtToman(Math.abs(totals.balance))}
+                        </span>
+                      </div>
+
+                      {isOpen && (
+                        <div className="border-t bg-muted/10 p-3 overflow-x-auto">
+                          {timeline.length === 0 ? (
+                            <p className="text-center py-6 text-muted-foreground text-persian text-xs">رویدادی ثبت نشده است.</p>
+                          ) : (
+                            <table className="w-full text-xs text-persian">
+                              <thead className="bg-muted/40">
+                                <tr>
+                                  <th className="text-right p-2 w-28">تاریخ</th>
+                                  <th className="text-right p-2 w-16">نوع</th>
+                                  <th className="text-right p-2">شرح</th>
+                                  <th className="text-right p-2 w-28">مبلغ (تومان)</th>
+                                  <th className="text-right p-2 w-20">وضعیت</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {timeline.map((ev) => {
+                                  if (ev.kind === "kotaj") {
+                                    const k = ev.data as Kotaj;
+                                    const key = `${card.id}-k-${k.id}`;
+                                    const kOpen = expandedKotaj.has(key);
+                                    return (
+                                      <Fragment key={key}>
+                                        <tr
+                                          className="border-t bg-indigo-500/5 hover:bg-indigo-500/10 cursor-pointer"
+                                          onClick={() => toggleKotaj(key)}
+                                        >
+                                          <td className="p-2 text-[11px] tabular-nums">{k.created_at?.slice(0, 16).replace("T", " ")}</td>
+                                          <td className="p-2">
+                                            <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-700">کوتاژ</span>
+                                          </td>
+                                          <td className="p-2 text-[11px]">
+                                            <div className="font-bold">شماره {k.kotaj_number}</div>
+                                            <div className="text-muted-foreground">
+                                              {k.entry_title || "—"} • {k.kotaj_date_jalali} • {k.total_value_usd.toLocaleString()} $
+                                            </div>
+                                          </td>
+                                          <td className="p-2 tabular-nums font-bold">{fmtToman(k.toman_total)}</td>
+                                          <td className="p-2 text-[11px]">
+                                            {kOpen ? <ChevronUp className="w-3.5 h-3.5 inline" /> : <ChevronDown className="w-3.5 h-3.5 inline" />}
+                                            <span className="mr-1">{k.items.length} قلم</span>
+                                          </td>
+                                        </tr>
+                                        {kOpen && (
+                                          <tr className="border-t bg-muted/20">
+                                            <td colSpan={5} className="p-2">
+                                              <table className="w-full text-[11px]">
+                                                <thead className="bg-background">
+                                                  <tr>
+                                                    <th className="text-right p-1.5 border">نام کالا</th>
+                                                    <th className="text-right p-1.5 border">ارزش ($)</th>
+                                                    <th className="text-right p-1.5 border">قیمت هر دلار</th>
+                                                    <th className="text-right p-1.5 border">جمع (تومان)</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {k.items.map((it, i) => (
+                                                    <tr key={i}>
+                                                      <td className="p-1.5 border">{it.name}</td>
+                                                      <td className="p-1.5 border tabular-nums">{it.value_usd.toLocaleString()}</td>
+                                                      <td className="p-1.5 border tabular-nums">{fmtToman(it.unit_price_irt)}</td>
+                                                      <td className="p-1.5 border tabular-nums font-bold">{fmtToman(it.toman)}</td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                        )}
+                                      </Fragment>
+                                    );
+                                  }
+                                  const p = ev.data as Payment;
+                                  const st = (p.status || "pending").toLowerCase();
+                                  return (
+                                    <tr key={`${card.id}-p-${p.id}`} className="border-t bg-emerald-500/5">
+                                      <td className="p-2 text-[11px] tabular-nums">{p.created_at?.slice(0, 16).replace("T", " ")}</td>
+                                      <td className="p-2">
+                                        <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700">پرداخت</span>
+                                      </td>
+                                      <td className="p-2 text-[11px] text-muted-foreground">
+                                        {p.note || "—"}
+                                        {p.receipt_path ? (
+                                          <>
+                                            {" • "}
+                                            <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">فیش</a>
+                                          </>
+                                        ) : null}
+                                      </td>
+                                      <td className="p-2 tabular-nums font-bold text-emerald-700">{fmtToman(p.amount_irt)}</td>
+                                      <td className={`p-2 text-[11px] font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        <DialogFooter className="gap-2 flex-wrap">
+          <Button
+            onClick={() => {
+              const bundles: BillingCardBundle[] = data.map(d => ({
+                cardName: d.card.name,
+                timeline: d.timeline,
+                totals: d.totals,
+              }));
+              void downloadAllBillingPdf(userName, bundles);
+            }}
+            disabled={loading || data.length === 0}
+            className="text-persian bg-gradient-to-l from-primary to-accent text-primary-foreground hover:opacity-90 shadow-md"
+          >
+            <Download className="w-4 h-4 ml-1" /> دانلود PDF صورتحساب کامل
+          </Button>
+          <Button variant="outline" onClick={() => window.print()} className="text-persian">
+            <Printer className="w-4 h-4 ml-1" /> چاپ
+          </Button>
+          <Button variant="ghost" onClick={onClose} className="text-persian">بستن</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default TSCardUser;
+
 
 
