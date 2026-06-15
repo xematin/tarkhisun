@@ -271,9 +271,10 @@
       0 6px 16px -8px hsl(var(--accent) / 0.18),
       inset 0 1px 0 0 hsl(0 0% 100% / 0.65);
   }
-  .pill-nav-link {
+  .pill-nav-link,
+  .pill-nav-link.text-persian {
     @apply px-4 py-2 rounded-full text-sm font-medium text-foreground/75 hover:text-primary transition-colors;
-    font-family: 'IRANSansX DemiBold', 'Noto Sans Arabic', sans-serif;
+    font-family: 'IRANSansX DemiBold', 'Noto Sans Arabic', sans-serif !important;
   }
   .pill-nav-active {
     @apply text-primary-foreground bg-gradient-to-l from-primary to-accent shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)];
