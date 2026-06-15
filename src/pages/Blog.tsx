@@ -265,11 +265,11 @@ const Blog = () => {
                           {post.category}
                         </span>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground text-persian">
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
                             <Calendar className="w-3 h-3" />
                             {post.date}
                           </div>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
                             <Clock className="w-3 h-3" />
                             {post.readTime}
                           </div>
@@ -292,7 +292,7 @@ const Blog = () => {
 
                     <CardContent className="pt-0 pb-6">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground text-persian">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground text-persian" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}>
                           <User className="w-4 h-4" />
                           {post.author}
                         </div>
