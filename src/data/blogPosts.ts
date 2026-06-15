@@ -363,7 +363,7 @@ export const blogPosts: BlogPost[] = [
       "استاندارد لوازم خانگی",
     ],
     relatedPosts: [1, 19, 16, 20],
-    image: "",
+    image: "/images/blog/home-appliances-clearance.webp",
   },
   {
     id: 22,
@@ -388,7 +388,7 @@ export const blogPosts: BlogPost[] = [
       "مدارک رجیستری",
     ],
     relatedPosts: [21, 1, 2, 20],
-    image: "",
+    image: "/images/blog/mobile-registry-clearance.webp",
   },
   {
     id: 23,
@@ -445,7 +445,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["مشاوره بازرگانی", "مشاوره تجارت", "خدمات مشاوره", "تجارت بین‌المللی"],
     relatedPosts: [9, 7, 6, 1],
-    image: "",
+    image: "/images/blog/business-consulting.webp",
   },
   {
     id: 26,
