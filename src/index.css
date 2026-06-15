@@ -31,6 +31,16 @@
   src: url('/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-700.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/__l5e/assets-v1/732b034d-185c-4c99-b118-2c80d66c9e55/Yekan-Bakh-FaNum-Regular.woff') format('woff');
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
