@@ -24,8 +24,8 @@ interface LeadRow {
   last_seen: string;
   search_count: number;
   ip: string | null;
-  note: string | null;
-  status: "new" | "contacted" | "done" | "rejected";
+  note?: string | null;
+  status?: "new" | "contacted" | "done" | "rejected";
   recent_queries?: { query: string; created_at: string }[];
 }
 interface LogRow { id: number; query: string; created_at: string; }
@@ -228,11 +228,12 @@ const LeadsPanel = () => {
       const res = await api<{ items: LeadRow[]; total: number }>(
         `/api/admin/leads.php?page=${page}&limit=${limit}&q=${encodeURIComponent(q)}`
       );
-      const list = status ? res.items.filter(r => r.status === status) : res.items;
-      setItems(list); setTotal(res.total);
+      const list = (res.items || []).filter(r => !status || r.status === status);
+      setItems(list); setTotal(res.total || 0);
       setDrafts({});
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+      setItems([]); setTotal(0);
     } finally { setLoading(false); }
   }, [page, q, status, toast]);
 
@@ -330,7 +331,7 @@ const LeadsPanel = () => {
               <TableBody>
                 {items.map((r) => {
                   const d = drafts[r.id] || {};
-                  const curStatus = (d.status ?? r.status) as LeadRow["status"];
+                  const curStatus = (d.status ?? r.status ?? "new") as LeadRow["status"];
                   const dirty = (d.status !== undefined && d.status !== r.status) ||
                                 (d.note !== undefined && d.note !== (r.note ?? ""));
                   return (
@@ -351,6 +352,7 @@ const LeadsPanel = () => {
                         <Select
                           value={curStatus}
                           onValueChange={(v) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], status: v } }))}
+                          disabled={r.status === undefined}
                         >
                           <SelectTrigger className="h-8 w-32 text-persian">
                             <SelectValue>
