@@ -292,6 +292,17 @@ try {
     $bf = ts_treasury_backfill($pdo);
     echo "OK: treasury backfill — inserted $bf row(s)\n";
 
+    // ts_leads: note + status (migration 2026_06_15_leads_status_note.sql)
+    if (!ts_column_exists($pdo, 'ts_leads', 'note')) {
+        $pdo->exec("ALTER TABLE ts_leads ADD COLUMN note VARCHAR(500) NULL AFTER ip");
+        echo "OK: added ts_leads.note\n";
+    }
+    if (!ts_column_exists($pdo, 'ts_leads', 'status')) {
+        $pdo->exec("ALTER TABLE ts_leads ADD COLUMN status ENUM('new','contacted','done','rejected') NOT NULL DEFAULT 'new' AFTER note");
+        try { $pdo->exec("ALTER TABLE ts_leads ADD INDEX idx_lead_status (status)"); } catch (Throwable $e) {}
+        echo "OK: added ts_leads.status\n";
+    }
+
     // ===== One-time data repair: orphan kotaj entry_ids =====
     // ریشه‌ی باگ: نسخه‌ی قدیمی _card_save.php هنگام ویرایش کارت تمام
     // ts_card_entries را DELETE+INSERT می‌کرد و entry_id عوض می‌شد، ولی
