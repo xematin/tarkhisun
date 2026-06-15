@@ -26,7 +26,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ترخیص کالا", "بندرعباس", "شهید رجایی", "گمرک", "مدارک ترخیص"],
     relatedPosts: [2, 3, 4, 16],
-    image: "/images/blog/shahid-rajaei-clearance.webp",
+    image: "/images/blog/zero-to-hundred-bandar-abbas-customs-clearance.webp",
   },
   {
     id: 2,
@@ -68,7 +68,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["نرخ ارز", "ارز گمرکی", "محاسبه حقوق", "هزینه واردات"],
     relatedPosts: [3, 2, 8, 1],
-    image: "/images/blog/customs-exchange-rate.webp",
+    image: "/images/blog/customs-exchange-rate-guide.webp",
   },
   {
     id: 5,
@@ -82,7 +82,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["سامانه جامع تجارت", "NTSW", "ثبت سفارش", "گمرک الکترونیک"],
     relatedPosts: [10, 7, 9, 1],
-    image: "/images/blog/ntsw-guide.webp",
+    image: "/images/blog/ntsw-complete-guide.webp",
   },
   {
     id: 6,
@@ -109,7 +109,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["واردات کالا به ایران", "واردات از چین", "واردات از امارات", "واردات از ترکیه", "مسیر واردات ۱۴۰۴"],
     relatedPosts: [17, 27, 6, 9],
-    image: "/images/blog/import-routes-iran.webp",
+    image: "/images/blog/import-routes-iran-guide.webp",
   },
   {
     id: 30,
@@ -122,7 +122,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه واردات خودرو برقی", "خودرو هیبریدی", "حقوق گمرکی ۴ درصد", "واردات خودرو ۱۴۰۴"],
     relatedPosts: [3, 24, 2, 31],
-    image: "/images/blog/electric-hybrid-car-tariff.webp",
+    image: "/images/blog/electric-car-tariff-guide.webp",
   },
   {
     id: 31,
@@ -135,7 +135,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه گمرکی ۱۴۰۵", "لایحه بودجه ۱۴۰۵", "حقوق ورودی خودرو", "تعرفه واردات گوشی", "نرخ ارز گمرکی"],
     relatedPosts: [30, 3, 4, 22],
-    image: "/images/blog/customs-tariff-2025.webp",
+    image: "/images/blog/customs-tariff-2025-guide.webp",
   },
   {
     id: 7,
@@ -149,7 +149,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["کارت بازرگانی", "کد اقتصادی", "واردات", "صادرات", "مجوز تجاری"],
     relatedPosts: [5, 9, 6, 1],
-    image: "/images/blog/business-card-commercial.webp",
+    image: "/images/blog/business-card-complete-guide.webp",
   },
   {
     id: 8,
@@ -163,7 +163,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ارز سنا", "ارز نیمایی", "نرخ ارز", "واردات", "تخصیص ارز"],
     relatedPosts: [4, 3, 9, 1],
-    image: "/images/blog/sana-nima-currencies.webp",
+    image: "/images/blog/sana-nima-exchange-rate-difference-guide.webp",
   },
   {
     id: 9,
@@ -177,7 +177,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["صادرات", "واردات", "تجارت خارجی", "مدارک واردات", "ثبت سفارش"],
     relatedPosts: [1, 5, 7, 6],
-    image: "/images/blog/import-export-guide.webp",
+    image: "/images/blog/import-export-guide-iran.webp",
   },
   {
     id: 10,
@@ -205,7 +205,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ته لنجی", "ملوانی", "واردات غیررسمی", "دبی", "ریسک قانونی"],
     relatedPosts: [17, 1, 9, 13],
-    image: "/images/blog/tah-lanji-import.webp",
+    image: "/images/blog/tah-lanji-import-guide.webp",
   },
   {
     id: 12,
@@ -219,7 +219,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ماشین آلات حفاری", "واردات ماشین آلات", "ترخیص", "استاندارد", "مجوز واردات"],
     relatedPosts: [1, 2, 16, 19],
-    image: "/images/blog/excavation-machinery.webp",
+    image: "/images/blog/excavation-machinery-import-guide.webp",
   },
   {
     id: 13,
@@ -233,7 +233,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["کمیسیون ماده 1", "اعتراض گمرکی", "ارزش گمرکی", "قوانین گمرک"],
     relatedPosts: [3, 4, 1, 2],
-    image: "/images/blog/customs-article-1-commission.webp",
+    image: "/images/blog/customs-article-1-commission-guide.webp",
   },
   {
     id: 14,
@@ -247,7 +247,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ترانزیت", "کویت", "افغانستان", "TIR", "حمل بین‌المللی"],
     relatedPosts: [15, 10, 6, 17],
-    image: "/images/blog/kuwait-afghanistan-transit.webp",
+    image: "/images/blog/kuwait-afghanistan-transit-guide.webp",
   },
   {
     id: 15,
@@ -261,7 +261,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["اسلام قلعه", "گذرگاه مرزی", "افغانستان", "صادرات", "واردات"],
     relatedPosts: [14, 9, 1, 10],
-    image: "/images/blog/islam-qala.webp",
+    image: "/images/blog/islam-qala-border-crossing-guide.webp",
   },
   {
     id: 16,
@@ -275,7 +275,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ژنراتور", "ترخیص", "بندرعباس", "استاندارد", "مجوز واردات"],
     relatedPosts: [1, 12, 2, 3],
-    image: "/images/blog/generator-clearance-bandar-abbas.webp",
+    image: "/images/blog/generator-clearance-bandar-abbas-guide.webp",
   },
   {
     id: 17,
@@ -289,7 +289,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["واردات از دبی", "بندرعباس", "حمل دریایی", "حمل هوایی", "امارات"],
     relatedPosts: [1, 11, 9, 6],
-    image: "/images/blog/dubai-to-abbas.webp",
+    image: "/images/blog/dubai-to-abbas-import-guide.webp",
   },
   {
     id: 18,
@@ -303,7 +303,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["مخزن آب", "تانکر", "ترخیص", "استاندارد", "مجوز بهداشتی"],
     relatedPosts: [1, 16, 2, 12],
-    image: "/images/blog/water-tank-clearance.webp",
+    image: "/images/blog/water-tank-clearance-bandar-abbas-guide.webp",
   },
   {
     id: 19,
@@ -317,7 +317,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["قطعات یدکی", "خودرو", "ترخیص", "واردات", "استاندارد"],
     relatedPosts: [1, 2, 12, 16],
-    image: "/images/blog/car-parts-import.webp",
+    image: "/images/blog/car-parts-import-customs-clearance-guide.webp",
   },
   {
     id: 20,
@@ -339,7 +339,7 @@ export const blogPosts: BlogPost[] = [
       "واردات بندرعباس",
     ],
     relatedPosts: [1, 2, 3, 4],
-    image: "/images/blog/bandar-abbas-clearance.webp",
+    image: "/images/blog/bandar-abbas-comprehensive-clearance-guide.webp",
   },
   {
     id: 21,
@@ -363,7 +363,7 @@ export const blogPosts: BlogPost[] = [
       "استاندارد لوازم خانگی",
     ],
     relatedPosts: [1, 19, 16, 20],
-    image: "/images/blog/home-appliances-clearance.webp",
+    image: "/images/blog/home-appliances-clearance-bandar-abbas-guide.webp",
   },
   {
     id: 22,
@@ -388,7 +388,7 @@ export const blogPosts: BlogPost[] = [
       "مدارک رجیستری",
     ],
     relatedPosts: [21, 1, 2, 20],
-    image: "/images/blog/mobile-registry-clearance.webp",
+    image: "/images/blog/mobile-phone-customs-clearance-registry-guide.webp",
   },
   {
     id: 23,
@@ -410,7 +410,7 @@ export const blogPosts: BlogPost[] = [
       "هزینه کارت صادراتی",
     ],
     relatedPosts: [7, 9, 5, 1],
-    image: "/images/blog/export-card.webp",
+    image: "/images/blog/export-card-complete-guide.webp",
   },
   {
     id: 24,
@@ -432,7 +432,7 @@ export const blogPosts: BlogPost[] = [
       "مدارک واردات خودرو",
     ],
     relatedPosts: [19, 1, 5, 17],
-    image: "/images/blog/imported-car-system.webp",
+    image: "/images/blog/imported-car-system-guide.webp",
   },
   {
     id: 25,
@@ -445,7 +445,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["مشاوره بازرگانی", "مشاوره تجارت", "خدمات مشاوره", "تجارت بین‌المللی"],
     relatedPosts: [9, 7, 6, 1],
-    image: "/images/blog/business-consulting.webp",
+    image: "/images/blog/business-consulting-guide.webp",
   },
   {
     id: 26,
@@ -458,7 +458,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["شرکت ترخیص کالا", "ترخیص‌کار", "ترخیص کالا از گمرک", "خدمات ترخیص"],
     relatedPosts: [1, 20, 17, 2],
-    image: "/images/blog/customs-clearance-company.webp",
+    image: "/images/blog/customs-clearance-company-guide.webp",
   },
   {
     id: 27,
@@ -484,7 +484,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["شرکت بازرگانی", "ثبت شرکت بازرگانی", "کارت بازرگانی", "واردات صادرات"],
     relatedPosts: [7, 23, 9, 5],
-    image: "/images/blog/trading-company.webp",
+    image: "/images/blog/trading-company-guide.webp",
   },
   {
     id: 32,
@@ -497,7 +497,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["لایحه بودجه ۱۴۰۵", "بودجه ۱۴۰۵", "بودجه کل کشور", "تعرفه گمرکی ۱۴۰۵", "مالیات ۱۴۰۵"],
     relatedPosts: [31, 3, 4, 30],
-    image: "/images/blog/budget-1405.webp",
+    image: "/images/blog/budget-1405-guide.webp",
   },
 ];
 
