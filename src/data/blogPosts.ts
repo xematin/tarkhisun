@@ -26,7 +26,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["ترخیص کالا", "بندرعباس", "شهید رجایی", "گمرک", "مدارک ترخیص"],
     relatedPosts: [2, 3, 4, 16],
-    image: "",
+    image: "/images/blog/shahid-rajaei-clearance.webp",
   },
   {
     id: 2,
@@ -54,7 +54,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه گمرکی", "حقوق گمرکی", "عوارض گمرکی", "محاسبه تعرفه"],
     relatedPosts: [2, 4, 1, 13],
-    image: "",
+    image: "/images/blog/customs-tariff-guide.webp",
   },
   {
     id: 4,
@@ -82,7 +82,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["سامانه جامع تجارت", "NTSW", "ثبت سفارش", "گمرک الکترونیک"],
     relatedPosts: [10, 7, 9, 1],
-    image: "",
+    image: "/images/blog/ntsw-guide.webp",
   },
   {
     id: 6,
@@ -96,7 +96,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["اینکوترمز", "FOB", "CIF", "شرایط تحویل", "تجارت بین‌المللی"],
     relatedPosts: [9, 17, 14, 1],
-    image: "",
+    image: "/images/blog/incoterms-guide.webp",
   },
   {
     id: 29,
@@ -135,7 +135,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["تعرفه گمرکی ۱۴۰۵", "لایحه بودجه ۱۴۰۵", "حقوق ورودی خودرو", "تعرفه واردات گوشی", "نرخ ارز گمرکی"],
     relatedPosts: [30, 3, 4, 22],
-    image: "",
+    image: "/images/blog/customs-tariff-2025.webp",
   },
   {
     id: 7,
@@ -191,7 +191,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["مانیفست", "بارنامه", "حمل کالا", "مدارک گمرکی", "ترخیص کالا"],
     relatedPosts: [5, 1, 14, 17],
-    image: "",
+    image: "/images/blog/manifest-guide.webp",
   },
   {
     id: 11,
@@ -289,7 +289,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["واردات از دبی", "بندرعباس", "حمل دریایی", "حمل هوایی", "امارات"],
     relatedPosts: [1, 11, 9, 6],
-    image: "",
+    image: "/images/blog/dubai-to-abbas.webp",
   },
   {
     id: 18,
@@ -410,7 +410,7 @@ export const blogPosts: BlogPost[] = [
       "هزینه کارت صادراتی",
     ],
     relatedPosts: [7, 9, 5, 1],
-    image: "",
+    image: "/images/blog/export-card.webp",
   },
   {
     id: 24,
@@ -432,7 +432,7 @@ export const blogPosts: BlogPost[] = [
       "مدارک واردات خودرو",
     ],
     relatedPosts: [19, 1, 5, 17],
-    image: "",
+    image: "/images/blog/imported-car-system.webp",
   },
   {
     id: 25,
@@ -497,7 +497,7 @@ export const blogPosts: BlogPost[] = [
     author: "تیم ترخیصان",
     keywords: ["لایحه بودجه ۱۴۰۵", "بودجه ۱۴۰۵", "بودجه کل کشور", "تعرفه گمرکی ۱۴۰۵", "مالیات ۱۴۰۵"],
     relatedPosts: [31, 3, 4, 30],
-    image: "",
+    image: "/images/blog/budget-1405.webp",
   },
 ];
 
