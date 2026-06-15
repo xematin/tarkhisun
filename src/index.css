@@ -47,6 +47,14 @@
   src: url('/__l5e/assets-v1/11dde941-7077-4451-b21d-1e80a29002d0/Yekan-Bakh-FaNum-Bold.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'IRANSansX DemiBold';
+  src: url('/fonts/IRANSansX-DemiBold.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 
 @tailwind base;
