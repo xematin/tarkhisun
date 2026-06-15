@@ -1086,6 +1086,30 @@ const STATUS_CLASS: Record<string, string> = {
   rejected: "text-destructive",
 };
 
+interface KotajItem {
+  name: string;
+  value_usd: number;
+  unit_price_irt: number;
+  toman: number;
+}
+interface KotajRow {
+  id: number;
+  card_id: number;
+  entry_id: number;
+  entry_title?: string;
+  kotaj_number: string;
+  kotaj_date_jalali: string;
+  kotaj_date_gregorian?: string | null;
+  total_value_usd: number;
+  toman_total: number;
+  created_at: string;
+  items: KotajItem[];
+}
+
+type TimelineEntry =
+  | { kind: "kotaj"; date: string; data: KotajRow }
+  | { kind: "payment"; date: string; data: Payment };
+
 const BillingDialog = ({
   card, onClose, toast,
 }: {
@@ -1093,22 +1117,31 @@ const BillingDialog = ({
   onClose: () => void;
   toast: ReturnType<typeof useToast>["toast"];
 }) => {
-  const [items, setItems] = useState<Payment[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [kotajs, setKotajs] = useState<KotajRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (!card) return;
     setLoading(true);
-    api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${card.id}`)
-      .then(r => setItems(r.items || []))
+    setExpanded(new Set());
+    Promise.all([
+      api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${card.id}`),
+      api<{ items: KotajRow[] }>(`/api/cards/kotaj-list.php?card_id=${card.id}`),
+    ])
+      .then(([p, k]) => {
+        setPayments(p.items || []);
+        setKotajs(k.items || []);
+      })
       .catch(e => toast({ title: "خطا", description: (e as Error).message, variant: "destructive" }))
       .finally(() => setLoading(false));
   }, [card, toast]);
 
   if (!card) return null;
 
-  const totalAll = items.reduce((s, p) => s + p.amount_irt, 0);
-  const byStatus = items.reduce<Record<string, number>>((acc, p) => {
+  const totalPaid = payments.reduce((s, p) => s + p.amount_irt, 0);
+  const byStatus = payments.reduce<Record<string, number>>((acc, p) => {
     const k = (p.status || "pending").toLowerCase();
     acc[k] = (acc[k] || 0) + p.amount_irt;
     return acc;
@@ -1117,9 +1150,22 @@ const BillingDialog = ({
   const paid = card.payments_toman_total ?? 0;
   const balance = paid - kotajToman;
 
+  const timeline: TimelineEntry[] = [
+    ...kotajs.map<TimelineEntry>(k => ({ kind: "kotaj", date: k.created_at, data: k })),
+    ...payments.map<TimelineEntry>(p => ({ kind: "payment", date: p.created_at, data: p })),
+  ].sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+
+  const toggle = (id: number) => {
+    setExpanded(prev => {
+      const n = new Set(prev);
+      if (n.has(id)) n.delete(id); else n.add(id);
+      return n;
+    });
+  };
+
   return (
     <Dialog open={!!card} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent dir="rtl" className="max-w-2xl panel-fa max-h-[90vh] overflow-y-auto">
+      <DialogContent dir="rtl" className="max-w-3xl panel-fa max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-persian text-right flex items-center gap-2">
             <Receipt className="w-5 h-5" /> صورتحساب — {card.name}
@@ -1150,43 +1196,111 @@ const BillingDialog = ({
 
           {loading ? (
             <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
-          ) : items.length === 0 ? (
-            <p className="text-center py-8 text-muted-foreground text-persian text-sm">پرداختی ثبت نشده است.</p>
+          ) : timeline.length === 0 ? (
+            <p className="text-center py-8 text-muted-foreground text-persian text-sm">رویدادی ثبت نشده است.</p>
           ) : (
             <div className="border rounded-md overflow-hidden">
               <table className="w-full text-sm text-persian">
                 <thead className="bg-muted/40">
                   <tr>
-                    <th className="text-right p-2">تاریخ</th>
-                    <th className="text-right p-2">مبلغ</th>
-                    <th className="text-right p-2">وضعیت</th>
-                    <th className="text-right p-2">توضیح</th>
-                    <th className="text-right p-2">فیش</th>
+                    <th className="text-right p-2 w-32">تاریخ</th>
+                    <th className="text-right p-2 w-20">نوع</th>
+                    <th className="text-right p-2">شرح</th>
+                    <th className="text-right p-2 w-32">مبلغ (تومان)</th>
+                    <th className="text-right p-2 w-24">وضعیت / اکشن</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {items.map(p => {
+                  {timeline.map((ev, idx) => {
+                    if (ev.kind === "kotaj") {
+                      const k = ev.data;
+                      const isOpen = expanded.has(k.id);
+                      return (
+                        <Fragment key={`k-${k.id}`}>
+                          <tr
+                            className="border-t bg-indigo-500/5 hover:bg-indigo-500/10 cursor-pointer"
+                            onClick={() => toggle(k.id)}
+                          >
+                            <td className="p-2 text-xs tabular-nums">{k.created_at?.slice(0, 16).replace("T", " ")}</td>
+                            <td className="p-2">
+                              <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded bg-indigo-500/15 text-indigo-700">کوتاژ</span>
+                            </td>
+                            <td className="p-2 text-xs">
+                              <div className="font-bold">شماره {k.kotaj_number}</div>
+                              <div className="text-muted-foreground">
+                                {k.entry_title || "—"} • تاریخ کوتاژ: {k.kotaj_date_jalali} • ارزش: {k.total_value_usd.toLocaleString()} $
+                              </div>
+                            </td>
+                            <td className="p-2 tabular-nums font-bold">{fmtToman(k.toman_total)}</td>
+                            <td className="p-2 text-xs">
+                              {isOpen ? <ChevronUp className="w-4 h-4 inline" /> : <ChevronDown className="w-4 h-4 inline" />}
+                              <span className="mr-1">{k.items.length} قلم</span>
+                            </td>
+                          </tr>
+                          {isOpen && (
+                            <tr className="border-t bg-muted/20">
+                              <td colSpan={5} className="p-3">
+                                <div className="text-xs font-bold mb-2">ریز اقلام کوتاژ {k.kotaj_number}</div>
+                                <table className="w-full text-xs">
+                                  <thead className="bg-background">
+                                    <tr>
+                                      <th className="text-right p-1.5 border">نام کالا</th>
+                                      <th className="text-right p-1.5 border">ارزش ($)</th>
+                                      <th className="text-right p-1.5 border">قیمت هر دلار (تومان)</th>
+                                      <th className="text-right p-1.5 border">جمع (تومان)</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {k.items.map((it, i) => (
+                                      <tr key={i}>
+                                        <td className="p-1.5 border">{it.name}</td>
+                                        <td className="p-1.5 border tabular-nums">{it.value_usd.toLocaleString()}</td>
+                                        <td className="p-1.5 border tabular-nums">{fmtToman(it.unit_price_irt)}</td>
+                                        <td className="p-1.5 border tabular-nums font-bold">{fmtToman(it.toman)}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                  <tfoot>
+                                    <tr className="bg-muted/30">
+                                      <td className="p-1.5 border font-bold" colSpan={3}>جمع کوتاژ</td>
+                                      <td className="p-1.5 border tabular-nums font-bold">{fmtToman(k.toman_total)}</td>
+                                    </tr>
+                                  </tfoot>
+                                </table>
+                              </td>
+                            </tr>
+                          )}
+                        </Fragment>
+                      );
+                    }
+                    const p = ev.data;
                     const st = (p.status || "pending").toLowerCase();
                     return (
-                      <tr key={p.id} className="border-t">
+                      <tr key={`p-${p.id}`} className="border-t bg-emerald-500/5">
                         <td className="p-2 text-xs tabular-nums">{p.created_at?.slice(0, 16).replace("T", " ")}</td>
-                        <td className="p-2 tabular-nums font-bold">{fmtToman(p.amount_irt)}</td>
-                        <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
-                        <td className="p-2 text-xs text-muted-foreground">{p.note || "—"}</td>
-                        <td className="p-2 text-xs">
-                          {p.receipt_path ? (
-                            <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">مشاهده</a>
-                          ) : "—"}
+                        <td className="p-2">
+                          <span className="inline-block text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-700">پرداخت</span>
                         </td>
+                        <td className="p-2 text-xs text-muted-foreground">
+                          {p.note || "—"}
+                          {p.receipt_path ? (
+                            <>
+                              {" • "}
+                              <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">فیش</a>
+                            </>
+                          ) : null}
+                        </td>
+                        <td className="p-2 tabular-nums font-bold text-emerald-700">{fmtToman(p.amount_irt)}</td>
+                        <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
                       </tr>
                     );
                   })}
                 </tbody>
                 <tfoot className="bg-muted/30">
                   <tr>
-                    <td className="p-2 font-bold">جمع کل</td>
-                    <td className="p-2 font-bold tabular-nums">{fmtToman(totalAll)}</td>
-                    <td colSpan={3}></td>
+                    <td className="p-2 font-bold" colSpan={3}>جمع پرداختی‌ها</td>
+                    <td className="p-2 font-bold tabular-nums">{fmtToman(totalPaid)}</td>
+                    <td></td>
                   </tr>
                 </tfoot>
               </table>
