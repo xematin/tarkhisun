@@ -1689,6 +1689,37 @@ const UsersManagementPanel = ({
     }
   };
 
+  const createUser = async () => {
+    const f = createForm;
+    if (!f.first_name.trim() || !f.last_name.trim()) {
+      toast({ title: "خطا", description: "نام و نام خانوادگی الزامی است", variant: "destructive" }); return;
+    }
+    if (!/^[A-Za-z0-9_.\-]{3,64}$/.test(f.username)) {
+      toast({ title: "خطا", description: "نام کاربری نامعتبر است (حداقل ۳ کاراکتر، حروف/اعداد لاتین)", variant: "destructive" }); return;
+    }
+    if (f.password.length < 6) {
+      toast({ title: "خطا", description: "رمز عبور حداقل ۶ کاراکتر باشد", variant: "destructive" }); return;
+    }
+    if (f.password !== f.password2) {
+      toast({ title: "خطا", description: "رمز عبور و تکرار آن یکسان نیستند", variant: "destructive" }); return;
+    }
+    setCreating(true);
+    try {
+      await api("/api/admin/card-user-create.php", {
+        method: "POST",
+        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password }),
+      });
+      toast({ title: "کاربر ساخته شد" });
+      setCreateOpen(false);
+      load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally {
+      setCreating(false);
+    }
+  };
+
+
   const remove = async (u: CardUser) => {
     if (!confirm(`حذف کاربر ${u.first_name} ${u.last_name}؟`)) return;
     try {
