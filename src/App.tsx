@@ -14,6 +14,7 @@ import HSCodeSearch from "./pages/HSCodeSearch";
 import TSDashboard from "./pages/TSDashboard";
 import TSCards from "./pages/TSCards";
 import TSCardUser from "./pages/TSCardUser";
+import AutoBlogSEO from "./components/AutoBlogSEO";
 
 // Lazy load blog pages for better performance
 const BlogPost = lazy(() => import("./pages/BlogPost"));
