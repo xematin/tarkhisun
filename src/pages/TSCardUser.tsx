@@ -1098,7 +1098,7 @@ const BillingDialog = ({
   toast: ReturnType<typeof useToast>["toast"];
 }) => {
   const [payments, setPayments] = useState<Payment[]>([]);
-  const [kotajs, setKotajs] = useState<KotajRow[]>([]);
+  const [kotajs, setKotajs] = useState<Kotaj[]>([]);
   const [loading, setLoading] = useState(false);
   const [expanded, setExpanded] = useState<Set<number>>(new Set());
 
@@ -1108,7 +1108,7 @@ const BillingDialog = ({
     setExpanded(new Set());
     Promise.all([
       api<{ items: Payment[] }>(`/api/cards/payments-list.php?card_id=${card.id}`),
-      api<{ items: KotajRow[] }>(`/api/cards/kotaj-list.php?card_id=${card.id}`),
+      api<{ items: Kotaj[] }>(`/api/cards/kotaj-list.php?card_id=${card.id}`),
     ])
       .then(([p, k]) => {
         setPayments(p.items || []);
