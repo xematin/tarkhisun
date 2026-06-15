@@ -117,6 +117,7 @@ const TSCardUser = () => {
   const { toast } = useToast();
   const [state, setState] = useState<State>("loading");
   const [me, setMe] = useState<MeUser | null>(null);
+  const [overallOpen, setOverallOpen] = useState(false);
 
   const refresh = useCallback(async () => {
     setState("loading");
@@ -142,8 +143,15 @@ const TSCardUser = () => {
               <CreditCard className="w-5 h-5" /> پنل کارت
             </h1>
             {state === "auth" && me && (
-              <div className="flex items-center gap-3 text-sm text-persian">
-                <span className="opacity-80">{me.first_name} {me.last_name}</span>
+              <div className="flex items-center gap-2 text-sm text-persian">
+                <span className="opacity-80 hidden sm:inline">{me.first_name} {me.last_name}</span>
+                <Button
+                  size="sm"
+                  onClick={() => setOverallOpen(true)}
+                  className="text-persian bg-gradient-to-l from-primary to-accent text-primary-foreground hover:opacity-90 shadow-sm"
+                >
+                  <Receipt className="w-4 h-4 ml-1" /> صورتحساب
+                </Button>
                 <Button
                   variant="ghost" size="sm"
                   onClick={async () => {
@@ -166,8 +174,17 @@ const TSCardUser = () => {
           {state === "login" && <LoginForm onDone={refresh} />}
           {state === "auth" && <MyCards toast={toast} />}
         </main>
+        {state === "auth" && me && (
+          <OverallBillingDialog
+            open={overallOpen}
+            onClose={() => setOverallOpen(false)}
+            toast={toast}
+            userName={`${me.first_name} ${me.last_name}`.trim() || me.username}
+          />
+        )}
       </div>
     </>
+
   );
 };
 
