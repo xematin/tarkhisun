@@ -16,15 +16,19 @@ if ($status !== null && !in_array($status, ['new','contacted','done','rejected']
     ts_json_error(400, 'Invalid status');
 }
 
+$pdo = ts_db();
+$hasStatus = ts_column_exists($pdo, 'ts_leads', 'status');
+$hasNote   = ts_column_exists($pdo, 'ts_leads', 'note');
+
 $sets = [];
 $params = [];
-if ($status !== null) { $sets[] = 'status = ?'; $params[] = $status; }
-if ($note   !== null) { $sets[] = 'note = ?';   $params[] = $note; }
+if ($hasStatus && $status !== null) { $sets[] = 'status = ?'; $params[] = $status; }
+if ($hasNote && $note   !== null) { $sets[] = 'note = ?';   $params[] = $note; }
 if (!$sets) ts_json_error(400, 'Nothing to update');
 
 $params[] = $id;
 
-$stmt = ts_db()->prepare('UPDATE ts_leads SET ' . implode(', ', $sets) . ' WHERE id = ?');
+$stmt = $pdo->prepare('UPDATE ts_leads SET ' . implode(', ', $sets) . ' WHERE id = ?');
 $stmt->execute($params);
 
 ts_json(200, ['ok' => true]);
