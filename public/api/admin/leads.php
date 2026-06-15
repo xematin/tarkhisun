@@ -21,7 +21,7 @@ $stmt = $pdo->prepare("SELECT COUNT(*) FROM ts_leads $where");
 $stmt->execute($params);
 $total = (int)$stmt->fetchColumn();
 
-$sql = "SELECT id, phone, first_seen, last_seen, search_count, ip
+$sql = "SELECT id, phone, first_seen, last_seen, search_count, ip, note, status
         FROM ts_leads $where
         ORDER BY last_seen DESC
         LIMIT $limit OFFSET $offset";

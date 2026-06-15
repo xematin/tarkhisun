@@ -24,6 +24,8 @@ interface LeadRow {
   last_seen: string;
   search_count: number;
   ip: string | null;
+  note: string | null;
+  status: "new" | "contacted" | "done" | "rejected";
   recent_queries?: { query: string; created_at: string }[];
 }
 interface LogRow { id: number; query: string; created_at: string; }
@@ -193,14 +195,29 @@ const LoginForm = ({ onDone }: { onDone: () => void }) => {
   );
 };
 
+const LEAD_STATUS_LABEL: Record<LeadRow["status"], string> = {
+  new: "جدید",
+  contacted: "در حال تماس",
+  done: "انجام شد",
+  rejected: "رد شده",
+};
+const LEAD_STATUS_VARIANT: Record<LeadRow["status"], "default" | "secondary" | "outline" | "destructive"> = {
+  new: "default",
+  contacted: "secondary",
+  done: "outline",
+  rejected: "destructive",
+};
+
 const LeadsPanel = () => {
   const { toast } = useToast();
   const [items, setItems] = useState<LeadRow[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [q, setQ] = useState("");
+  const [status, setStatus] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<LeadRow | null>(null);
+  const [drafts, setDrafts] = useState<Record<number, { status?: string; note?: string }>>({});
 
   const limit = 25;
   const totalPages = Math.max(1, Math.ceil(total / limit));
@@ -211,11 +228,13 @@ const LeadsPanel = () => {
       const res = await api<{ items: LeadRow[]; total: number }>(
         `/api/admin/leads.php?page=${page}&limit=${limit}&q=${encodeURIComponent(q)}`
       );
-      setItems(res.items); setTotal(res.total);
+      const list = status ? res.items.filter(r => r.status === status) : res.items;
+      setItems(list); setTotal(res.total);
+      setDrafts({});
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally { setLoading(false); }
-  }, [page, q, toast]);
+  }, [page, q, status, toast]);
 
   useEffect(() => { void load(); }, [load]);
 
@@ -224,6 +243,25 @@ const LeadsPanel = () => {
     try {
       await api("/api/admin/lead-delete.php", { method: "POST", body: JSON.stringify({ id }) });
       toast({ title: "حذف شد" });
+      void load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
+  const handleSave = async (row: LeadRow) => {
+    const d = drafts[row.id];
+    if (!d) return;
+    try {
+      await api("/api/admin/lead-update.php", {
+        method: "POST",
+        body: JSON.stringify({
+          id: row.id,
+          status: d.status ?? row.status,
+          note: d.note ?? row.note ?? "",
+        }),
+      });
+      toast({ title: "ذخیره شد" });
       void load();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
@@ -246,9 +284,19 @@ const LeadsPanel = () => {
                 value={q}
                 onChange={(e) => { setPage(1); setQ(e.target.value); }}
                 placeholder="جستجوی شماره"
-                className="h-9 pr-8 w-48 text-persian"
+                className="h-9 pr-8 w-44 text-persian"
               />
             </div>
+            <Select value={status || "all"} onValueChange={(v) => { setPage(1); setStatus(v === "all" ? "" : v); }}>
+              <SelectTrigger className="h-9 w-32 text-persian"><SelectValue placeholder="وضعیت" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">همه</SelectItem>
+                <SelectItem value="new">جدید</SelectItem>
+                <SelectItem value="contacted">در حال تماس</SelectItem>
+                <SelectItem value="done">انجام شد</SelectItem>
+                <SelectItem value="rejected">رد شده</SelectItem>
+              </SelectContent>
+            </Select>
             <Button size="sm" variant="outline" onClick={() => load()}>
               <RefreshCw className="w-4 h-4" />
             </Button>
@@ -272,29 +320,74 @@ const LeadsPanel = () => {
                 <TableRow>
                   <TableHead className="text-right text-persian">شماره</TableHead>
                   <TableHead className="text-right text-persian">آخرین بازدید</TableHead>
-                  <TableHead className="text-right text-persian">اولین بازدید</TableHead>
                   <TableHead className="text-right text-persian">تعداد سرچ</TableHead>
                   <TableHead className="text-right text-persian">آخرین عبارت‌ها</TableHead>
+                  <TableHead className="text-right text-persian">وضعیت</TableHead>
+                  <TableHead className="text-right text-persian">یادداشت</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {items.map((r) => (
-                  <TableRow key={r.id} className="cursor-pointer" onClick={() => setSelected(r)}>
-                    <TableCell className="font-mono">{r.phone}</TableCell>
-                    <TableCell className="text-persian text-xs">{fmt(r.last_seen)}</TableCell>
-                    <TableCell className="text-persian text-xs">{fmt(r.first_seen)}</TableCell>
-                    <TableCell><Badge>{r.search_count}</Badge></TableCell>
-                    <TableCell className="text-persian text-xs max-w-xs truncate">
-                      {r.recent_queries?.map((q) => q.query).join(" • ") || "—"}
-                    </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
-                      <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)}>
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {items.map((r) => {
+                  const d = drafts[r.id] || {};
+                  const curStatus = (d.status ?? r.status) as LeadRow["status"];
+                  const dirty = (d.status !== undefined && d.status !== r.status) ||
+                                (d.note !== undefined && d.note !== (r.note ?? ""));
+                  return (
+                    <TableRow key={r.id}>
+                      <TableCell className="font-mono" dir="ltr">
+                        <a href={`tel:${r.phone}`} className="hover:underline text-primary">{r.phone}</a>
+                      </TableCell>
+                      <TableCell className="text-persian text-xs">{fmt(r.last_seen)}</TableCell>
+                      <TableCell>
+                        <button onClick={() => setSelected(r)} className="cursor-pointer">
+                          <Badge>{r.search_count}</Badge>
+                        </button>
+                      </TableCell>
+                      <TableCell className="text-persian text-xs max-w-xs truncate">
+                        {r.recent_queries?.map((qq) => qq.query).join(" • ") || "—"}
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={curStatus}
+                          onValueChange={(v) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], status: v } }))}
+                        >
+                          <SelectTrigger className="h-8 w-32 text-persian">
+                            <SelectValue>
+                              <Badge variant={LEAD_STATUS_VARIANT[curStatus]}>
+                                {LEAD_STATUS_LABEL[curStatus]}
+                              </Badge>
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="new">جدید</SelectItem>
+                            <SelectItem value="contacted">در حال تماس</SelectItem>
+                            <SelectItem value="done">انجام شد</SelectItem>
+                            <SelectItem value="rejected">رد شده</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="min-w-[180px]">
+                        <Input
+                          value={d.note ?? r.note ?? ""}
+                          onChange={(e) => setDrafts((s) => ({ ...s, [r.id]: { ...s[r.id], note: e.target.value } }))}
+                          placeholder="—"
+                          className="h-8 text-persian"
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-1">
+                          <Button size="sm" variant="ghost" disabled={!dirty} onClick={() => handleSave(r)} title="ذخیره">
+                            <Save className={`w-4 h-4 ${dirty ? "text-primary" : "text-muted-foreground"}`} />
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف">
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
             {totalPages > 1 && (
