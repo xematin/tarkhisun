@@ -1086,28 +1086,8 @@ const STATUS_CLASS: Record<string, string> = {
   rejected: "text-destructive",
 };
 
-interface KotajItem {
-  name: string;
-  value_usd: number;
-  unit_price_irt: number;
-  toman: number;
-}
-interface KotajRow {
-  id: number;
-  card_id: number;
-  entry_id: number;
-  entry_title?: string;
-  kotaj_number: string;
-  kotaj_date_jalali: string;
-  kotaj_date_gregorian?: string | null;
-  total_value_usd: number;
-  toman_total: number;
-  created_at: string;
-  items: KotajItem[];
-}
-
 type TimelineEntry =
-  | { kind: "kotaj"; date: string; data: KotajRow }
+  | { kind: "kotaj"; date: string; data: Kotaj }
   | { kind: "payment"; date: string; data: Payment };
 
 const BillingDialog = ({
