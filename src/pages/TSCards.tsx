@@ -1629,6 +1629,11 @@ const UsersManagementPanel = ({
     first_name: "", last_name: "", username: "", password: "",
   });
   const [saving, setSaving] = useState(false);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createForm, setCreateForm] = useState<{ first_name: string; last_name: string; username: string; password: string; password2: string }>({
+    first_name: "", last_name: "", username: "", password: "", password2: "",
+  });
+  const [creating, setCreating] = useState(false);
   const [payUser, setPayUser] = useState<CardUser | null>(null);
   const [payData, setPayData] = useState<any>(null);
   const [payLoading, setPayLoading] = useState(false);
