@@ -357,7 +357,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                           ) : "—"}
                         </TableCell>
                         <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
-                          <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[160px]">
+                          <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[240px]">
                             <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
                               <FileText className="w-4 h-4" />
                               <span className="md:hidden text-persian text-[11px]">گزارش</span>
@@ -383,13 +383,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <span className="md:hidden text-persian text-[11px]">حذف</span>
                             </Button>
                             <div className="col-span-3 grid grid-cols-2 gap-1.5">
-                              <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 h-9">
-                                <Banknote className="w-4 h-4 ml-1" />
-                                <span className="text-persian text-xs">پرداخت</span>
+                              <Button size="sm" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-md">
+                                <Banknote className="w-4 h-4 shrink-0" />
+                                <span className="text-persian text-xs truncate">پرداخت</span>
                               </Button>
-                              <Button size="sm" variant="ghost" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="bg-primary/10 hover:bg-primary/20 text-primary h-9">
-                                <Receipt className="w-4 h-4 ml-1" />
-                                <span className="text-persian text-xs">صورتحساب</span>
+                              <Button size="sm" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-md">
+                                <Receipt className="w-4 h-4 shrink-0" />
+                                <span className="text-persian text-xs truncate">صورتحساب</span>
                               </Button>
                             </div>
                           </div>
