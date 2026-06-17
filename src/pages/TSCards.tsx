@@ -1803,6 +1803,10 @@ const UsersManagementPanel = ({
                           <Wallet className="h-3.5 w-3.5" />
                           <span className="md:hidden text-persian text-xs">پرداختی‌ها</span>
                         </Button>
+                        <Button variant="outline" size="sm" onClick={() => setBillingUser(u)} title="صورتحساب" className="gap-1.5">
+                          <Receipt className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">صورتحساب</span>
+                        </Button>
                         <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها" className="gap-1.5">
                           <FileText className="h-3.5 w-3.5" />
                           <span className="md:hidden text-persian text-xs">کوتاژها</span>
