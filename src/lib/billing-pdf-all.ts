@@ -17,6 +17,7 @@ export interface BillingCardBundle {
   cardName: string;
   timeline: BillingTimelineEntry[];
   totals: { kotajToman: number; paid: number; pending: number; balance: number };
+  forCardOwner?: boolean;
 }
 
 function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
