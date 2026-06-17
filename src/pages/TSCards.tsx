@@ -383,7 +383,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <span className="md:hidden text-persian text-[11px]">حذف</span>
                             </Button>
                             <div className="col-span-3 grid grid-cols-2 gap-1.5">
-                              <Button size="sm" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-md">
+                              <Button size="sm" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-emerald-600 to-green-500 text-white hover:opacity-90 shadow-md">
                                 <Banknote className="w-4 h-4 shrink-0" />
                                 <span className="text-persian text-xs truncate">پرداخت</span>
                               </Button>
