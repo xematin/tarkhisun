@@ -272,6 +272,7 @@ const CardBillingDialog = ({ open, onClose, cardId, cardName }: Props) => {
                   pending: totals.adminPending,
                   balance,
                 },
+                forCardOwner: true,
               };
               void downloadAllBillingPdf(cardName, [bundle]);
             }}
