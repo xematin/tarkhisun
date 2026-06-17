@@ -1643,6 +1643,7 @@ const UsersManagementPanel = ({
   const [kotajData, setKotajData] = useState<any>(null);
   const [kotajLoading, setKotajLoading] = useState(false);
   const [billingUser, setBillingUser] = useState<CardUser | null>(null);
+  const [billingCard, setBillingCard] = useState<{ id: number; name: string } | null>(null);
 
   const openPayments = (u: CardUser) => {
     setPayUser(u); setPayData(null); setPayLoading(true);
