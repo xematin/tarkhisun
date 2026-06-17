@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
+import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 
 import { Button } from "@/components/ui/button";
@@ -1640,6 +1641,7 @@ const UsersManagementPanel = ({
   const [kotajUser, setKotajUser] = useState<CardUser | null>(null);
   const [kotajData, setKotajData] = useState<any>(null);
   const [kotajLoading, setKotajLoading] = useState(false);
+  const [billingUser, setBillingUser] = useState<CardUser | null>(null);
 
   const openPayments = (u: CardUser) => {
     setPayUser(u); setPayData(null); setPayLoading(true);
@@ -1801,6 +1803,10 @@ const UsersManagementPanel = ({
                           <Wallet className="h-3.5 w-3.5" />
                           <span className="md:hidden text-persian text-xs">پرداختی‌ها</span>
                         </Button>
+                        <Button variant="outline" size="sm" onClick={() => setBillingUser(u)} title="صورتحساب" className="gap-1.5">
+                          <Receipt className="h-3.5 w-3.5" />
+                          <span className="md:hidden text-persian text-xs">صورتحساب</span>
+                        </Button>
                         <Button variant="outline" size="sm" onClick={() => openKotaj(u)} title="گزارش کوتاژها" className="gap-1.5">
                           <FileText className="h-3.5 w-3.5" />
                           <span className="md:hidden text-persian text-xs">کوتاژها</span>
@@ -1889,6 +1895,13 @@ const UsersManagementPanel = ({
         </Dialog>
 
 
+
+        <UserBillingDialog
+          open={!!billingUser}
+          onClose={() => setBillingUser(null)}
+          userId={billingUser?.id || 0}
+          userName={billingUser ? `${billingUser.first_name} ${billingUser.last_name}`.trim() || billingUser.username : ""}
+        />
 
         <Dialog open={!!payUser} onOpenChange={(o) => !o && setPayUser(null)}>
           <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">
