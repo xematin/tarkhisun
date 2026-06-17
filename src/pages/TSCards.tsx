@@ -206,6 +206,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [reportFor, setReportFor] = useState<CardRow | null>(null);
   const [kotajCostFor, setKotajCostFor] = useState<CardRow | null>(null);
   const [payDebtFor, setPayDebtFor] = useState<CardRow | null>(null);
+  const [billingCard, setBillingCard] = useState<{ id: number; name: string } | null>(null);
   const [treasuryKey, setTreasuryKey] = useState(0);
   const bumpTreasury = useCallback(() => setTreasuryKey((k) => k + 1), []);
   const [adminPaymentsKey, setAdminPaymentsKey] = useState(0);
