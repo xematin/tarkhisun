@@ -11,7 +11,8 @@ $pdo = ts_db();
 $hasG = false;
 try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
 $st = $pdo->prepare(
-    "SELECT k.*, e.title AS entry_title, u.first_name, u.last_name, u.username
+    "SELECT k.*, e.title AS entry_title, e.unit_price_irt AS entry_unit_price_irt,
+            u.first_name, u.last_name, u.username
      FROM ts_kotaj k
      LEFT JOIN ts_card_entries e ON e.id = k.entry_id
      JOIN ts_card_users u ON u.id = k.card_user_id
@@ -20,6 +21,11 @@ $st = $pdo->prepare(
 );
 $st->execute([$card_id]);
 $rows = $st->fetchAll();
+
+$entryPriceByK = [];
+foreach ($rows as $r) {
+    $entryPriceByK[(int)$r['id']] = $r['entry_unit_price_irt'] !== null ? (float)$r['entry_unit_price_irt'] : null;
+}
 
 $ids = array_map(fn($r) => (int)$r['id'], $rows);
 $itemsByK = [];
@@ -30,7 +36,10 @@ if ($ids) {
     $it->execute($ids);
     foreach ($it->fetchAll() as $r) {
         $kid = (int)$r['kotaj_id'];
-        $v = (float)$r['value_usd']; $p = (float)$r['unit_price_irt']; $t = $v * $p;
+        $v = (float)$r['value_usd'];
+        // Override per-item user price with the card section's defined price
+        $p = $entryPriceByK[$kid] ?? (float)$r['unit_price_irt'];
+        $t = $v * $p;
         $itemsByK[$kid][] = [
             'name' => $r['name'],
             'value_usd' => $v,
