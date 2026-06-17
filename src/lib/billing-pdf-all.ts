@@ -140,7 +140,8 @@ export async function downloadAllBillingPdf(userName: string, cards: BillingCard
     }),
     { kotajToman: 0, paid: 0, pending: 0, balance: 0 },
   );
-  const grandPositive = grand.balance >= 0;
+  const grandForCardOwner = cards.length === 1 && cards[0].forCardOwner;
+  const grandPositive = grandForCardOwner ? grand.balance < 0 : grand.balance >= 0;
 
   const container = document.createElement("div");
   container.style.cssText = `
