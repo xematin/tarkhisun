@@ -49,14 +49,14 @@ function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
       return `
         <tr style="background:#eef2ff33">
           <td style="padding:6px;border:1px solid #c7d2fe;text-align:center;font-weight:600">${num}</td>
-          <td style="padding:6px;border:1px solid #c7d2fe;direction:ltr;font-size:10px">${esc((k.created_at || "").slice(0, 16).replace("T", " "))}</td>
+          <td style="padding:6px;border:1px solid #c7d2fe;font-size:10px">${esc(k.kotaj_date_jalali || "—")}</td>
           <td style="padding:6px;border:1px solid #c7d2fe">
             <span style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#6366f1;color:#fff">کوتاژ</span>
           </td>
           <td style="padding:6px;border:1px solid #c7d2fe;font-size:11px">
             <div style="font-weight:700">شماره ${esc(k.kotaj_number)}</div>
             <div style="color:#475569;font-size:10px;margin-top:2px">
-              ${esc(k.entry_title || "—")} • تاریخ کوتاژ: ${esc(k.kotaj_date_jalali)} • ارزش: ${fa(k.total_value_usd)} $
+              ${esc(k.entry_title || "—")} • ارزش: ${fa(k.total_value_usd)} $
             </div>
             ${itemsHtml}
           </td>
@@ -66,16 +66,17 @@ function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
     }
     const p = ev.data;
     const st = (p.status || "pending").toLowerCase();
+    const payDate = p.pay_date_jalali || (p.created_at || "").slice(0, 10);
     return `
-      <tr style="background:#ecfdf533">
-        <td style="padding:6px;border:1px solid #bbf7d0;text-align:center;font-weight:600">${num}</td>
-        <td style="padding:6px;border:1px solid #bbf7d0;direction:ltr;font-size:10px">${esc((p.created_at || "").slice(0, 16).replace("T", " "))}</td>
-        <td style="padding:6px;border:1px solid #bbf7d0">
-          <span style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#10b981;color:#fff">پرداخت</span>
+      <tr style="background:#e0f2fe33">
+        <td style="padding:6px;border:1px solid #bae6fd;text-align:center;font-weight:600">${num}</td>
+        <td style="padding:6px;border:1px solid #bae6fd;font-size:10px">${esc(payDate || "—")}</td>
+        <td style="padding:6px;border:1px solid #bae6fd">
+          <span style="display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px;background:#0284c7;color:#fff">پرداخت کارت</span>
         </td>
-        <td style="padding:6px;border:1px solid #bbf7d0;font-size:11px;color:#475569">${esc(p.note || "—")}</td>
-        <td style="padding:6px;border:1px solid #bbf7d0;font-weight:700;color:#047857">${fa(p.amount_irt)}</td>
-        <td style="padding:6px;border:1px solid #bbf7d0;font-size:10px;font-weight:600">${esc(STATUS_LABEL[st] || st)}</td>
+        <td style="padding:6px;border:1px solid #bae6fd;font-size:11px;color:#475569">${esc(p.note || "پرداخت به صاحب کارت")}</td>
+        <td style="padding:6px;border:1px solid #bae6fd;font-weight:700;color:#0369a1">${fa(p.amount_irt)}</td>
+        <td style="padding:6px;border:1px solid #bae6fd;font-size:10px;font-weight:600">${esc(STATUS_LABEL[st] || st)}</td>
       </tr>`;
   }).join("");
 }

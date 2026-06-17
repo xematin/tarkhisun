@@ -18,6 +18,7 @@ interface PaymentRow {
   note?: string | null;
   status?: string | null;
   created_at: string;
+  pay_date_jalali?: string | null;
   receipt_path?: string | null;
 }
 export type BillingTimelineEntry =

@@ -1,25 +1,44 @@
-Fix the billing button (صورتحساب) and payment button layout in the admin cards table.
+## هدف
+صورتحساب کارت در پنل ادمین برای ارسال به صاحب کارت اصلاح شود: فقط کوتاژها و پرداخت‌های به صاحب کارت نمایش داده شود، تاریخ شمسی باشد، قیمت هر دلار همان مقدار تعریف‌شده در «قیمت هر دلار (تومان)» در سکشن کارت باشد، نام کاربر و یادداشت اضافی پنهان شود.
 
-## Changes
+## تغییرات
 
-### File: src/pages/TSCards.tsx
+### ۱) `src/components/admin/CardBillingDialog.tsx`
+- درخواست `card-payments-list.php` (پرداخت‌های کاربران) و کل منطق `userPays` حذف شود.
+- در حلقه‌ی کوتاژها، عنوان کاربر (`label`) به `entry_title` افزوده نشود و `userLabel` خالی بماند.
+- کارت آماری حذف می‌شود: «پرداختی کاربران (تایید)» و «در انتظار تایید». گرید از ۵ ستون به ۳ ستون (هزینه کوتاژها / پرداخت به صاحب کارت / بستانکار-بدهکار) تبدیل شود.
+- `balance = adminPaid − kotajToman` (مثبت=بستانکار صاحب کارت، منفی=بدهکار).
+- در ردیف کوتاژ، `• {ev.userLabel}` از شرح حذف شود.
+- در ردیف پرداخت ادمین:
+  - تاریخ از `pay_date_jalali` خوانده شود (نیازمند افزودن این فیلد در `TimelineExtra.data`).
+  - شرح فقط «پرداخت به صاحب کارت» یا «پرداخت به صاحب کارت (از خزانه)»؛ بخش `— {p.note}` حذف.
+- ستون تاریخ جدول: برای کوتاژ از `kotaj_date_jalali`، برای پرداخت ادمین از `pay_date_jalali` (به جای `created_at` میلادی).
+- ترتیب timeline بر اساس همان رشته‌های شمسی (YYYY/MM/DD مرتب‌سازی صحیح می‌دهد).
+- خروجی PDF (`bundle`) با همان داده‌های تمیزشده ساخته می‌شود.
 
-1. **Widen the action buttons container** (line ~360):
-   - Change `md:max-w-[160px]` to `md:max-w-[240px]` so the two side-by-side text buttons have enough horizontal room on desktop.
+### ۲) `src/lib/billing-pdf-all.ts` (و در صورت استفاده `billing-pdf.ts`)
+- `BillingTimelineEntry` گسترش یابد تا `kotaj_date_jalali` و `pay_date_jalali` در `data` پشتیبانی شوند.
+- در رندر ردیف کوتاژ: ستون تاریخ = `kotaj_date_jalali`، حذف `entry_title` ضمیمه‌شده با نام کاربر (در دیالوگ تمیز می‌شود، PDF همان را می‌گیرد).
+- در رندر ردیف پرداخت: ستون تاریخ = `pay_date_jalali`؛ ستون شرح فقط متن استاندارد بدون `— note`.
+- کارت‌های خلاصه‌ی PDF نیز همان ۳ شاخص (کوتاژ/پرداخت به صاحب/مانده) را نشان دهد.
 
-2. **Fix the payment button** (line ~386):
-   - Replace green `bg-emerald-600/10` / `text-emerald-600` with a blue gradient: `bg-gradient-to-l from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-md`
-   - Add `w-full justify-start gap-1.5 px-2` for proper flex containment
-   - Remove `ml-1` from the `<Banknote>` icon (redundant with gap)
-   - Add `shrink-0` to the icon so it never gets squished
-   - Add `truncate` to the text span so it clips instead of overflowing
+### ۳) `public/api/admin/card-kotaj-report.php`
+هدف: اعمال «قیمت هر دلار سکشن کارت» روی همه‌ی اقلام کوتاژ، بدون افشای قیمت سفارشی کاربر.
 
-3. **Fix the billing button** (line ~390):
-   - Same blue gradient style as the payment button for visual consistency
-   - Add `w-full justify-start gap-1.5 px-2` for proper flex containment
-   - Remove `ml-1` from the `<Receipt>` icon (redundant with gap)
-   - Add `shrink-0` to the icon so it never gets squished
-   - Add `truncate` to the text span so it clips instead of overflowing
+- در SELECT اصلی، `e.unit_price_irt AS entry_unit_price_irt` افزوده شود.
+- نگاشتی `entryPriceByKotaj[kotaj_id] = entry_unit_price_irt` ساخته شود.
+- در حلقه‌ی `ts_kotaj_items`:
+  - `unit_price = entryPriceByKotaj[kid] ?? $r['unit_price_irt']`
+  - `toman = value_usd * unit_price`
+  - مقدار `unit_price_irt` ارسالی به فرانت با همین `unit_price` جایگزین شود.
+- `tomanByK` و در نتیجه `total_toman` کاربران و `debt_toman` بر مبنای قیمت سکشن کارت محاسبه شود (سازگار با شمارش `kotajToman` در دیالوگ).
 
-## Result
-Both buttons will sit cleanly side-by-side, icons will stay inside the button frame, text will truncate if space is too tight, and the color will switch from green to a pleasant blue-to-sky gradient.
+## فایل‌های ویرایش‌شده
+- `src/components/admin/CardBillingDialog.tsx`
+- `src/lib/billing-pdf-all.ts`
+- `src/lib/billing-pdf.ts` (هم‌راستاسازی حداقلی)
+- `public/api/admin/card-kotaj-report.php`
+
+## نکات
+- پرداخت‌های کاربر کلاً از این صورتحساب حذف می‌شوند (هم نمایش، هم خلاصه، هم PDF). در صفحات دیگر دست نمی‌خوریم.
+- قیمت اقلام در نمایش بر اساس قیمت تعریف‌شده‌ی کارت برای سکشن مربوطه است؛ اختلاف با قیمت کاربر در این گزارش نمایان نخواهد بود.
