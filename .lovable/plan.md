@@ -1,46 +1,25 @@
-# صورتحساب کلی کاربر در `/TSCardUser`
+Fix the billing button (صورتحساب) and payment button layout in the admin cards table.
 
-## هدف
-کنار نام کاربر در نوار بالا، یک دکمه‌ی «صورتحساب» اضافه شود که بازشدنش یک دیالوگ کلی نشان می‌دهد. این دیالوگ همه‌ی کارت‌های متعلق به کاربر را در یک لیست آکاردئونی نمایش می‌دهد: برای هر کارت «هزینه کوتاژها» و «مجموع پرداختی»، و با کلیک روی کارت یک تایم‌لاین کوتاژ+پرداخت به ترتیب تاریخ باز می‌شود (مشابه `BillingDialog` فعلی، اما به‌صورت inline). یک دکمه‌ی «دانلود PDF صورتحساب کامل» هم در فوتر دیالوگ هست که خروجی همه‌ی کارت‌ها را در یک فایل واحد می‌دهد.
+## Changes
 
-## تغییرات
+### File: src/pages/TSCards.tsx
 
-### ۱. `src/pages/TSCardUser.tsx` — هدر
-- در ناحیه‌ی `{state === "auth" && me && ...}` (حدود خط ۱۴۲–۱۵۵)، کنار نام کاربر و قبل از دکمه‌ی «خروج»، یک دکمه‌ی `<Button>` با آیکن `Receipt` و متن «صورتحساب» اضافه می‌شود. حالت `useState<boolean>` در `TSCardUser` نگه می‌دارد که این دیالوگ باز است یا نه و به یک کامپوننت جدید `OverallBillingDialog` پاس می‌دهد.
+1. **Widen the action buttons container** (line ~360):
+   - Change `md:max-w-[160px]` to `md:max-w-[240px]` so the two side-by-side text buttons have enough horizontal room on desktop.
 
-### ۲. کامپوننت جدید `OverallBillingDialog` (در همان فایل، انتهای فایل)
-- ورودی‌ها: `open`, `onClose`, `toast`, و نام کامل کاربر.
-- در `useEffect` با باز شدن: 
-  - `GET /api/cards/my-cards.php` → لیست کارت‌ها (همان `MyCard[]`).
-  - برای هر کارت: `Promise.all` روی `payments-list.php?card_id=` و `kotaj-list.php?card_id=` تا داده‌ی تایم‌لاین آماده شود.
-  - نتیجه در یک `Map<cardId, { card, timeline, kotajToman, paid, pending, balance }>` نگهداری می‌شود.
-- UI: لیست عمودی از کارت‌ها. هر آیتم:
-  - سطر هدر کلیک‌پذیر با: نام کارت، Badge هزینه کوتاژها، Badge مجموع پرداختی، Badge بستانکار/بدهکار، آیکن chevron.
-  - با کلیک، بخش زیرین expand می‌شود و جدول تایم‌لاین (شبیه `BillingDialog` فعلی) را نشان می‌دهد: ستون‌های تاریخ | نوع | شرح | مبلغ | وضعیت. کوتاژها قابل کلیک برای دیدن ریز اقلام (`expanded: Set<string>` با کلید `${cardId}-${kotajId}` برای جلوگیری از تداخل بین کارت‌ها).
-- در پایین دیالوگ جمع کل همه‌ی کارت‌ها (مجموع کوتاژ، مجموع پرداختی، مانده کل) به‌صورت ۳ کارت کوچک.
-- در `DialogFooter` سه دکمه:
-  - **دانلود PDF کامل** (با گرادیان `from-primary to-accent`، آیکن `Download`).
-  - **چاپ** (window.print).
-  - **بستن**.
+2. **Fix the payment button** (line ~386):
+   - Replace green `bg-emerald-600/10` / `text-emerald-600` with a blue gradient: `bg-gradient-to-l from-blue-600 to-sky-500 text-white hover:opacity-90 shadow-md`
+   - Add `w-full justify-start gap-1.5 px-2` for proper flex containment
+   - Remove `ml-1` from the `<Banknote>` icon (redundant with gap)
+   - Add `shrink-0` to the icon so it never gets squished
+   - Add `truncate` to the text span so it clips instead of overflowing
 
-### ۳. ابزار جدید `src/lib/billing-pdf-all.ts`
-- تابع `downloadAllBillingPdf(userName, cardsBundle)` که آرایه‌ای از `{ card, timeline, totals }` می‌گیرد.
-- خروجی PDF شامل:
-  - هدر با نام کاربر، تاریخ صدور.
-  - بخش «خلاصه کلی» با ۴ کارت رنگی (هزینه کوتاژها، مجموع پرداختی، در انتظار، مانده).
-  - برای هر کارت یک سکشن جداگانه: عنوان کارت + ۴ Badge خلاصه + جدول کامل تایم‌لاین (همراه ریز اقلام کوتاژها به‌صورت inline زیر هر ردیف کوتاژ، مانند خروجی `billing-pdf.ts` فعلی).
-  - فاصله‌ی بصری بین کارت‌ها (page-break-friendly).
-- منطق رندر HTML + `html2canvas` + `jsPDF` با همان الگوی موجود در `src/lib/billing-pdf.ts` و `src/lib/kotaj-pdf.ts` بازنویسی می‌شود؛ multi-page slicing از همان روال موجود.
-- فونت‌ها در PDF: `"Vazirmatn","IRANSansX DemiBold","Noto Sans Arabic","Tahoma"` (هماهنگ با باقی PDFها).
+3. **Fix the billing button** (line ~390):
+   - Same blue gradient style as the payment button for visual consistency
+   - Add `w-full justify-start gap-1.5 px-2` for proper flex containment
+   - Remove `ml-1` from the `<Receipt>` icon (redundant with gap)
+   - Add `shrink-0` to the icon so it never gets squished
+   - Add `truncate` to the text span so it clips instead of overflowing
 
-### ۴. بدون تغییرات بک‌اند
-endpointهای `my-cards.php`، `payments-list.php`، `kotaj-list.php` همگی موجود و کافی هستند. نیاز به PHP/migration نیست.
-
-### ۵. حفظ موارد موجود
-- دکمه‌ی «صورتحساب» روی هر کارت و `BillingDialog` فعلی دست‌نخورده باقی می‌مانند تا workflow تک‌کارت همچنان کار کند.
-- کلاس `panel-fa` و قواعد RTL طبق memory رعایت می‌شود؛ هیچ `dir="rtl"` inline اضافه‌ای روی wrapperها نمی‌آید.
-
-## یادداشت
-- مرتب‌سازی تایم‌لاین هر کارت بر اساس `created_at` صعودی (مانند `BillingDialog` فعلی).
-- بارگذاری در `OverallBillingDialog` با Loader وسط تا داده‌ی همه‌ی کارت‌ها بیاید، سپس رندر.
-- اگر تعداد کارت‌ها زیاد باشد، فراخوانی‌ها به‌صورت `Promise.all` موازی انجام می‌شود؛ نیازی به endpoint جدید نیست.
+## Result
+Both buttons will sit cleanly side-by-side, icons will stay inside the button frame, text will truncate if space is too tight, and the color will switch from green to a pleasant blue-to-sky gradient.
