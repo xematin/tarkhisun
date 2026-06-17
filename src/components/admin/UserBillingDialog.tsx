@@ -22,7 +22,7 @@ const STATUS_CLASS: Record<string, string> = {
 interface KotajItemRaw { name: string; value_usd: number; unit_price_irt: number; toman?: number }
 interface KotajRaw {
   id: number; card_id: number; card_name: string; entry_id?: number | null;
-  entry_title?: string | null; kotaj_number: string; kotaj_date_jalali: string;
+  entry_title: string | null; kotaj_number: string; kotaj_date_jalali: string;
   total_value_usd: number; toman_total: number; created_at: string; items: KotajItemRaw[];
 }
 interface PaymentRaw {
