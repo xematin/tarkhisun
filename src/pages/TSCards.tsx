@@ -378,18 +378,20 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <Pencil className="w-4 h-4" />
                               <span className="md:hidden text-persian text-[11px]">ویرایش</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="md:!justify-center justify-start gap-1.5 h-9">
-                              <Receipt className="w-4 h-4 text-primary" />
-                              <span className="md:hidden text-persian text-[11px]">صورتحساب</span>
-                            </Button>
                             <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Trash2 className="w-4 h-4 text-destructive" />
                               <span className="md:hidden text-persian text-[11px]">حذف</span>
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="col-span-3 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 h-9">
-                              <Banknote className="w-4 h-4 ml-1" />
-                              <span className="text-persian text-xs">پرداخت</span>
-                            </Button>
+                            <div className="col-span-3 grid grid-cols-2 gap-1.5">
+                              <Button size="sm" variant="ghost" onClick={() => setPayDebtFor(r)} title="پرداخت بدهی به صاحب کارت" className="bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-600 h-9">
+                                <Banknote className="w-4 h-4 ml-1" />
+                                <span className="text-persian text-xs">پرداخت</span>
+                              </Button>
+                              <Button size="sm" variant="ghost" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="bg-primary/10 hover:bg-primary/20 text-primary h-9">
+                                <Receipt className="w-4 h-4 ml-1" />
+                                <span className="text-persian text-xs">صورتحساب</span>
+                              </Button>
+                            </div>
                           </div>
                         </TableCell>
                       </TableRow>
