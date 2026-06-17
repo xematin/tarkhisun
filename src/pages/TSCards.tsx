@@ -1896,6 +1896,13 @@ const UsersManagementPanel = ({
 
 
 
+        <UserBillingDialog
+          open={!!billingUser}
+          onClose={() => setBillingUser(null)}
+          userId={billingUser?.id || 0}
+          userName={billingUser ? `${billingUser.first_name} ${billingUser.last_name}`.trim() || billingUser.username : ""}
+        />
+
         <Dialog open={!!payUser} onOpenChange={(o) => !o && setPayUser(null)}>
           <DialogContent className="panel-fa max-w-4xl max-h-[85vh] overflow-y-auto">
             <DialogHeader>
