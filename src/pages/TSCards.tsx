@@ -377,6 +377,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <Pencil className="w-4 h-4" />
                               <span className="md:hidden text-persian text-[11px]">ویرایش</span>
                             </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="md:!justify-center justify-start gap-1.5 h-9">
+                              <Receipt className="w-4 h-4 text-primary" />
+                              <span className="md:hidden text-persian text-[11px]">صورتحساب</span>
+                            </Button>
                             <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Trash2 className="w-4 h-4 text-destructive" />
                               <span className="md:hidden text-persian text-[11px]">حذف</span>
