@@ -456,6 +456,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             </Dialog>
 
             <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); bumpAdminPayments(); }} toast={toast} />
+
+            <CardBillingDialog
+              open={!!billingCard}
+              onClose={() => setBillingCard(null)}
+              cardId={billingCard?.id || 0}
+              cardName={billingCard?.name || ""}
+            />
           </CardContent>
         </Card>
       </TabsContent>
