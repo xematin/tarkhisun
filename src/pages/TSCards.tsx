@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
+import CardBillingDialog from "@/components/admin/CardBillingDialog";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 
 import { Button } from "@/components/ui/button";
@@ -205,6 +206,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
   const [reportFor, setReportFor] = useState<CardRow | null>(null);
   const [kotajCostFor, setKotajCostFor] = useState<CardRow | null>(null);
   const [payDebtFor, setPayDebtFor] = useState<CardRow | null>(null);
+  const [billingCard, setBillingCard] = useState<{ id: number; name: string } | null>(null);
   const [treasuryKey, setTreasuryKey] = useState(0);
   const bumpTreasury = useCallback(() => setTreasuryKey((k) => k + 1), []);
   const [adminPaymentsKey, setAdminPaymentsKey] = useState(0);
@@ -376,6 +378,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               <Pencil className="w-4 h-4" />
                               <span className="md:hidden text-persian text-[11px]">ویرایش</span>
                             </Button>
+                            <Button size="sm" variant="ghost" onClick={() => setBillingCard({ id: r.id, name: r.name })} title="صورتحساب کارت" className="md:!justify-center justify-start gap-1.5 h-9">
+                              <Receipt className="w-4 h-4 text-primary" />
+                              <span className="md:hidden text-persian text-[11px]">صورتحساب</span>
+                            </Button>
                             <Button size="sm" variant="ghost" onClick={() => handleDelete(r.id)} title="حذف" className="md:!justify-center justify-start gap-1.5 h-9">
                               <Trash2 className="w-4 h-4 text-destructive" />
                               <span className="md:hidden text-persian text-[11px]">حذف</span>
@@ -450,6 +456,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             </Dialog>
 
             <AdminPayCardDialog card={payDebtFor} onClose={() => setPayDebtFor(null)} onSaved={() => { setPayDebtFor(null); void load(); bumpTreasury(); bumpAdminPayments(); }} toast={toast} />
+
+            <CardBillingDialog
+              open={!!billingCard}
+              onClose={() => setBillingCard(null)}
+              cardId={billingCard?.id || 0}
+              cardName={billingCard?.name || ""}
+            />
           </CardContent>
         </Card>
       </TabsContent>
