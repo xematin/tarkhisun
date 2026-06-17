@@ -83,8 +83,8 @@ function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
 }
 
 function renderCardSection(bundle: BillingCardBundle): string {
-  const { cardName, timeline, totals } = bundle;
-  const balancePositive = totals.balance >= 0;
+  const { cardName, timeline, totals, forCardOwner } = bundle;
+  const balancePositive = forCardOwner ? totals.balance < 0 : totals.balance >= 0;
   return `
     <section style="margin-top:24px;page-break-inside:avoid">
       <div style="background:linear-gradient(90deg,#0f172a,#1e293b);color:#fff;padding:10px 14px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center">
