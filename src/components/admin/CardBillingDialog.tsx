@@ -152,9 +152,9 @@ const CardBillingDialog = ({ open, onClose, cardId, cardName }: Props) => {
                 <div className="text-[11px] text-muted-foreground flex items-center gap-1"><Banknote className="w-3 h-3" /> پرداخت به صاحب کارت</div>
                 <div className="text-sm font-bold tabular-nums text-sky-700">{fmtToman(totals.adminPaid)}</div>
               </div>
-              <div className={`border rounded-md p-2 ${balance >= 0 ? "bg-emerald-500/10" : "bg-destructive/10"}`}>
-                <div className="text-[11px] text-muted-foreground">{balance >= 0 ? "بستانکار" : "بدهکار"}</div>
-                <div className={`text-sm font-bold tabular-nums ${balance >= 0 ? "text-emerald-700" : "text-destructive"}`}>
+              <div className={`border rounded-md p-2 ${balance < 0 ? "bg-emerald-500/10" : "bg-destructive/10"}`}>
+                <div className="text-[11px] text-muted-foreground">{balance < 0 ? "بستانکار" : "بدهکار"}</div>
+                <div className={`text-sm font-bold tabular-nums ${balance < 0 ? "text-emerald-700" : "text-destructive"}`}>
                   {fmtToman(Math.abs(balance))}
                 </div>
               </div>
@@ -272,6 +272,7 @@ const CardBillingDialog = ({ open, onClose, cardId, cardName }: Props) => {
                   pending: totals.adminPending,
                   balance,
                 },
+                forCardOwner: true,
               };
               void downloadAllBillingPdf(cardName, [bundle]);
             }}

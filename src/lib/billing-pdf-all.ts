@@ -17,6 +17,7 @@ export interface BillingCardBundle {
   cardName: string;
   timeline: BillingTimelineEntry[];
   totals: { kotajToman: number; paid: number; pending: number; balance: number };
+  forCardOwner?: boolean;
 }
 
 function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
@@ -82,8 +83,8 @@ function renderTimelineRows(timeline: BillingTimelineEntry[]): string {
 }
 
 function renderCardSection(bundle: BillingCardBundle): string {
-  const { cardName, timeline, totals } = bundle;
-  const balancePositive = totals.balance >= 0;
+  const { cardName, timeline, totals, forCardOwner } = bundle;
+  const balancePositive = forCardOwner ? totals.balance < 0 : totals.balance >= 0;
   return `
     <section style="margin-top:24px;page-break-inside:avoid">
       <div style="background:linear-gradient(90deg,#0f172a,#1e293b);color:#fff;padding:10px 14px;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center">
@@ -139,7 +140,8 @@ export async function downloadAllBillingPdf(userName: string, cards: BillingCard
     }),
     { kotajToman: 0, paid: 0, pending: 0, balance: 0 },
   );
-  const grandPositive = grand.balance >= 0;
+  const grandForCardOwner = cards.length === 1 && cards[0].forCardOwner;
+  const grandPositive = grandForCardOwner ? grand.balance < 0 : grand.balance >= 0;
 
   const container = document.createElement("div");
   container.style.cssText = `
