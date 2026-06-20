@@ -6,30 +6,57 @@ ts_admin_require();
 
 $pdo = ts_db();
 
-// Per-user kotaj totals
-$kotajByUser = [];
-foreach ($pdo->query(
-    "SELECT card_user_id, COUNT(*) AS n, COALESCE(SUM(total_value_usd),0) AS usd
-     FROM ts_kotaj GROUP BY card_user_id"
-)->fetchAll() as $r) {
-    $kotajByUser[(int)$r['card_user_id']] = [
-        'count' => (int)$r['n'],
-        'usd'   => (float)$r['usd'],
+// ===== Per-user kotaj aggregates: count, usd, sell (toman), buy (toman) =====
+// Buy price per dollar = ts_cards.cost_unit_price_irt (the value set when the card was created)
+$aggByUser = [];
+$rowsAgg = $pdo->query(
+    "SELECT k.card_user_id,
+            COUNT(DISTINCT k.id) AS n,
+            COALESCE(SUM(k.total_value_usd),0) AS usd,
+            COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS sell_irt,
+            COALESCE(SUM(ki.value_usd * COALESCE(c.cost_unit_price_irt,0)),0) AS buy_irt
+       FROM ts_kotaj k
+       LEFT JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
+       LEFT JOIN ts_cards c ON c.id = k.card_id
+      GROUP BY k.card_user_id"
+)->fetchAll();
+foreach ($rowsAgg as $r) {
+    $aggByUser[(int)$r['card_user_id']] = [
+        'count'    => (int)$r['n'],
+        'usd'      => (float)$r['usd'],
+        'sell_irt' => (float)$r['sell_irt'],
+        'buy_irt'  => (float)$r['buy_irt'],
     ];
 }
 
-// Per-user toman debt (sum of items)
-$debtByUser = [];
-foreach ($pdo->query(
-    "SELECT k.card_user_id, COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS toman
-     FROM ts_kotaj k
-     JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
-     GROUP BY k.card_user_id"
-)->fetchAll() as $r) {
-    $debtByUser[(int)$r['card_user_id']] = (float)$r['toman'];
+// ===== Per-user list of kotaj (for expandable detail) =====
+$kotajListByUser = [];
+$detailRows = $pdo->query(
+    "SELECT k.id, k.card_user_id, k.kotaj_number, k.kotaj_date_jalali, k.total_value_usd,
+            COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS sell_irt,
+            COALESCE(SUM(ki.value_usd * COALESCE(c.cost_unit_price_irt,0)),0) AS buy_irt
+       FROM ts_kotaj k
+       LEFT JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
+       LEFT JOIN ts_cards c ON c.id = k.card_id
+      GROUP BY k.id
+      ORDER BY k.id DESC"
+)->fetchAll();
+foreach ($detailRows as $r) {
+    $uid = (int)$r['card_user_id'];
+    $sell = (float)$r['sell_irt'];
+    $buy = (float)$r['buy_irt'];
+    $kotajListByUser[$uid][] = [
+        'id'         => (int)$r['id'],
+        'number'     => $r['kotaj_number'],
+        'date'       => $r['kotaj_date_jalali'],
+        'value_usd'  => (float)$r['total_value_usd'],
+        'sell_irt'   => $sell,
+        'buy_irt'    => $buy,
+        'profit_irt' => $sell - $buy,
+    ];
 }
 
-// Per-user confirmed payments
+// ===== Per-user confirmed payments =====
 $paidByUser = [];
 try {
     foreach ($pdo->query(
@@ -41,7 +68,7 @@ try {
     }
 } catch (Throwable $e) { $paidByUser = []; }
 
-// Per-user active card count
+// ===== Per-user active card count =====
 $cardCountByUser = [];
 foreach ($pdo->query(
     "SELECT card_user_id, COUNT(DISTINCT card_id) AS n
@@ -55,29 +82,38 @@ $users = $pdo->query(
 )->fetchAll();
 
 $rows = [];
-$totDebt = 0.0; $totPaid = 0.0; $totRem = 0.0; $activeUsers = 0;
+$totDebt = 0.0; $totPaid = 0.0; $totRem = 0.0;
+$totSell = 0.0; $totBuy = 0.0; $totProfit = 0.0; $totUsd = 0.0;
+$activeUsers = 0;
 foreach ($users as $u) {
     $uid = (int)$u['id'];
-    $k = $kotajByUser[$uid] ?? ['count' => 0, 'usd' => 0.0];
-    $debt = $debtByUser[$uid] ?? 0.0;
+    $a = $aggByUser[$uid] ?? ['count'=>0,'usd'=>0.0,'sell_irt'=>0.0,'buy_irt'=>0.0];
     $paid = $paidByUser[$uid] ?? 0.0;
     $cards = $cardCountByUser[$uid] ?? 0;
-    if ($k['count'] === 0 && $paid == 0.0 && $cards === 0) continue;
-    $rem = $debt - $paid; // positive => user owes us
+    if ($a['count'] === 0 && $paid == 0.0 && $cards === 0) continue;
+    $sell = $a['sell_irt'];
+    $buy = $a['buy_irt'];
+    $profit = $sell - $buy;
+    $rem = $sell - $paid; // debt_irt == sell_irt
     $rows[] = [
         'id' => $uid,
         'first_name' => $u['first_name'],
         'last_name' => $u['last_name'],
         'username' => $u['username'],
-        'kotaj_count' => $k['count'],
-        'used_usd' => $k['usd'],
-        'debt_irt' => $debt,
+        'kotaj_count' => $a['count'],
+        'used_usd' => $a['usd'],
+        'buy_irt' => $buy,
+        'sell_irt' => $sell,
+        'profit_irt' => $profit,
+        'debt_irt' => $sell,
         'paid_irt' => $paid,
         'remaining_irt' => $rem,
         'card_count' => $cards,
+        'kotajs' => $kotajListByUser[$uid] ?? [],
     ];
-    $totDebt += $debt; $totPaid += $paid; $totRem += $rem;
-    if ($k['count'] > 0 || $paid > 0) $activeUsers++;
+    $totDebt += $sell; $totPaid += $paid; $totRem += $rem;
+    $totSell += $sell; $totBuy += $buy; $totProfit += $profit; $totUsd += $a['usd'];
+    if ($a['count'] > 0 || $paid > 0) $activeUsers++;
 }
 
 // sort by remaining desc (largest debtors first)
@@ -86,6 +122,10 @@ usort($rows, fn($a, $b) => $b['remaining_irt'] <=> $a['remaining_irt']);
 ts_json(200, [
     'totals' => [
         'users' => $activeUsers,
+        'used_usd' => $totUsd,
+        'buy_irt' => $totBuy,
+        'sell_irt' => $totSell,
+        'profit_irt' => $totProfit,
         'debt_irt' => $totDebt,
         'paid_irt' => $totPaid,
         'remaining_irt' => $totRem,
