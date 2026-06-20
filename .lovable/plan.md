@@ -1,44 +1,52 @@
 ## هدف
-صورتحساب کارت در پنل ادمین برای ارسال به صاحب کارت اصلاح شود: فقط کوتاژها و پرداخت‌های به صاحب کارت نمایش داده شود، تاریخ شمسی باشد، قیمت هر دلار همان مقدار تعریف‌شده در «قیمت هر دلار (تومان)» در سکشن کارت باشد، نام کاربر و یادداشت اضافی پنهان شود.
+انتقال لیست کدهای گمرکی (الان در `src/data/customsCodes.ts` به‌صورت ثابت) به دیتابیس و افزودن تب «تنظیمات» در `/TSDashboard` برای مدیریت (افزودن/ویرایش/حذف) کدها توسط ادمین.
 
-## تغییرات
+## بخش‌های کار
 
-### ۱) `src/components/admin/CardBillingDialog.tsx`
-- درخواست `card-payments-list.php` (پرداخت‌های کاربران) و کل منطق `userPays` حذف شود.
-- در حلقه‌ی کوتاژها، عنوان کاربر (`label`) به `entry_title` افزوده نشود و `userLabel` خالی بماند.
-- کارت آماری حذف می‌شود: «پرداختی کاربران (تایید)» و «در انتظار تایید». گرید از ۵ ستون به ۳ ستون (هزینه کوتاژها / پرداخت به صاحب کارت / بستانکار-بدهکار) تبدیل شود.
-- `balance = adminPaid − kotajToman` (مثبت=بستانکار صاحب کارت، منفی=بدهکار).
-- در ردیف کوتاژ، `• {ev.userLabel}` از شرح حذف شود.
-- در ردیف پرداخت ادمین:
-  - تاریخ از `pay_date_jalali` خوانده شود (نیازمند افزودن این فیلد در `TimelineExtra.data`).
-  - شرح فقط «پرداخت به صاحب کارت» یا «پرداخت به صاحب کارت (از خزانه)»؛ بخش `— {p.note}` حذف.
-- ستون تاریخ جدول: برای کوتاژ از `kotaj_date_jalali`، برای پرداخت ادمین از `pay_date_jalali` (به جای `created_at` میلادی).
-- ترتیب timeline بر اساس همان رشته‌های شمسی (YYYY/MM/DD مرتب‌سازی صحیح می‌دهد).
-- خروجی PDF (`bundle`) با همان داده‌های تمیزشده ساخته می‌شود.
+### ۱) دیتابیس (MySQL — همان دیتابیس فعلی PHP)
+چون بک‌اند پروژه روی PHP/MySQL هاست شخصی است (نه Supabase)، جدول جدید را در همان دیتابیس می‌سازیم:
 
-### ۲) `src/lib/billing-pdf-all.ts` (و در صورت استفاده `billing-pdf.ts`)
-- `BillingTimelineEntry` گسترش یابد تا `kotaj_date_jalali` و `pay_date_jalali` در `data` پشتیبانی شوند.
-- در رندر ردیف کوتاژ: ستون تاریخ = `kotaj_date_jalali`، حذف `entry_title` ضمیمه‌شده با نام کاربر (در دیالوگ تمیز می‌شود، PDF همان را می‌گیرد).
-- در رندر ردیف پرداخت: ستون تاریخ = `pay_date_jalali`؛ ستون شرح فقط متن استاندارد بدون `— note`.
-- کارت‌های خلاصه‌ی PDF نیز همان ۳ شاخص (کوتاژ/پرداخت به صاحب/مانده) را نشان دهد.
+جدول `ts_customs_codes`:
+- `code` VARCHAR(10) PRIMARY KEY (کد ۵ رقمی گمرک)
+- `name` VARCHAR(255) NOT NULL (نام گمرک)
+- `created_at`, `updated_at`
 
-### ۳) `public/api/admin/card-kotaj-report.php`
-هدف: اعمال «قیمت هر دلار سکشن کارت» روی همه‌ی اقلام کوتاژ، بدون افشای قیمت سفارشی کاربر.
+یک فایل migration در `public/api/migrations/2026_06_20_customs_codes.sql` ساخته می‌شود که جدول را ایجاد و ۱۱۸ ردیف موجود در `customsCodes.ts` را seed می‌کند.
 
-- در SELECT اصلی، `e.unit_price_irt AS entry_unit_price_irt` افزوده شود.
-- نگاشتی `entryPriceByKotaj[kotaj_id] = entry_unit_price_irt` ساخته شود.
-- در حلقه‌ی `ts_kotaj_items`:
-  - `unit_price = entryPriceByKotaj[kid] ?? $r['unit_price_irt']`
-  - `toman = value_usd * unit_price`
-  - مقدار `unit_price_irt` ارسالی به فرانت با همین `unit_price` جایگزین شود.
-- `tomanByK` و در نتیجه `total_toman` کاربران و `debt_toman` بر مبنای قیمت سکشن کارت محاسبه شود (سازگار با شمارش `kotajToman` در دیالوگ).
+### ۲) API های PHP
+چهار endpoint جدید زیر `public/api/`:
 
-## فایل‌های ویرایش‌شده
-- `src/components/admin/CardBillingDialog.tsx`
-- `src/lib/billing-pdf-all.ts`
-- `src/lib/billing-pdf.ts` (هم‌راستاسازی حداقلی)
-- `public/api/admin/card-kotaj-report.php`
+- `public/api/customs-codes-list.php` — عمومی (GET) — برای استفاده در فرم افزودن کوتاژ کاربر و ادمین. خروجی JSON: `{ items: [{code, name}, ...] }`
+- `public/api/admin/customs-code-create.php` — ادمین (POST) — افزودن کد جدید
+- `public/api/admin/customs-code-update.php` — ادمین (POST) — ویرایش نام
+- `public/api/admin/customs-code-delete.php` — ادمین (POST) — حذف کد
 
-## نکات
-- پرداخت‌های کاربر کلاً از این صورتحساب حذف می‌شوند (هم نمایش، هم خلاصه، هم PDF). در صفحات دیگر دست نمی‌خوریم.
-- قیمت اقلام در نمایش بر اساس قیمت تعریف‌شده‌ی کارت برای سکشن مربوطه است؛ اختلاف با قیمت کاربر در این گزارش نمایان نخواهد بود.
+### ۳) فرانت‌اند
+
+**الف) جایگزینی منبع کدهای گمرکی:**
+- فایل `src/data/customsCodes.ts` به یک fallback تبدیل می‌شود و یک hook جدید `useCustomsCodes()` در `src/hooks/useCustomsCodes.ts` ساخته می‌شود که از API لیست را می‌گیرد و کش می‌کند (با fallback به لیست استاتیک در صورت خطا، تا چیزی خراب نشود).
+- در جاهایی که `lookupCustoms()` استفاده می‌شود (فرم افزودن کوتاژ در `TSCardUser.tsx` و احتمالاً `TSCards.tsx`)، از hook جدید استفاده می‌شود.
+
+**ب) تب تنظیمات در `/TSDashboard`:**
+- یک تب جدید «تنظیمات» به `src/pages/TSDashboard.tsx` اضافه می‌شود.
+- محتوای تب: کامپوننت جدید `src/components/admin/CustomsCodesSettings.tsx` شامل:
+  - جدول کدهای موجود (کد، نام، عملیات ویرایش/حذف)
+  - فرم افزودن کد جدید (کد ۵ رقمی + نام)
+  - جستجو در لیست
+  - تأیید قبل از حذف
+
+## جزئیات فنی
+- اعتبارسنجی کد: دقیقاً ۵ رقم، یکتا.
+- نرمال‌سازی ارقام فارسی به انگلیسی در ورودی.
+- اعمال جهت RTL از طریق کلاس `panel-fa` طبق قرارداد پروژه (نه `dir="rtl"` در wrapper).
+- بدون تغییر در منطق محاسبه کوتاژ یا صورتحساب.
+
+## فایل‌های اصلی متاثر
+- جدید: `public/api/migrations/2026_06_20_customs_codes.sql`
+- جدید: `public/api/customs-codes-list.php`
+- جدید: `public/api/admin/customs-code-{create,update,delete}.php`
+- جدید: `src/hooks/useCustomsCodes.ts`
+- جدید: `src/components/admin/CustomsCodesSettings.tsx`
+- ویرایش: `src/data/customsCodes.ts` (به fallback)
+- ویرایش: `src/pages/TSDashboard.tsx` (افزودن تب)
+- ویرایش: `src/pages/TSCardUser.tsx` و در صورت نیاز `src/pages/TSCards.tsx` (استفاده از hook)
