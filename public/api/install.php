@@ -303,6 +303,31 @@ try {
         echo "OK: added ts_leads.status\n";
     }
 
+    // ts_customs_codes (migration 2026_06_20_customs_codes.sql)
+    try {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS ts_customs_codes (
+            code VARCHAR(10) NOT NULL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+        $cnt = (int)$pdo->query("SELECT COUNT(*) FROM ts_customs_codes")->fetchColumn();
+        if ($cnt === 0) {
+            $seedFile = __DIR__ . '/migrations/2026_06_20_customs_codes.sql';
+            if (file_exists($seedFile)) {
+                $sql = file_get_contents($seedFile);
+                // Execute as a single multi-statement batch
+                $pdo->exec($sql);
+                echo "OK: seeded ts_customs_codes\n";
+            }
+        }
+        echo "OK: ensured ts_customs_codes\n";
+    } catch (Throwable $e) {
+        echo "WARN: ts_customs_codes: " . $e->getMessage() . "\n";
+    }
+
+
+
     // ===== One-time data repair: orphan kotaj entry_ids =====
     // ریشه‌ی باگ: نسخه‌ی قدیمی _card_save.php هنگام ویرایش کارت تمام
     // ts_card_entries را DELETE+INSERT می‌کرد و entry_id عوض می‌شد، ولی
