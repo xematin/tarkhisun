@@ -1,52 +1,45 @@
 ## هدف
-انتقال لیست کدهای گمرکی (الان در `src/data/customsCodes.ts` به‌صورت ثابت) به دیتابیس و افزودن تب «تنظیمات» در `/TSDashboard` برای مدیریت (افزودن/ویرایش/حذف) کدها توسط ادمین.
+در صفحه `/TSCards` تب «گزارش‌گیری» به «گزارش‌گیری کارت» تغییر نام پیدا کند و تب جدید «گزارش‌گیری کاربر» در کنار آن اضافه شود که جدول «وضعیت هر کاربر» را نمایش می‌دهد — مشابه ساختار «وضعیت هر کارت».
 
-## بخش‌های کار
+## ستون‌های جدول «وضعیت هر کاربر»
+بر اساس همان منطقی که برای محاسبه‌ی بدهی هر کاربر در صورتحساب کارت استفاده می‌شود:
 
-### ۱) دیتابیس (MySQL — همان دیتابیس فعلی PHP)
-چون بک‌اند پروژه روی PHP/MySQL هاست شخصی است (نه Supabase)، جدول جدید را در همان دیتابیس می‌سازیم:
+- نام و نام خانوادگی (+ نام کاربری)
+- تعداد کوتاژ
+- مصرف (دلار) — مجموع `total_value_usd` کوتاژها
+- بدهی کل (تومان) — مجموع `value_usd × unit_price_irt` آیتم‌های کوتاژها
+- پرداختی‌ها (تومان) — مجموع پرداخت‌های تأییدشده‌ی کاربر در `ts_card_payments`
+- مانده بدهی (تومان) = بدهی − پرداختی‌ها (سبز اگر منفی/صفر، قرمز اگر مثبت)
+- تعداد کارت‌های فعال (کارت‌هایی که در آن‌ها تخصیص دارد)
 
-جدول `ts_customs_codes`:
-- `code` VARCHAR(10) PRIMARY KEY (کد ۵ رقمی گمرک)
-- `name` VARCHAR(255) NOT NULL (نام گمرک)
-- `created_at`, `updated_at`
-
-یک فایل migration در `public/api/migrations/2026_06_20_customs_codes.sql` ساخته می‌شود که جدول را ایجاد و ۱۱۸ ردیف موجود در `customsCodes.ts` را seed می‌کند.
-
-### ۲) API های PHP
-چهار endpoint جدید زیر `public/api/`:
-
-- `public/api/customs-codes-list.php` — عمومی (GET) — برای استفاده در فرم افزودن کوتاژ کاربر و ادمین. خروجی JSON: `{ items: [{code, name}, ...] }`
-- `public/api/admin/customs-code-create.php` — ادمین (POST) — افزودن کد جدید
-- `public/api/admin/customs-code-update.php` — ادمین (POST) — ویرایش نام
-- `public/api/admin/customs-code-delete.php` — ادمین (POST) — حذف کد
-
-### ۳) فرانت‌اند
-
-**الف) جایگزینی منبع کدهای گمرکی:**
-- فایل `src/data/customsCodes.ts` به یک fallback تبدیل می‌شود و یک hook جدید `useCustomsCodes()` در `src/hooks/useCustomsCodes.ts` ساخته می‌شود که از API لیست را می‌گیرد و کش می‌کند (با fallback به لیست استاتیک در صورت خطا، تا چیزی خراب نشود).
-- در جاهایی که `lookupCustoms()` استفاده می‌شود (فرم افزودن کوتاژ در `TSCardUser.tsx` و احتمالاً `TSCards.tsx`)، از hook جدید استفاده می‌شود.
-
-**ب) تب تنظیمات در `/TSDashboard`:**
-- یک تب جدید «تنظیمات» به `src/pages/TSDashboard.tsx` اضافه می‌شود.
-- محتوای تب: کامپوننت جدید `src/components/admin/CustomsCodesSettings.tsx` شامل:
-  - جدول کدهای موجود (کد، نام، عملیات ویرایش/حذف)
-  - فرم افزودن کد جدید (کد ۵ رقمی + نام)
-  - جستجو در لیست
-  - تأیید قبل از حذف
+کارت‌های بالای صفحه (KPI) برای این تب:
+- مجموع بدهی کاربران (تومان)
+- مجموع پرداختی‌ها (تومان)
+- مجموع مانده‌ی بدهی (تومان)
+- تعداد کاربران فعال (کسانی که حداقل یک کوتاژ یا یک پرداخت دارند)
 
 ## جزئیات فنی
-- اعتبارسنجی کد: دقیقاً ۵ رقم، یکتا.
-- نرمال‌سازی ارقام فارسی به انگلیسی در ورودی.
-- اعمال جهت RTL از طریق کلاس `panel-fa` طبق قرارداد پروژه (نه `dir="rtl"` در wrapper).
-- بدون تغییر در منطق محاسبه کوتاژ یا صورتحساب.
 
-## فایل‌های اصلی متاثر
-- جدید: `public/api/migrations/2026_06_20_customs_codes.sql`
-- جدید: `public/api/customs-codes-list.php`
-- جدید: `public/api/admin/customs-code-{create,update,delete}.php`
-- جدید: `src/hooks/useCustomsCodes.ts`
-- جدید: `src/components/admin/CustomsCodesSettings.tsx`
-- ویرایش: `src/data/customsCodes.ts` (به fallback)
-- ویرایش: `src/pages/TSDashboard.tsx` (افزودن تب)
-- ویرایش: `src/pages/TSCardUser.tsx` و در صورت نیاز `src/pages/TSCards.tsx` (استفاده از hook)
+1. **بک‌اند — اندپوینت جدید**
+   `public/api/admin/reports-users-summary.php`
+   - با کوئری روی `ts_card_users` + `LEFT JOIN ts_kotaj` (برای usd و count) + ساب‌کوئری `ts_kotaj_items` (برای toman) + ساب‌کوئری `ts_card_payments` (status='confirmed') + ساب‌کوئری `ts_card_user_access` (برای تعداد کارت‌های فعال).
+   - فقط کاربرانی که حداقل یک کوتاژ، یک پرداخت یا یک تخصیص دارند نمایش داده شوند.
+   - ساختار خروجی:
+     ```json
+     {
+       "totals": { "users": N, "debt_irt": .., "paid_irt": .., "remaining_irt": .. },
+       "users": [ { "id", "first_name", "last_name", "username",
+                    "kotaj_count", "used_usd", "debt_irt",
+                    "paid_irt", "remaining_irt", "card_count" } ]
+     }
+     ```
+
+2. **فرانت — `src/pages/TSCards.tsx`**
+   - برچسب تب `value="reports"` از «گزارش‌گیری» به «گزارش‌گیری کارت» تغییر می‌کند.
+   - یک `TabsTrigger` جدید با `value="reports-users"` و برچسب «گزارش‌گیری کاربر» در کنار آن اضافه می‌شود (همان استایل گرد و سه‌بعدی).
+   - یک کامپوننت داخلی جدید `ReportsUsersPanel` ساخته می‌شود (الگو از `ReportsPanel` فعلی) که اندپوینت بالا را فراخوانی کرده و کارت‌های KPI + جدول «وضعیت هر کاربر» را رندر می‌کند.
+   - یک `<TabsContent value="reports-users">` با `<ReportsUsersPanel />` اضافه می‌شود.
+
+## فایل‌های متأثر
+- **ایجاد:** `public/api/admin/reports-users-summary.php`
+- **ویرایش:** `src/pages/TSCards.tsx` (نام تب، تب جدید، کامپوننت `ReportsUsersPanel`، `TabsContent` جدید)
