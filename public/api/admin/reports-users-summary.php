@@ -7,17 +7,18 @@ ts_admin_require();
 $pdo = ts_db();
 
 // ===== Per-user kotaj aggregates: count, usd, sell (toman), buy (toman) =====
-// Buy price per dollar = ts_cards.cost_unit_price_irt (the value set when the card was created)
+// Buy price per dollar = ts_card_entries.unit_price_irt (price set when the card/entry was created)
+// Sell price per dollar = ts_kotaj_items.unit_price_irt (price set on the kotaj item)
 $aggByUser = [];
 $rowsAgg = $pdo->query(
     "SELECT k.card_user_id,
             COUNT(DISTINCT k.id) AS n,
             COALESCE(SUM(k.total_value_usd),0) AS usd,
             COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS sell_irt,
-            COALESCE(SUM(ki.value_usd * COALESCE(c.cost_unit_price_irt,0)),0) AS buy_irt
+            COALESCE(SUM(ki.value_usd * COALESCE(e.unit_price_irt,0)),0) AS buy_irt
        FROM ts_kotaj k
        LEFT JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
-       LEFT JOIN ts_cards c ON c.id = k.card_id
+       LEFT JOIN ts_card_entries e ON e.id = k.entry_id
       GROUP BY k.card_user_id"
 )->fetchAll();
 foreach ($rowsAgg as $r) {
@@ -34,10 +35,10 @@ $kotajListByUser = [];
 $detailRows = $pdo->query(
     "SELECT k.id, k.card_user_id, k.kotaj_number, k.kotaj_date_jalali, k.total_value_usd,
             COALESCE(SUM(ki.value_usd * ki.unit_price_irt),0) AS sell_irt,
-            COALESCE(SUM(ki.value_usd * COALESCE(c.cost_unit_price_irt,0)),0) AS buy_irt
+            COALESCE(SUM(ki.value_usd * COALESCE(e.unit_price_irt,0)),0) AS buy_irt
        FROM ts_kotaj k
        LEFT JOIN ts_kotaj_items ki ON ki.kotaj_id = k.id
-       LEFT JOIN ts_cards c ON c.id = k.card_id
+       LEFT JOIN ts_card_entries e ON e.id = k.entry_id
       GROUP BY k.id
       ORDER BY k.id DESC"
 )->fetchAll();
