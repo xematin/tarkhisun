@@ -2633,6 +2633,110 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
   );
 };
 
+interface ReportsUsersData {
+  totals: { users: number; debt_irt: number; paid_irt: number; remaining_irt: number; };
+  users: {
+    id: number; first_name: string; last_name: string; username: string;
+    kotaj_count: number; used_usd: number; debt_irt: number;
+    paid_irt: number; remaining_irt: number; card_count: number;
+  }[];
+}
+
+const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
+  const [data, setData] = useState<ReportsUsersData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const r = await api<ReportsUsersData>("/api/admin/reports-users-summary.php");
+      setData(r);
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    } finally { setLoading(false); }
+  }, [toast]);
+  useEffect(() => { void load(); }, [load]);
+
+  const fa = (n: number) => (isFinite(n) ? n : 0).toLocaleString("fa-IR");
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <CardTitle className="text-persian flex items-center gap-2">
+            <FileText className="w-5 h-5" /> گزارش‌گیری کاربر
+          </CardTitle>
+          <Button size="sm" variant="outline" onClick={() => load()}>
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {loading || !data ? (
+          <div className="py-8 text-center"><Loader2 className="w-5 h-5 animate-spin inline" /></div>
+        ) : (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { label: "تعداد کاربران فعال", value: fa(data.totals.users) },
+                { label: "مجموع بدهی (تومان)", value: fa(data.totals.debt_irt) },
+                { label: "مجموع پرداختی‌ها (تومان)", value: fa(data.totals.paid_irt) },
+                { label: "مانده کل (تومان)", value: fa(data.totals.remaining_irt), highlight: data.totals.remaining_irt > 0 ? "text-destructive" : "text-emerald-600" },
+              ].map((s) => (
+                <div key={s.label} className="border rounded-md p-3 bg-muted/30">
+                  <div className="text-xs text-muted-foreground text-persian">{s.label}</div>
+                  <div className={`text-lg font-bold tabular-nums text-persian mt-1 ${(s as { highlight?: string }).highlight || ""}`}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <h3 className="text-persian font-bold mb-2">وضعیت هر کاربر</h3>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-persian">کاربر</TableHead>
+                      <TableHead className="text-persian">کارت‌ها</TableHead>
+                      <TableHead className="text-persian">کوتاژ</TableHead>
+                      <TableHead className="text-persian">مصرف (دلار)</TableHead>
+                      <TableHead className="text-persian">بدهی کل (تومان)</TableHead>
+                      <TableHead className="text-persian">پرداختی‌ها (تومان)</TableHead>
+                      <TableHead className="text-persian">مانده (تومان)</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.users.map(u => {
+                      const rem = u.remaining_irt;
+                      return (
+                        <TableRow key={u.id}>
+                          <TableCell className="text-persian font-medium">
+                            {u.first_name} {u.last_name}
+                            <div className="text-xs text-muted-foreground">@{u.username}</div>
+                          </TableCell>
+                          <TableCell className="tabular-nums">{fa(u.card_count)}</TableCell>
+                          <TableCell className="tabular-nums">{fa(u.kotaj_count)}</TableCell>
+                          <TableCell className="tabular-nums">{fa(u.used_usd)}</TableCell>
+                          <TableCell className="tabular-nums text-primary">{fa(u.debt_irt)}</TableCell>
+                          <TableCell className="tabular-nums text-emerald-600">{fa(u.paid_irt)}</TableCell>
+                          <TableCell className={`tabular-nums font-bold ${rem > 0 ? "text-destructive" : "text-emerald-600"}`}>{fa(rem)}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {data.users.length === 0 && (
+                      <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground text-persian py-4">کاربری یافت نشد.</TableCell></TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+
 // ============ Admin Pay Card Debt Dialog ============
 const AdminPayCardDialog = ({
   card, onClose, onSaved, toast,
