@@ -2633,18 +2633,29 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
   );
 };
 
+interface ReportsUsersKotaj {
+  id: number; number: string; date: string;
+  value_usd: number; sell_irt: number; buy_irt: number; profit_irt: number;
+}
 interface ReportsUsersData {
-  totals: { users: number; debt_irt: number; paid_irt: number; remaining_irt: number; };
+  totals: {
+    users: number; used_usd: number;
+    buy_irt: number; sell_irt: number; profit_irt: number;
+    debt_irt: number; paid_irt: number; remaining_irt: number;
+  };
   users: {
     id: number; first_name: string; last_name: string; username: string;
-    kotaj_count: number; used_usd: number; debt_irt: number;
-    paid_irt: number; remaining_irt: number; card_count: number;
+    kotaj_count: number; used_usd: number;
+    buy_irt: number; sell_irt: number; profit_irt: number;
+    debt_irt: number; paid_irt: number; remaining_irt: number;
+    card_count: number; kotajs: ReportsUsersKotaj[];
   }[];
 }
 
 const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
   const [data, setData] = useState<ReportsUsersData | null>(null);
   const [loading, setLoading] = useState(false);
+  const [openIds, setOpenIds] = useState<Set<number>>(new Set());
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -2657,6 +2668,13 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
   useEffect(() => { void load(); }, [load]);
 
   const fa = (n: number) => (isFinite(n) ? n : 0).toLocaleString("fa-IR");
+  const toggle = (id: number) => {
+    setOpenIds(prev => {
+      const s = new Set(prev);
+      if (s.has(id)) s.delete(id); else s.add(id);
+      return s;
+    });
+  };
 
   return (
     <Card>
@@ -2678,6 +2696,10 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
                 { label: "تعداد کاربران فعال", value: fa(data.totals.users) },
+                { label: "ارزش کالا کل (دلار)", value: fa(data.totals.used_usd) },
+                { label: "قیمت خرید کل (تومان)", value: fa(data.totals.buy_irt) },
+                { label: "قیمت فروش کل (تومان)", value: fa(data.totals.sell_irt) },
+                { label: "سود کل (تومان)", value: fa(data.totals.profit_irt), highlight: data.totals.profit_irt >= 0 ? "text-emerald-600" : "text-destructive" },
                 { label: "مجموع بدهی (تومان)", value: fa(data.totals.debt_irt) },
                 { label: "مجموع پرداختی‌ها (تومان)", value: fa(data.totals.paid_irt) },
                 { label: "مانده کل (تومان)", value: fa(data.totals.remaining_irt), highlight: data.totals.remaining_irt > 0 ? "text-destructive" : "text-emerald-600" },
@@ -2695,11 +2717,14 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="text-persian w-10"></TableHead>
                       <TableHead className="text-persian">کاربر</TableHead>
                       <TableHead className="text-persian">کارت‌ها</TableHead>
                       <TableHead className="text-persian">کوتاژ</TableHead>
-                      <TableHead className="text-persian">مصرف (دلار)</TableHead>
-                      <TableHead className="text-persian">بدهی کل (تومان)</TableHead>
+                      <TableHead className="text-persian">ارزش کالا (دلار)</TableHead>
+                      <TableHead className="text-persian">قیمت خرید (تومان)</TableHead>
+                      <TableHead className="text-persian">قیمت فروش (تومان)</TableHead>
+                      <TableHead className="text-persian">سود (تومان)</TableHead>
                       <TableHead className="text-persian">پرداختی‌ها (تومان)</TableHead>
                       <TableHead className="text-persian">مانده (تومان)</TableHead>
                     </TableRow>
@@ -2707,23 +2732,69 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
                   <TableBody>
                     {data.users.map(u => {
                       const rem = u.remaining_irt;
+                      const isOpen = openIds.has(u.id);
+                      const hasKotaj = (u.kotajs?.length || 0) > 0;
                       return (
-                        <TableRow key={u.id}>
-                          <TableCell className="text-persian font-medium">
-                            {u.first_name} {u.last_name}
-                            <div className="text-xs text-muted-foreground">@{u.username}</div>
-                          </TableCell>
-                          <TableCell className="tabular-nums">{fa(u.card_count)}</TableCell>
-                          <TableCell className="tabular-nums">{fa(u.kotaj_count)}</TableCell>
-                          <TableCell className="tabular-nums">{fa(u.used_usd)}</TableCell>
-                          <TableCell className="tabular-nums text-primary">{fa(u.debt_irt)}</TableCell>
-                          <TableCell className="tabular-nums text-emerald-600">{fa(u.paid_irt)}</TableCell>
-                          <TableCell className={`tabular-nums font-bold ${rem > 0 ? "text-destructive" : "text-emerald-600"}`}>{fa(rem)}</TableCell>
-                        </TableRow>
+                        <Fragment key={u.id}>
+                          <TableRow>
+                            <TableCell className="p-1">
+                              {hasKotaj && (
+                                <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => toggle(u.id)} aria-label="جزئیات کوتاژها">
+                                  {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                </Button>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-persian font-medium">
+                              {u.first_name} {u.last_name}
+                              <div className="text-xs text-muted-foreground">@{u.username}</div>
+                            </TableCell>
+                            <TableCell className="tabular-nums">{fa(u.card_count)}</TableCell>
+                            <TableCell className="tabular-nums">{fa(u.kotaj_count)}</TableCell>
+                            <TableCell className="tabular-nums">{fa(u.used_usd)}</TableCell>
+                            <TableCell className="tabular-nums text-orange-600">{fa(u.buy_irt)}</TableCell>
+                            <TableCell className="tabular-nums text-primary">{fa(u.sell_irt)}</TableCell>
+                            <TableCell className={`tabular-nums font-bold ${u.profit_irt >= 0 ? "text-emerald-600" : "text-destructive"}`}>{fa(u.profit_irt)}</TableCell>
+                            <TableCell className="tabular-nums text-emerald-600">{fa(u.paid_irt)}</TableCell>
+                            <TableCell className={`tabular-nums font-bold ${rem > 0 ? "text-destructive" : "text-emerald-600"}`}>{fa(rem)}</TableCell>
+                          </TableRow>
+                          {isOpen && hasKotaj && (
+                            <TableRow className="bg-muted/30 hover:bg-muted/30">
+                              <TableCell colSpan={10} className="p-3">
+                                <div className="text-persian font-bold mb-2 text-sm">کوتاژهای {u.first_name} {u.last_name}</div>
+                                <div className="overflow-x-auto">
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead className="text-persian">شماره کوتاژ</TableHead>
+                                        <TableHead className="text-persian">تاریخ</TableHead>
+                                        <TableHead className="text-persian">ارزش کالا (دلار)</TableHead>
+                                        <TableHead className="text-persian">قیمت خرید (تومان)</TableHead>
+                                        <TableHead className="text-persian">قیمت فروش (تومان)</TableHead>
+                                        <TableHead className="text-persian">سود (تومان)</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {u.kotajs.map(k => (
+                                        <TableRow key={k.id}>
+                                          <TableCell className="font-medium tabular-nums">{k.number}</TableCell>
+                                          <TableCell className="tabular-nums text-persian">{k.date}</TableCell>
+                                          <TableCell className="tabular-nums">{fa(k.value_usd)}</TableCell>
+                                          <TableCell className="tabular-nums text-orange-600">{fa(k.buy_irt)}</TableCell>
+                                          <TableCell className="tabular-nums text-primary">{fa(k.sell_irt)}</TableCell>
+                                          <TableCell className={`tabular-nums font-bold ${k.profit_irt >= 0 ? "text-emerald-600" : "text-destructive"}`}>{fa(k.profit_irt)}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </Fragment>
                       );
                     })}
                     {data.users.length === 0 && (
-                      <TableRow><TableCell colSpan={7} className="text-center text-muted-foreground text-persian py-4">کاربری یافت نشد.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground text-persian py-4">کاربری یافت نشد.</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>
