@@ -14,6 +14,10 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import CustomsCodesSettings from "@/components/admin/CustomsCodesSettings";
+
+const SettingsPanel = () => <CustomsCodesSettings />;
+
 
 type AdminState = "loading" | "setup" | "login" | "auth";
 
