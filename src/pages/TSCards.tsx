@@ -2660,10 +2660,15 @@ interface ReportsUsersData {
   }[];
 }
 
+type UsersSortKey = "remaining_irt" | "profit_irt" | "sell_irt" | "buy_irt" | "paid_irt" | "used_usd" | "kotaj_count" | "card_count" | "name";
 const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
   const [data, setData] = useState<ReportsUsersData | null>(null);
   const [loading, setLoading] = useState(false);
   const [openIds, setOpenIds] = useState<Set<number>>(new Set());
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "debt" | "settled" | "credit" | "no_payment" | "has_profit" | "loss">("all");
+  const [sortKey, setSortKey] = useState<UsersSortKey>("remaining_irt");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const load = useCallback(async () => {
     setLoading(true);
     try {
@@ -2683,6 +2688,41 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
       return s;
     });
   };
+  const toggleSort = (k: UsersSortKey) => {
+    if (sortKey === k) setSortDir(d => d === "asc" ? "desc" : "asc");
+    else { setSortKey(k); setSortDir("desc"); }
+  };
+  const sortIcon = (k: UsersSortKey) => sortKey !== k ? "↕" : (sortDir === "asc" ? "↑" : "↓");
+
+  const filteredUsers = useMemo(() => {
+    if (!data) return [];
+    const q = search.trim().toLowerCase();
+    let arr = data.users.filter(u => {
+      if (q) {
+        const hay = `${u.first_name || ""} ${u.last_name || ""} ${u.username || ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      switch (statusFilter) {
+        case "debt": return u.remaining_irt > 0;
+        case "settled": return u.remaining_irt === 0 && (u.sell_irt > 0 || u.paid_irt > 0);
+        case "credit": return u.remaining_irt < 0;
+        case "no_payment": return u.paid_irt === 0 && u.sell_irt > 0;
+        case "has_profit": return u.profit_irt > 0;
+        case "loss": return u.profit_irt < 0;
+        default: return true;
+      }
+    });
+    arr = [...arr].sort((a, b) => {
+      let av: number | string; let bv: number | string;
+      if (sortKey === "name") { av = `${a.first_name} ${a.last_name}`; bv = `${b.first_name} ${b.last_name}`; }
+      else { av = a[sortKey] as number; bv = b[sortKey] as number; }
+      if (av < bv) return sortDir === "asc" ? -1 : 1;
+      if (av > bv) return sortDir === "asc" ? 1 : -1;
+      return 0;
+    });
+    return arr;
+  }, [data, search, statusFilter, sortKey, sortDir]);
+
 
   return (
     <Card>
