@@ -2760,25 +2760,68 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
             </div>
 
             <div>
-              <h3 className="text-persian font-bold mb-2">وضعیت هر کاربر</h3>
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                <h3 className="text-persian font-bold">وضعیت هر کاربر</h3>
+                <div className="text-xs text-muted-foreground text-persian">
+                  نمایش {fa(filteredUsers.length)} از {fa(data.users.length)} کاربر
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+                <Input
+                  placeholder="جستجو نام، نام خانوادگی یا نام کاربری..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="text-persian"
+                />
+                <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as typeof statusFilter)}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all" className="text-persian">همه کاربران</SelectItem>
+                    <SelectItem value="debt" className="text-persian">فقط دارای بدهی</SelectItem>
+                    <SelectItem value="no_payment" className="text-persian">بدون هیچ پرداختی</SelectItem>
+                    <SelectItem value="settled" className="text-persian">تسویه‌شده</SelectItem>
+                    <SelectItem value="credit" className="text-persian">دارای اضافه پرداخت</SelectItem>
+                    <SelectItem value="has_profit" className="text-persian">دارای سود</SelectItem>
+                    <SelectItem value="loss" className="text-persian">دارای ضرر</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select value={`${sortKey}:${sortDir}`} onValueChange={(v) => { const [k, d] = v.split(":") as [UsersSortKey, "asc" | "desc"]; setSortKey(k); setSortDir(d); }}>
+                  <SelectTrigger className="text-persian"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="remaining_irt:desc" className="text-persian">مانده بدهی (بیشترین)</SelectItem>
+                    <SelectItem value="remaining_irt:asc" className="text-persian">مانده بدهی (کمترین)</SelectItem>
+                    <SelectItem value="profit_irt:desc" className="text-persian">سود (بیشترین)</SelectItem>
+                    <SelectItem value="profit_irt:asc" className="text-persian">سود (کمترین)</SelectItem>
+                    <SelectItem value="sell_irt:desc" className="text-persian">قیمت فروش (بیشترین)</SelectItem>
+                    <SelectItem value="buy_irt:desc" className="text-persian">قیمت خرید (بیشترین)</SelectItem>
+                    <SelectItem value="paid_irt:desc" className="text-persian">پرداختی (بیشترین)</SelectItem>
+                    <SelectItem value="used_usd:desc" className="text-persian">ارزش کالا (بیشترین)</SelectItem>
+                    <SelectItem value="kotaj_count:desc" className="text-persian">تعداد کوتاژ (بیشترین)</SelectItem>
+                    <SelectItem value="card_count:desc" className="text-persian">تعداد کارت (بیشترین)</SelectItem>
+                    <SelectItem value="name:asc" className="text-persian">نام (الفبا)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-persian w-10"></TableHead>
-                      <TableHead className="text-persian">کاربر</TableHead>
-                      <TableHead className="text-persian">کارت‌ها</TableHead>
-                      <TableHead className="text-persian">کوتاژ</TableHead>
-                      <TableHead className="text-persian">ارزش کالا (دلار)</TableHead>
-                      <TableHead className="text-persian">قیمت خرید (تومان)</TableHead>
-                      <TableHead className="text-persian">قیمت فروش (تومان)</TableHead>
-                      <TableHead className="text-persian">سود (تومان)</TableHead>
-                      <TableHead className="text-persian">پرداختی‌ها (تومان)</TableHead>
-                      <TableHead className="text-persian">مانده (تومان)</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("name")}>کاربر {sortIcon("name")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("card_count")}>کارت‌ها {sortIcon("card_count")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("kotaj_count")}>کوتاژ {sortIcon("kotaj_count")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("used_usd")}>ارزش کالا (دلار) {sortIcon("used_usd")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("buy_irt")}>قیمت خرید (تومان) {sortIcon("buy_irt")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("sell_irt")}>قیمت فروش (تومان) {sortIcon("sell_irt")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("profit_irt")}>سود (تومان) {sortIcon("profit_irt")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("paid_irt")}>پرداختی‌ها (تومان) {sortIcon("paid_irt")}</TableHead>
+                      <TableHead className="text-persian cursor-pointer select-none" onClick={() => toggleSort("remaining_irt")}>مانده (تومان) {sortIcon("remaining_irt")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {data.users.map(u => {
+                    {filteredUsers.map(u => {
                       const rem = u.remaining_irt;
                       const isOpen = openIds.has(u.id);
                       const hasKotaj = (u.kotajs?.length || 0) > 0;
@@ -2841,13 +2884,14 @@ const ReportsUsersSection = ({ toast }: { toast: ReturnType<typeof useToast>["to
                         </Fragment>
                       );
                     })}
-                    {data.users.length === 0 && (
+                    {filteredUsers.length === 0 && (
                       <TableRow><TableCell colSpan={10} className="text-center text-muted-foreground text-persian py-4">کاربری یافت نشد.</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>
               </div>
             </div>
+
           </div>
         )}
       </CardContent>
