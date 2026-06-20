@@ -258,10 +258,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
             <Vault className="w-3.5 h-3.5 ml-1 inline" /> بانک ترخیصان
           </TabsTrigger>
           <TabsTrigger value="reports" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-            گزارش‌گیری کارت
-          </TabsTrigger>
-          <TabsTrigger value="reports-users" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
-            گزارش‌گیری کاربر
+            گزارش‌گیری
           </TabsTrigger>
         </TabsList>
       </div>
@@ -493,11 +490,22 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="reports" className="mt-0">
-        <ReportsSection toast={toast} />
-      </TabsContent>
-
-      <TabsContent value="reports-users" className="mt-0">
-        <ReportsUsersSection toast={toast} />
+        <Tabs dir="rtl" defaultValue="reports-card" className="space-y-6">
+          <TabsList className="panel-3d-tabs h-12 md:h-14 w-max md:w-full justify-between rounded-full bg-secondary p-1.5 border border-border shadow-[inset_0_2px_6px_hsl(var(--primary)/0.12),0_2px_4px_hsl(var(--primary)/0.06)] gap-1 flex-nowrap md:flex-wrap">
+            <TabsTrigger value="reports-card" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+              کارت
+            </TabsTrigger>
+            <TabsTrigger value="reports-user" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+              کاربر
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="reports-card" className="mt-0">
+            <ReportsSection toast={toast} />
+          </TabsContent>
+          <TabsContent value="reports-user" className="mt-0">
+            <ReportsUsersSection toast={toast} />
+          </TabsContent>
+        </Tabs>
       </TabsContent>
     </Tabs>
   );
