@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Search, Trash2, Download, RefreshCw, ArrowRight, Phone, CreditCard, BookOpen, Save } from "lucide-react";
+import { Loader2, LogOut, Search, Trash2, Download, RefreshCw, ArrowRight, Phone, CreditCard, BookOpen, Save, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,10 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import CustomsCodesSettings from "@/components/admin/CustomsCodesSettings";
+
+const SettingsPanel = () => <CustomsCodesSettings />;
+
 
 type AdminState = "loading" | "setup" | "login" | "auth";
 
@@ -113,11 +117,14 @@ const TSDashboard = () => {
                   <TabsTrigger value="leads" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">لیدها</TabsTrigger>
                   <TabsTrigger value="card-consult" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">مشاوره کارت بازرگانی</TabsTrigger>
                   <TabsTrigger value="cards" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">کارت‌های مشتریان</TabsTrigger>
+                  <TabsTrigger value="settings" className="shrink-0 md:flex-1 h-full px-4 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out"><Settings className="w-4 h-4 ml-1 inline" />تنظیمات</TabsTrigger>
                 </TabsList>
               </div>
               <TabsContent value="leads"><LeadsPanel /></TabsContent>
               <TabsContent value="card-consult"><CardConsultPanel /></TabsContent>
               <TabsContent value="cards"><CardsEntry /></TabsContent>
+              <TabsContent value="settings"><SettingsPanel /></TabsContent>
+
             </Tabs>
           )}
         </main>
