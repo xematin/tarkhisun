@@ -27,6 +27,11 @@ import gregorian from "react-date-object/calendars/gregorian";
 import gregorian_en from "react-date-object/locales/gregorian_en";
 import { lookupCustoms, hydrateCustomsCodes } from "@/data/customsCodes";
 
+// Pull fresh customs codes from the admin-managed table.
+void hydrateCustomsCodes();
+
+
+
 // Convert gregorian "YYYY-MM-DD" → jalali "YYYY/MM/DD"
 const gToJ = (g: string): string => {
   if (!g) return "";
