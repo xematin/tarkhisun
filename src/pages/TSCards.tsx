@@ -2510,7 +2510,7 @@ const ReportsSection = ({ toast }: { toast: ReturnType<typeof useToast>["toast"]
       <CardHeader>
         <div className="flex items-center justify-between flex-wrap gap-3">
           <CardTitle className="text-persian flex items-center gap-2">
-            <FileText className="w-5 h-5" /> گزارش‌گیری
+            <FileText className="w-5 h-5" /> گزارش‌گیری کارت
           </CardTitle>
           <Button size="sm" variant="outline" onClick={() => load()}>
             <RefreshCw className="w-4 h-4" />
