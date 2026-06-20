@@ -153,6 +153,38 @@ const SEED_CUSTOMS_CODES: Record<string, string> = {
   "10102": "منطقه ویژه اقتصادی پیام",
 };
 
+// Mutable runtime map (starts from seed, replaced once API responds).
+let CUSTOMS_CODES: Record<string, string> = { ...SEED_CUSTOMS_CODES };
+
+export function getCustomsCodes(): Record<string, string> {
+  return CUSTOMS_CODES;
+}
+
+export function setCustomsCodes(map: Record<string, string>): void {
+  if (map && Object.keys(map).length > 0) {
+    CUSTOMS_CODES = { ...map };
+  }
+}
+
+let hydrating: Promise<void> | null = null;
+export function hydrateCustomsCodes(force = false): Promise<void> {
+  if (hydrating && !force) return hydrating;
+  hydrating = (async () => {
+    try {
+      const res = await fetch("/api/customs-codes-list.php", { credentials: "same-origin" });
+      if (!res.ok) return;
+      const data = await res.json();
+      const items: Array<{ code: string; name: string }> = data?.items || [];
+      if (items.length > 0) {
+        const map: Record<string, string> = {};
+        for (const it of items) map[it.code] = it.name;
+        setCustomsCodes(map);
+      }
+    } catch { /* keep seed */ }
+  })();
+  return hydrating;
+}
+
 export function lookupCustoms(kotajNumber: string): { code: string; name: string } | null {
   const m = kotajNumber.match(/^(\d{5})/);
   if (!m) return null;
@@ -160,3 +192,4 @@ export function lookupCustoms(kotajNumber: string): { code: string; name: string
   const name = CUSTOMS_CODES[code];
   return name ? { code, name } : { code, name: "" };
 }
+
