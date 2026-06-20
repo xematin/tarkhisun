@@ -1,6 +1,8 @@
-// Iranian customs office codes (118 entries).
-// Source: user-provided list (کد گمرکات اجرایی کشور).
-export const CUSTOMS_CODES: Record<string, string> = {
+// Iranian customs office codes — seed list (118 entries).
+// Runtime list is hydrated from /api/customs-codes-list.php (admin-managed).
+// The seed remains as a fallback if the API request fails.
+const SEED_CUSTOMS_CODES: Record<string, string> = {
+
   // تهران
   "10300": "گمرک اجرایی تهران",
   "10200": "غرب تهران",
