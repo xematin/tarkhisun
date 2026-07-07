@@ -79,6 +79,12 @@ const Contact = () => {
       link: "https://B2n.ir/tarkhisun-map",
     },
     {
+      icon: MapPin,
+      title: "آدرس شعبه ۲",
+      content: "بندرعباس، بلوار رسالت جنوبی، کوچه اردیبهشت، ساختمان عرشیا، طبقه ۴ واحد ۸ — کد پستی: ۷۹۱۶۸۶۴۵۷۹",
+      link: "https://B2n.ir/Tarkhisun-Map1",
+    },
+    {
       icon: Clock,
       title: "ساعت کاری",
       content: "شنبه تا پنجشنبه: ۸ تا ۱۸",
