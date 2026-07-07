@@ -75,13 +75,15 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "شعبه 1 ترخیصان",
-      content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 312 شرکت کشتیرانی شاخص صدف دریا",
+      content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 312",
+      subtitle: "شرکت کشتیرانی شاخص صدف دریا",
       link: "https://B2n.ir/tarkhisun-map",
     },
     {
       icon: MapPin,
       title: "شعبه 2 ترخیصان",
       content: "بندرعباس، بلوار رسالت جنوبی، کوچه اردیبهشت، ساختمان عرشیا، طبقه ۴ واحد ۸ — کد پستی: ۷۹۱۶۸۶۴۵۷۹",
+      subtitle: "دفتر بازرگانی ترخیصان",
       link: "https://B2n.ir/Tarkhisun-Map1",
     },
     {
@@ -206,19 +208,22 @@ const Contact = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h4 className={`mb-2 text-persian ${info.icon === MapPin ? "text-muted-foreground" : "text-primary"}`}>
+                      <h4 className="mb-2 text-persian text-primary">
                         <strong>{info.title}</strong>
                       </h4>
                       {info.link ? (
                         <a
                           href={info.link}
-                          className="text-muted-foreground hover:text-accent transition-colors text-persian"
+                          className="text-muted-foreground hover:text-accent transition-colors text-persian block"
                           {...(info.link.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           {info.content}
                         </a>
                       ) : (
-                        <span className="text-muted-foreground text-persian">{info.content}</span>
+                        <span className="text-muted-foreground text-persian block">{info.content}</span>
+                      )}
+                      {info.subtitle && (
+                        <strong className="text-muted-foreground text-persian block mt-1 font-normal">{info.subtitle}</strong>
                       )}
                     </div>
                   </div>
