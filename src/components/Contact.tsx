@@ -206,7 +206,7 @@ const Contact = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h4 className="text-primary mb-2 text-persian">
+                      <h4 className={`mb-2 text-persian ${info.icon === MapPin ? "text-muted-foreground" : "text-primary"}`}>
                         <strong>{info.title}</strong>
                       </h4>
                       {info.link ? (
