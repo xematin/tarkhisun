@@ -97,6 +97,10 @@ const Footer = () => {
                   <span className="text-persian">بندرعباس — چهارراه سازمان</span>
                   <MapPin className="w-4 h-4 text-accent" />
                 </div>
+                <div className="pill-row">
+                  <span className="text-persian">بندرعباس — بلوار رسالت</span>
+                  <MapPin className="w-4 h-4 text-accent" />
+                </div>
                 <a href="tel:+989177380080" className="pill-row" dir="ltr">
                   <span className="tabular-nums">09177380080</span>
                   <Phone className="w-4 h-4 text-accent" />
