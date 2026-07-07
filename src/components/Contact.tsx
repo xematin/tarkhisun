@@ -74,13 +74,13 @@ const Contact = () => {
     },
     {
       icon: MapPin,
-      title: "شرکت کشتیرانی شاخص صدف دریا",
+      title: "شعبه 1 ترخیصان",
       content: "بندرعباس، چهارراه سازمان، خیابان امام موسی صدر شمالی، ساختمان ثریا طبقه سوم واحد 312 شرکت کشتیرانی شاخص صدف دریا",
       link: "https://B2n.ir/tarkhisun-map",
     },
     {
       icon: MapPin,
-      title: "دفتر بازرگانی ترخیصان",
+      title: "شعبه 2 ترخیصان",
       content: "بندرعباس، بلوار رسالت جنوبی، کوچه اردیبهشت، ساختمان عرشیا، طبقه ۴ واحد ۸ — کد پستی: ۷۹۱۶۸۶۴۵۷۹",
       link: "https://B2n.ir/Tarkhisun-Map1",
     },
@@ -206,7 +206,7 @@ const Contact = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h4 className="text-primary mb-2 text-persian">
+                      <h4 className={`mb-2 text-persian ${info.icon === MapPin ? "text-muted-foreground" : "text-primary"}`}>
                         <strong>{info.title}</strong>
                       </h4>
                       {info.link ? (
