@@ -208,19 +208,22 @@ const Contact = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h4 className={`mb-2 text-persian ${info.icon === MapPin ? "text-muted-foreground" : "text-primary"}`}>
+                      <h4 className="mb-2 text-persian text-primary">
                         <strong>{info.title}</strong>
                       </h4>
                       {info.link ? (
                         <a
                           href={info.link}
-                          className="text-muted-foreground hover:text-accent transition-colors text-persian"
+                          className="text-muted-foreground hover:text-accent transition-colors text-persian block"
                           {...(info.link.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
                         >
                           {info.content}
                         </a>
                       ) : (
-                        <span className="text-muted-foreground text-persian">{info.content}</span>
+                        <span className="text-muted-foreground text-persian block">{info.content}</span>
+                      )}
+                      {info.subtitle && (
+                        <strong className="text-muted-foreground text-persian block mt-1 font-normal">{info.subtitle}</strong>
                       )}
                     </div>
                   </div>
