@@ -283,7 +283,7 @@
     font-family: 'IRANSansX DemiBold', 'Noto Sans Arabic', sans-serif !important;
   }
   .pill-nav-active {
-    @apply text-primary-foreground bg-gradient-to-l from-primary to-accent shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)];
+    @apply !text-white bg-gradient-to-l from-primary to-accent shadow-[0_6px_18px_-6px_hsl(var(--primary)/0.55)];
   }
   .pill-row {
     @apply flex items-center justify-between gap-2 rounded-2xl bg-white/65 hover:bg-white/90 border border-white/70 px-4 py-2.5 text-sm text-foreground/80 hover:text-primary transition-all;
