@@ -169,6 +169,7 @@ const CustomsTariff2025Guide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/customs-tariff-2025-guide" />
         <title>تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا | ترخیصان</title>
         <meta
           name="description"

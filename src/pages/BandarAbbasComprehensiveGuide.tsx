@@ -72,6 +72,7 @@ const BandarAbbasComprehensiveGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/bandar-abbas-comprehensive-clearance-guide" />
         <title>صفر تا صد ترخیص کالا از بندرعباس | راهنمای کامل گمرک شهید رجایی</title>
         <meta
           name="description"

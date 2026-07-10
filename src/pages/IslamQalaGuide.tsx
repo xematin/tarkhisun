@@ -61,6 +61,7 @@ const IslamQalaGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/islam-qala-border-crossing-guide" />
         <title>اسلام قلعه | راهنمای کامل گذرگاه مرزی ایران و افغانستان | ترخیصان</title>
         <meta
           name="description"

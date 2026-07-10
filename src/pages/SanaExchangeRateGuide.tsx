@@ -77,6 +77,7 @@ const SanaExchangeRateGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/sana-nima-exchange-rate-difference-guide" />
         <title>تفاوت ارز سنا و ارز نیمایی چیست؟ راهنمای کامل</title>
         <meta
           name="description"

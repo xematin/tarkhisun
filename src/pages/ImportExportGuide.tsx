@@ -74,6 +74,7 @@ const ImportExportGuide = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/import-export-guide-iran" />
         <title>راهنمای کامل صادرات و واردات در ایران | قوانین، مراحل و نکات مهم</title>
         <meta
           name="description"

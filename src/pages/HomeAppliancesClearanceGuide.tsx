@@ -51,6 +51,7 @@ const HomeAppliancesClearanceGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/home-appliances-clearance-bandar-abbas-guide" />
         <title>
           ترخیص لوازم خانگی از گمرک بندرعباس | راهنمای کامل واردات یخچال، تلویزیون، ماشین لباسشویی | ترخیصان
         </title>

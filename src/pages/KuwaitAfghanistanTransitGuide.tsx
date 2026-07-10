@@ -14,6 +14,7 @@ const KuwaitAfghanistanTransitGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/kuwait-afghanistan-transit-guide" />
         <title>ترانزیت از کویت به افغانستان | راهنمای کامل حمل و نقل بین‌المللی کالا</title>
         <meta
           name="description"

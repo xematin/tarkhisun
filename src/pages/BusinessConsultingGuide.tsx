@@ -102,6 +102,7 @@ const BusinessConsultingGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/business-consulting-guide" />
         <title>مشاوره بازرگانی چیست؟ راهنمای کامل خدمات مشاوره تجارت و بازرگانی</title>
         <meta
           name="description"

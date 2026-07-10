@@ -109,6 +109,7 @@ const WaterTankClearanceGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/water-tank-clearance-bandar-abbas-guide" />
         <title>ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل واردات تانکر آب</title>
         <meta
           name="description"

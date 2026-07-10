@@ -79,6 +79,7 @@ const MobileRegistryGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/mobile-phone-customs-clearance-registry-guide" />
         <title>ترخیص موبایل و رجیستری گوشی از گمرک | راهنمای کامل ۱۴۰۴ | ترخیصان</title>
         <meta
           name="description"

@@ -105,6 +105,7 @@ const ImportedCarSystemGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/imported-car-system-guide" />
         <title>سامانه خودروهای وارداتی | راهنمای کامل واردات و ترخیص خودرو ۱۴۰۴</title>
         <meta
           name="description"

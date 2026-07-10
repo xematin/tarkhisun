@@ -102,6 +102,7 @@ const TradingCompanyGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/trading-company-guide" />
         <title>شرکت بازرگانی چیست؟ راهنمای کامل ثبت و راه‌اندازی شرکت بازرگانی</title>
         <meta
           name="description"

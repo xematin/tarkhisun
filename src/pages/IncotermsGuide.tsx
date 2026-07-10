@@ -127,6 +127,7 @@ const IncotermsGuide = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/incoterms-guide" />
         <title>اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا</title>
         <meta
           name="description"

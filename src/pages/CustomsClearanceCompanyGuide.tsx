@@ -102,6 +102,7 @@ const CustomsClearanceCompanyGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/customs-clearance-company-guide" />
         <title>شرکت ترخیص کالا چیست؟ راهنمای انتخاب بهترین شرکت ترخیص‌کار</title>
         <meta
           name="description"

@@ -102,6 +102,7 @@ const InternationalShippingGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/international-shipping-guide" />
         <title>حمل و نقل بین‌المللی چیست؟ راهنمای کامل روش‌های حمل کالا</title>
         <meta
           name="description"
