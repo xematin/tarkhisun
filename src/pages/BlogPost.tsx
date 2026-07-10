@@ -74,6 +74,7 @@ const BlogPost = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/zero-to-hundred-bandar-abbas-customs-clearance" />
         <title>راهنمای کامل ترخیص کالا از گمرک شهید رجایی بندرعباس | ترخیصان</title>
         <meta name="description" content="راهنمای گام به گام ترخیص کالا از گمرک شهید رجایی بندرعباس، مدارک لازم، مراحل و نکات مهم برای واردکنندگان" />
         <meta name="keywords" content="ترخیص کالا, گمرک شهید رجایی, بندرعباس, مشاوره امور گمرکی, واردات, صادرات, مدارک گمرکی, کوتاژ, بارنامه" />

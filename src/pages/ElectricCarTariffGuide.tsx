@@ -34,6 +34,7 @@ const ElectricCarTariffGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/electric-car-tariff-guide" />
         <title>تعرفه واردات خودرو برقی و هیبریدی ۱۴۰۴ | حقوق گمرکی ۴ درصدی</title>
         <meta
           name="description"

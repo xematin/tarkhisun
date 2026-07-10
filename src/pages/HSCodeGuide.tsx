@@ -74,6 +74,7 @@ const HSCodeGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/hs-code-guide" />
         <title>کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها | ترخیصان</title>
         <meta name="description" content="راهنمای جامع سیستم کد HS، نحوه تعیین کد تعرفه کالاها، اهمیت در تجارت بین‌المللی و جستجوی صحیح کد کالا در گمرک" />
         <meta name="keywords" content="کد HS, تعرفه هماهنگ, کد کالا, HS Code, Harmonized System, تعرفه گمرکی, کد تعرفه, طبقه‌بندی کالا, تجارت بین‌المللی, گمرک ایران" />

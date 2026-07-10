@@ -64,6 +64,7 @@ const TahLanjiImportGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/tah-lanji-import-guide" />
         <title>واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌ها</title>
         <meta
           name="description"

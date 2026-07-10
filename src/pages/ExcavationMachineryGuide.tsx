@@ -105,6 +105,7 @@ const ExcavationMachineryGuide = () => {
   return (
     <div className="min-h-screen bg-background">
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/excavation-machinery-import-guide" />
         <title>ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین</title>
         <meta name="description" content="راهنمای ترخیص ماشین آلات حفاری از گمرک: مدارک، تعرفه، کد HS و مجوزهای واردات ماشین آلات سنگین" />
         <meta name="keywords" content="ترخیص ماشین آلات حفاری, واردات ماشین آلات سنگین, گمرک ماشین آلات, حقوق گمرکی ماشین حفاری, کد تعرفه ماشین آلات, ترخیص بیل مکانیکی, واردات لودر, ترخیص بلدوزر, ماشین آلات ساختمانی, ماشین آلات معدنی, مدارک ترخیص ماشین آلات, بندرعباس, شهید رجایی, تعرفه گمرکی ماشین آلات, مجوز واردات ماشین آلات" />

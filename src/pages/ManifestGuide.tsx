@@ -105,6 +105,7 @@ const ManifestGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/manifest-guide" />
         <title>مانیفست در گمرک چیست؟ راهنمای جامع مانیفست بارنامه | ترخیصان</title>
         <meta
           name="description"

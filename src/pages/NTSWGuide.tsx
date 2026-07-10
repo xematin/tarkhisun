@@ -77,6 +77,7 @@ const NTSWGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/ntsw-complete-guide" />
         <title>سامانه جامع تجارت (ntsw.ir) | راهنمای کامل ثبت‌نام و استفاده</title>
         <meta
           name="description"

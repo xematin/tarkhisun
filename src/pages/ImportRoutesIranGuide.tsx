@@ -36,6 +36,7 @@ const ImportRoutesIranGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/import-routes-iran-guide" />
         <title>بهترین مسیرهای واردات کالا به ایران در ۱۴۰۴ | چین، امارات، ترکیه</title>
         <meta
           name="description"

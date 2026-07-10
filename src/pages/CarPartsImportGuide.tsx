@@ -128,6 +128,7 @@ const CarPartsImportGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/car-parts-import-customs-clearance-guide" />
         <title>ترخیص قطعات یدکی خودرو از گمرک | راهنمای کامل واردات قطعات</title>
         <meta
           name="description"

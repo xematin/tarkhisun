@@ -75,6 +75,7 @@ const ExchangeRateGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/customs-exchange-rate-guide" />
         <title>نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی</title>
         <meta
           name="description"

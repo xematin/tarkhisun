@@ -116,6 +116,7 @@ const ExportCardGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/export-card-complete-guide" />
         <title>کارت صادراتی چیست؟ تفاوت با کارت بازرگانی + نحوه دریافت فوری ۱۴۰۴</title>
         <meta
           name="description"

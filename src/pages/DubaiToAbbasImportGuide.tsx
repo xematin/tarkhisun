@@ -32,6 +32,7 @@ const DubaiToAbbasImportGuide = () => {
   return (
     <>
       <Helmet>
+        <link rel="canonical" href="https://tarkhisun.com/blog/dubai-to-abbas-import-guide" />
         <title>واردات کالا از دبی به بندرعباس | راهنمای کامل حمل و ترخیص کالا از امارات</title>
         <meta
           name="description"
