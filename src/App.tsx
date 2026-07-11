@@ -49,6 +49,7 @@ const ImportRoutesIranGuide = lazy(() => import("./pages/ImportRoutesIranGuide")
 const ElectricCarTariffGuide = lazy(() => import("./pages/ElectricCarTariffGuide"));
 const CustomsTariff2025Guide = lazy(() => import("./pages/CustomsTariff2025Guide"));
 const Budget1405Guide = lazy(() => import("./pages/Budget1405Guide"));
+const CustomsLawArticles1To13Guide = lazy(() => import("./pages/CustomsLawArticles1To13Guide"));
 const ServicesPage = lazy(() => import("./pages/Services"));
 const BusinessCardService = lazy(() => import("./pages/BusinessCardService"));
 
@@ -104,6 +105,7 @@ const AppContent = () => {
         <Route path="/blog/electric-car-tariff-guide" element={<ElectricCarTariffGuide />} />
         <Route path="/blog/customs-tariff-2025-guide" element={<CustomsTariff2025Guide />} />
         <Route path="/blog/budget-1405-guide" element={<Budget1405Guide />} />
+        <Route path="/blog/customs-law-articles-1-to-13-guide" element={<CustomsLawArticles1To13Guide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
         <Route path="/hscode" element={<HSCodeSearch />} />
