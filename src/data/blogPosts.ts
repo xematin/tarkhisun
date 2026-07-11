@@ -499,6 +499,28 @@ export const blogPosts: BlogPost[] = [
     relatedPosts: [31, 3, 4, 30],
     image: "/images/blog/budget-1405-guide.webp",
   },
+  {
+    id: 33,
+    title: "قوانین امور گمرکی؛ از ماده ۱ تا ۱۳ | راهنمای کامل مبانی گمرک",
+    slug: "customs-law-articles-1-to-13-guide",
+    excerpt:
+      "بررسی ساده و کاربردی ماده ۱ تا ۱۳ قانون امور گمرکی؛ تعاریف، سازمان گمرک، وظایف، حقوق ورودی، تضمین و کنترل‌های گمرکی برای بازرگانان.",
+    category: "قوانین و مقررات",
+    date: "۱۴۰۵/۴/۲۰",
+    readTime: "۱۲ دقیقه",
+    author: "تیم ترخیصان",
+    keywords: [
+      "قانون امور گمرکی",
+      "ماده 1 قانون گمرک",
+      "ماده 5 حقوق ورودی",
+      "ماده 10 تضمین گمرکی",
+      "ماده 13 HS",
+      "قوانین گمرک ایران",
+    ],
+    relatedPosts: [13, 3, 2, 5],
+    image: "/images/blog/customs-law-articles-1-to-13.jpg",
+  },
+
 ];
 
 // Helper function to get related posts
