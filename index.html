@@ -1,8 +1,9 @@
+
 <!doctype html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" data-critters-container>
   <head>
-    <meta charset="UTF-8" />
-    <!-- Google Tag Manager
+    <meta charset="UTF-8">
+    <!-- Google Tag Manager -->
     <script>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
           new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -10,34 +11,47 @@
           'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
           })(window,document,'script','dataLayer','GTM-59ZFSX8H');
     </script>
-    -->
     <!-- End Google Tag Manager -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#1a472a" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="ترخیصان" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#1a472a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ترخیصان">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.webmanifest">
 
-    <!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->
+    
+    <script>
+      if (location.pathname === '/') {
+        var preloads = [
+          { href: '/assets/images/hero-port-480-C3DLdLcH.avif', media: '(max-width: 767px)' },
+          { href: '/assets/images/hero-port-1024-CSHfTuOg.avif', media: '(min-width: 768px) and (max-width: 1439px)' },
+          { href: '/assets/images/hero-port-1920-zgaA1rQc.avif', media: '(min-width: 1440px)' }
+        ];
+        preloads.forEach(function(p) {
+          var link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = p.href;
+          link.type = 'image/avif';
+          link.fetchPriority = 'high';
+          link.media = p.media;
+          document.head.appendChild(link);
+        });
+      }
+    </script>
 
     <!-- Preload only critical font (regular weight) for instant text render -->
-    <link
-      rel="preload"
-      href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+    <link rel="preload" href="/fonts/noto-sans-arabic/noto-sans-arabic-v33-arabic-regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Critical CSS for Hero Section - Inline for instant render -->
     <style>
       /* Critical Hero Image Styles */
       #hero-initial-image{position:absolute;inset:0;z-index:0;pointer-events:none;}
-      #hero-initial-image img{width:100%;height:100%;object-fit:cover;}
+      #hero-initial-image img{width:100%;height:100%;-o-object-fit:cover;object-fit:cover;}
 
       /* Hero Gradient & Animations */
       .hero-gradient{background:linear-gradient(135deg,hsl(var(--primary)),hsl(var(--accent)));}
@@ -53,63 +67,57 @@
 
     <!-- Preconnect to external resources for faster DNS resolution -->
     <!-- Removed storage.googleapis.com preconnect - no longer needed -->
-    <!--
+    <!-- DELETE -->
     <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-    -->
-    <link rel="preconnect" href="https://gomrok24.com" crossorigin />
+    
+    <link rel="preconnect" href="https://gomrok24.com" crossorigin>
 
     <!-- DNS Prefetch for other resources -->
-    <link rel="dns-prefetch" href="https://n8n.tarkhisun.ir" />
-    <!--
+    <link rel="dns-prefetch" href="https://n8n.tarkhisun.ir">
+    <!-- DELETE -->
     <link rel="dns-prefetch" href="https://analytics.ahrefs.com" />
-    -->
+    
 
     <!-- Primary SEO Meta Tags (Single Source of Truth - No duplicates in React) -->
     <title>ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا</title>
-    <meta
-      name="description"
-      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
-    />
-    <meta name="author" content="Tarkhisun" />
-    <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس" />
-    <meta
-      name="keywords"
-      content="ترخیصان، Tarkhisun، ترخیص کالا بندرعباس، مشاوره گمرکی بندرعباس، ترخیص کالا بندر شهید رجایی، هوش مصنوعی گمرکی، ترخیصان یار، AI گمرکی، مشاور گمرکی بندرعباس، حقوق گمرکی، کمیسیون ماده یک، واردات صادرات، تعرفه گمرکی، خدمات گمرکی، بندر امام خمینی، بندر چابهار، بندر بوشهر، بندر انزلی، بندر جاسک، ترخیص کالا بندر جاسک، کد تعرفه، HS Code، ترخیص فوری"
-    />
+    <meta name="description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
+    <meta name="author" content="Tarkhisun">
+    <meta name="publisher" content="ترخیصان - مشاوره گمرکی بندرعباس">
+    <meta name="keywords" content="ترخیصان، Tarkhisun، ترخیص کالا بندرعباس، مشاوره گمرکی بندرعباس، ترخیص کالا بندر شهید رجایی، هوش مصنوعی گمرکی، ترخیصان یار، AI گمرکی، مشاور گمرکی بندرعباس، حقوق گمرکی، کمیسیون ماده یک، واردات صادرات، تعرفه گمرکی، خدمات گمرکی، بندر امام خمینی، بندر چابهار، بندر بوشهر، بندر انزلی، بندر جاسک، ترخیص کالا بندر جاسک، کد تعرفه، HS Code، ترخیص فوری">
 
     <!-- Robots Meta -->
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
     <!-- Hreflang Tags -->
-    <link rel="alternate" hreflang="fa" href="https://tarkhisun.com/" />
-    <link rel="alternate" hreflang="fa-IR" href="https://tarkhisun.com/" />
-    <link rel="alternate" hreflang="x-default" href="https://tarkhisun.com/" />
+    <link rel="alternate" hreflang="fa" href="https://tarkhisun.com/">
+    <link rel="alternate" hreflang="fa-IR" href="https://tarkhisun.com/">
+    <link rel="alternate" hreflang="x-default" href="https://tarkhisun.com/">
 
     <!-- RSS Feed -->
-    <link rel="alternate" type="application/rss+xml" title="وبلاگ ترخیصان - RSS" href="https://tarkhisun.com/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="وبلاگ ترخیصان - RSS" href="https://tarkhisun.com/rss.xml">
 
     <!-- Open Graph Tags -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tarkhisun.com/" />
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tarkhisun.com/">
 
-    <meta property="og:image" content="https://tarkhisun.com/og-image.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس" />
-    <meta property="og:locale" content="fa_IR" />
-    <meta property="og:site_name" content="ترخیصان" />
+    <meta property="og:image" content="https://tarkhisun.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="ترخیصان - مشاور امور گمرکی بندرعباس">
+    <meta property="og:locale" content="fa_IR">
+    <meta property="og:site_name" content="ترخیصان">
 
     <!-- Twitter Card Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:card" content="summary_large_image">
 
-    <meta name="twitter:site" content="@tarkhisun" />
-    <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg" />
+    <meta name="twitter:site" content="@tarkhisun">
+    <meta name="twitter:image" content="https://tarkhisun.com/og-image.jpg">
 
     <!-- Favicon for Google Search + All Browsers -->
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <!-- Organization + Logo Structured Data -->
     <script type="application/ld+json">
@@ -236,20 +244,49 @@
       }
     </script>
 
-    <meta property="og:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
-    <meta name="twitter:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا" />
-    <meta
-      property="og:description"
-      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
-    />
-    <meta
-      name="twitter:description"
-      content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080"
-    />
-  </head>
+    <meta property="og:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا">
+    <meta name="twitter:title" content="ترخیصان | مشاوره امور گمرکی بندرعباس شهید رجایی | ترخیص کالا">
+    <meta property="og:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
+    <meta name="twitter:description" content="ترخیصان - مشاوره گمرکی تخصصی بندرعباس شهید رجایی با +20 سال تجربه و هوش مصنوعی. خدمات: ترخیص کالا، صدور کمیسیون ماده یک، واردات و صادرات. تماس: 09177380080">
+    <script type="module" crossorigin src="/assets/js/index-DW69PxKn.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/js/react-vendor-DjLGwv42.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/radix-dialog-ChdHwbqy.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/radix-other-BXUbFD6v.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/ui-utils-CmT13j6K.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/icons-Ck7YNNRU.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/query-vendor-B1MAyyL6.js">
+    <link rel="modulepreload" crossorigin href="/assets/js/radix-accordion-m4SFF-MW.js">
+    <link rel="stylesheet" crossorigin href="/assets/css/index-Dc3VVi9s.css">
+  <link rel="manifest" href="/manifest.webmanifest"></head>
 
   <body>
-    <!-- Google Tag Manager (noscript)
+    
+        <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+          <!-- Mobile: 480px only -->
+          <source media="(max-width: 767px)" type="image/avif" srcset="/assets/images/hero-port-480-C3DLdLcH.avif" />
+          <source media="(max-width: 767px)" type="image/webp" srcset="/assets/images/hero-port-480-QIkt1Vhw.webp" />
+          
+          <!-- Tablet: 1024px only -->
+          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcset="/assets/images/hero-port-1024-CSHfTuOg.avif" />
+          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/assets/images/hero-port-1024-aC-qP2YJ.webp" />
+          
+          <!-- Desktop: 1920px only -->
+          <source media="(min-width: 1440px)" type="image/avif" srcset="/assets/images/hero-port-1920-zgaA1rQc.avif" />
+          <source media="(min-width: 1440px)" type="image/webp" srcset="/assets/images/hero-port-1920-CzfqZNaw.webp" />
+          
+          <!-- Fallback for older browsers -->
+          <img 
+            src="/assets/images/hero-port-1024-aC-qP2YJ.webp"
+            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"
+            style="width:100%;height:100%;object-fit:cover;"
+            width="1920"
+            height="1080"
+            fetchpriority="high"
+            loading="eager"
+            decoding="async" />
+        </picture>
+        
+    <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
         src="https://www.googletagmanager.com/ns.html?id=GTM-59ZFSX8H"
@@ -258,13 +295,11 @@
         style="display:none;visibility:hidden"
       ></iframe
     ></noscript>
-    End Google Tag Manager (noscript) -->
+    
+    <!-- End Google Tag Manager (noscript) -->
     <div id="root">
       <!-- Static SEO Content for Crawlers - Visible to crawlers, hidden from users via off-screen positioning -->
-      <header
-        id="static-seo-content"
-        style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;"
-      >
+      <header id="static-seo-content" style="position:absolute;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;">
         <nav aria-label="منوی اصلی">
           <a href="/">ترخیصان - صفحه اصلی</a>
           <a href="/services">خدمات تخصصی ترخیص و امور گمرکی</a>
@@ -336,10 +371,9 @@
         </main>
       </header>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
 
-    <!--
+    <!-- DELETE -->
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="AHo7wVhkJBPuLlpiV0864Q" async></script>
-    -->
+    
   </body>
 </html>
