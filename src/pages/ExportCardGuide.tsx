@@ -206,9 +206,8 @@ const ExportCardGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/export-card-complete-guide.webp"
-                  alt="مدارک و فرم‌های مربوط به کارت صادراتی ایران"
+                  alt="کارت صادراتی چیست؟ تفاوت با کارت بازرگانی + نحوه دریافت فوری ۱۴۰۴"
                   caption="کارت صادراتی مجوز رسمی فعالیت در بازار صادرات ایران است"
-                  priority
                 />
 
                 {/* Definition Section */}

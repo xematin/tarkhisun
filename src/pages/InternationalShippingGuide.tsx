@@ -191,9 +191,8 @@ const InternationalShippingGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/international-shipping-guide.webp"
-                  alt="کشتی باری در حال حمل کانتینرهای کالا در حمل و نقل بین‌المللی"
+                  alt="حمل و نقل بین‌المللی چیست؟ راهنمای کامل روش‌های حمل کالا"
                   caption="حمل دریایی پرکاربردترین روش حمل و نقل بین‌المللی است"
-                  priority
                 />
 
                 {/* Definition Section */}

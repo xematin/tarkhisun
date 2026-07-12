@@ -153,9 +153,8 @@ const CustomsTariffGuide = () => {
                     {/* Hero Image */}
                     <ArticleImage
                       src="/images/blog/customs-tariff-guide.webp"
-                      alt="محاسبه تعرفه گمرکی و حقوق ورودی کالا"
+                      alt="تعریف و اهمیت تعرفه گمرکی در واردات و صادرات"
                       caption="محاسبه دقیق تعرفه گمرکی برای تعیین هزینه نهایی واردات ضروری است"
-                      priority
                     />
 
                     {/* Introduction */}

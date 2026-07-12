@@ -104,9 +104,8 @@ const Article1CommissionGuide = () => {
 
               <ArticleImage
                 src="/images/blog/customs-article-1-commission-guide.webp"
-                alt="کمیسیون ماده 1 گمرک - رسیدگی به اختلافات ارزش گمرکی"
+                alt="کمیسیون ماده 1 گمرک چیست؟ | راهنمای کامل رسیدگی به اختلافات ارزش گمرکی"
                 caption="جلسه کمیسیون ماده یک برای رسیدگی به اختلافات ارزش گمرکی"
-                priority
                 className="mt-4"
               />
             </div>

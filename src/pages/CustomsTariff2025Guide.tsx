@@ -275,9 +275,8 @@ const CustomsTariff2025Guide = () => {
 
                 <ArticleImage 
                   src="/images/blog/customs-tariff-2025-guide.webp"
-                  alt="تعرفه واردات خودرو در سال ۱۴۰۵ - جدول حقوق ورودی خودروهای برقی، هیبریدی و بنزینی"
+                  alt="تعرفه گمرکی ۱۴۰۵ براساس لایحه بودجه | خودرو، گوشی و کالا"
                   caption="تعرفه واردات انواع خودرو در لایحه بودجه ۱۴۰۵"
-                  priority={true}
                 />
 
                 {/* Vehicle Tariffs Section */}

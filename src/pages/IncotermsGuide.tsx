@@ -199,9 +199,8 @@ const IncotermsGuide = () => {
               {/* Hero Image */}
               <ArticleImage
                 src="/images/blog/incoterms-guide.webp"
-                alt="حمل دریایی کالا و شرایط تحویل اینکوترمز در تجارت بین‌المللی"
+                alt="اینکوترمز چیست؟ راهنمای کامل شرایط تحویل بین‌المللی کالا"
                 caption="اینکوترمز شرایط تحویل کالا در تجارت بین‌المللی را مشخص می‌کند"
-                priority
               />
 
               {/* Introduction */}

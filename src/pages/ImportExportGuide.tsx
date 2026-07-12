@@ -124,9 +124,8 @@ const ImportExportGuide = () => {
               {/* Hero Image */}
               <ArticleImage
                 src="/images/blog/import-export-guide-iran.webp"
-                alt="کانتینرهای صادراتی و وارداتی در بندر - راهنمای صادرات و واردات ایران"
+                alt="راهنمای کامل صادرات و واردات در ایران"
                 caption="تجارت بین‌المللی و حمل کالا از طریق کانتینر در بنادر ایران"
-                priority
               />
 
               {/* Introduction */}

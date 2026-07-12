@@ -167,7 +167,7 @@ const ImportRoutesIranGuide = () => {
           {/* Featured Image */}
           <ArticleImage
             src="/images/blog/import-routes-iran-guide.webp"
-            alt="مسیرهای واردات کالا به ایران - کانتینرهای صادراتی و وارداتی در بندر"
+            alt="بهترین مسیرهای واردات کالا به ایران در ۱۴۰۴ | چین، امارات، ترکیه"
             caption="انتخاب مسیر مناسب واردات، کلید موفقیت در تجارت بین‌المللی است"
           />
 

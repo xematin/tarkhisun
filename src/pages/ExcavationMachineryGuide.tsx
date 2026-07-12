@@ -154,9 +154,8 @@ const ExcavationMachineryGuide = () => {
 
               <ArticleImage
                 src="/images/blog/excavation-machinery-import-guide.webp"
-                alt="ماشین آلات حفاری و سنگین ساختمانی برای واردات و ترخیص از گمرک"
+                alt="ترخیص ماشین آلات حفاری از گمرک | راهنمای کامل واردات ماشین آلات سنگین"
                 caption="ماشین آلات حفاری - بیل مکانیکی و لودر برای پروژه‌های ساختمانی"
-                priority
                 className="mt-8 max-w-3xl mx-auto"
               />
             </div>
