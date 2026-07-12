@@ -245,8 +245,7 @@ const Blog = () => {
               <div className="grid lg:grid-cols-2 gap-8">
                 {currentPosts.map((post) => (
                   <Card key={post.id} className="card-service group cursor-pointer overflow-hidden !p-0">
-                    <div className="w-full aspect-[3/2] bg-muted overflow-hidden">
-
+                    <Link to={`/blog/${post.slug}`} aria-label={post.title} className="block w-full aspect-[3/2] bg-muted overflow-hidden">
                       {post.image ? (
                         <img
                           src={post.image}
@@ -258,7 +257,7 @@ const Blog = () => {
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
                       )}
-                    </div>
+                    </Link>
                     <CardHeader className="pt-6">
                       <div className="flex items-center justify-between mb-4">
                         <span className="text-xs font-medium text-accent bg-accent/10 px-3 py-1 rounded-full text-persian">
