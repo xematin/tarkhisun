@@ -109,6 +109,7 @@ const AppContent = () => {
         <Route path="/blog/customs-law-articles-1-to-13-guide" element={<CustomsLawArticles1To13Guide />} />
         <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/currencies" element={<Currencies />} />
+        <Route path="/contact" element={<ContactPage />} />
         <Route path="/hscode" element={<HSCodeSearch />} />
         <Route path="/TSDashboard" element={<TSDashboard />} />
         <Route path="/TSCards" element={<TSCards />} />
