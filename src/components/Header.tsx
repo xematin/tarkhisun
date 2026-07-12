@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
   { title: "جستجوی تعرفه", href: "/hscode" },
   { title: "بلاگ", href: "/blog" },
   { title: "ترخیصان‌یار", href: "/#ai-assistant" },
-  { title: "تماس", href: "/#contact" },
+  { title: "تماس", href: "/contact" },
 ];
 
 const Header = () => {
