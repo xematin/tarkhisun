@@ -123,7 +123,7 @@ const ImportExportGuide = () => {
             <div className="max-w-4xl mx-auto">
               {/* Hero Image */}
               <ArticleImage
-                src="/images/blog/import-export-container.webp"
+                src="/images/blog/import-export-guide-iran.webp"
                 alt="کانتینرهای صادراتی و وارداتی در بندر - راهنمای صادرات و واردات ایران"
                 caption="تجارت بین‌المللی و حمل کالا از طریق کانتینر در بنادر ایران"
                 priority

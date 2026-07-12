@@ -160,7 +160,7 @@ const WaterTankClearanceGuide = () => {
               </p>
 
               <ArticleImage
-                src="/images/blog/water-tank-storage.webp"
+                src="/images/blog/water-tank-clearance-bandar-abbas-guide.webp"
                 alt="مخزن ذخیره آب - تانکر آب برای ترخیص از گمرک"
                 caption="انواع مخازن ذخیره آب قابل واردات و ترخیص از گمرک بندرعباس"
                 priority

@@ -118,7 +118,7 @@ const BandarAbbasComprehensiveGuide = () => {
               </div>
 
               <ArticleImage
-                src="/images/blog/shahid-rajaei-port.webp"
+                src="/images/blog/bandar-abbas-comprehensive-clearance-guide.webp"
                 alt="گمرک شهید رجایی بندرعباس - بزرگترین بندر تجاری ایران"
                 caption="نمای بندر شهید رجایی - مرکز اصلی ترخیص کالا در ایران"
                 priority

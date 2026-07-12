@@ -127,7 +127,7 @@ const TahLanjiImportGuide = () => {
                   </div>
 
                   <ArticleImage
-                    src="/images/blog/lanji-boat.webp"
+                    src="/images/blog/tah-lanji-import-guide.webp"
                     alt="لنج سنتی در بنادر جنوب ایران - واردات ته لنجی"
                     caption="لنج‌های سنتی در بنادر جنوبی ایران"
                     priority

@@ -205,7 +205,7 @@ const ExportCardGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/export-card-documents.webp"
+                  src="/images/blog/export-card-complete-guide.webp"
                   alt="مدارک و فرم‌های مربوط به کارت صادراتی ایران"
                   caption="کارت صادراتی مجوز رسمی فعالیت در بازار صادرات ایران است"
                   priority

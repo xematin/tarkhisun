@@ -164,7 +164,7 @@ const ElectricCarTariffGuide = () => {
 
           {/* Featured Image */}
           <ArticleImage
-            src="/images/blog/electric-car-charging.webp"
+            src="/images/blog/electric-car-tariff-guide.webp"
             alt="خودرو برقی در حال شارژ - تعرفه واردات خودرو برقی ۱۴۰۴"
             caption="کاهش تعرفه واردات خودرو برقی به ۴ درصد، فرصتی برای توسعه حمل‌ونقل پاک"
           />

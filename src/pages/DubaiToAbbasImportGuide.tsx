@@ -218,7 +218,7 @@ const DubaiToAbbasImportGuide = () => {
 
               {/* Hero Image */}
               <ArticleImage
-                src="/images/blog/dubai-port-cargo.webp"
+                src="/images/blog/dubai-to-abbas-import-guide.webp"
                 alt="بندر دبی - کشتی‌های باری و کانتینرهای صادراتی به ایران"
                 caption="بندر جبل علی دبی - مبدأ واردات کالا به بندرعباس"
                 priority

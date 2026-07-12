@@ -73,7 +73,7 @@ const KuwaitAfghanistanTransitGuide = () => {
             </header>
 
             <ArticleImage
-              src="/images/blog/transit-truck.webp"
+              src="/images/blog/kuwait-afghanistan-transit-guide.webp"
               alt="ترانزیت کالا از کویت به افغانستان - کامیون حمل بین المللی"
               caption="ترانزیت کالا در مسیر کویت به افغانستان از طریق ایران"
               priority

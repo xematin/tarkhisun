@@ -138,7 +138,7 @@ const HomeAppliancesClearanceGuide = () => {
 
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/home-appliances-container.webp"
+                  src="/images/blog/home-appliances-clearance-bandar-abbas-guide.webp"
                   alt="ترخیص لوازم خانگی از گمرک بندرعباس - کانتینر حاوی یخچال، ماشین لباسشویی و تلویزیون"
                   caption="ترخیص لوازم خانگی از گمرک شهید رجایی بندرعباس"
                   priority

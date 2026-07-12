@@ -173,7 +173,7 @@ const ManifestGuide = () => {
                 </p>
 
                 <ArticleImage
-                  src="/images/blog/manifest-documents.webp"
+                  src="/images/blog/manifest-guide.webp"
                   alt="مانیفست گمرکی - اسناد و مدارک حمل کالا در گمرک"
                   caption="مانیفست بارنامه - سند اصلی حمل و نقل کالا در گمرکات"
                   priority

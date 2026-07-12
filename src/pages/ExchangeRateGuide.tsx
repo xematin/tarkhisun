@@ -146,7 +146,7 @@ const ExchangeRateGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/exchange-rate-chart.webp"
+                  src="/images/blog/customs-exchange-rate-guide.webp"
                   alt="نمودار نرخ ارز و تأثیر آن بر هزینه‌های گمرکی"
                   caption="نرخ ارز گمرکی تأثیر مستقیم بر هزینه ترخیص کالا دارد"
                   priority

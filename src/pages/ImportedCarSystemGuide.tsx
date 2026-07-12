@@ -162,7 +162,7 @@ const ImportedCarSystemGuide = () => {
               </div>
 
               <ArticleImage
-                src="/images/blog/imported-car-port.webp"
+                src="/images/blog/imported-car-system-guide.webp"
                 alt="خودروهای وارداتی در بندر شهید رجایی بندرعباس - سامانه واردات خودرو"
                 caption="خودروهای وارداتی در انتظار ترخیص از گمرک بندرعباس"
                 priority

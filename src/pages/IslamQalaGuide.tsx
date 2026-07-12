@@ -127,7 +127,7 @@ const IslamQalaGuide = () => {
                 </div>
 
                 <ArticleImage
-                  src="/images/blog/afghanistan-iran-map.webp"
+                  src="/images/blog/islam-qala-border-crossing-guide.webp"
                   alt="نقشه مرز ایران و افغانستان - موقعیت گذرگاه اسلام قلعه"
                   caption="موقعیت جغرافیایی گذرگاه مرزی اسلام قلعه در مرز ایران و افغانستان"
                   priority

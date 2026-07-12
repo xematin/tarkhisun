@@ -144,7 +144,7 @@ const SanaExchangeRateGuide = () => {
                 </div>
 
                 <ArticleImage
-                  src="/images/blog/sana-currency-exchange.webp"
+                  src="/images/blog/sana-nima-exchange-rate-difference-guide.webp"
                   alt="نرخ ارز سنا و نیمایی - تفاوت سامانه‌های ارزی در واردات و صادرات"
                   caption="مقایسه سامانه‌های ارزی سنا و نیما برای واردکنندگان و صادرکنندگان"
                   priority

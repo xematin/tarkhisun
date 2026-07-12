@@ -190,7 +190,7 @@ const BusinessConsultingGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/business-consulting-meeting.webp"
+                  src="/images/blog/business-consulting-guide.webp"
                   alt="جلسه مشاوره بازرگانی و تجارت بین‌المللی"
                   caption="مشاوره بازرگانی کلید موفقیت در تجارت بین‌المللی است"
                   priority

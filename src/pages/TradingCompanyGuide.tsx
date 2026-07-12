@@ -190,7 +190,7 @@ const TradingCompanyGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/trading-company-office.webp"
+                  src="/images/blog/trading-company-guide.webp"
                   alt="دفتر شرکت بازرگانی و خدمات تجارت بین‌المللی"
                   caption="شرکت بازرگانی پل ارتباطی بین تولیدکننده و بازار است"
                   priority

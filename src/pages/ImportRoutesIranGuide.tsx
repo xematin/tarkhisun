@@ -166,7 +166,7 @@ const ImportRoutesIranGuide = () => {
 
           {/* Featured Image */}
           <ArticleImage
-            src="/images/blog/import-routes-iran-container.webp"
+            src="/images/blog/import-routes-iran-guide.webp"
             alt="مسیرهای واردات کالا به ایران - کانتینرهای صادراتی و وارداتی در بندر"
             caption="انتخاب مسیر مناسب واردات، کلید موفقیت در تجارت بین‌المللی است"
           />
