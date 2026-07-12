@@ -52,6 +52,7 @@ const Budget1405Guide = lazy(() => import("./pages/Budget1405Guide"));
 const CustomsLawArticles1To13Guide = lazy(() => import("./pages/CustomsLawArticles1To13Guide"));
 const ServicesPage = lazy(() => import("./pages/Services"));
 const BusinessCardService = lazy(() => import("./pages/BusinessCardService"));
+const ContactPage = lazy(() => import("./pages/Contact"));
 
 const queryClient = new QueryClient();
 
