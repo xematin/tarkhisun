@@ -6,7 +6,7 @@
     <atom:link href="https://tarkhisun.com/rss.xml" rel="self" type="application/rss+xml" />
     <description>آخرین مقالات و راهنمای ترخیص کالا، گمرک، تعرفه و تجارت بین‌الملل از ترخیصان</description>
     <language>fa-IR</language>
-    <lastBuildDate>Wed, 08 Jul 2026 07:26:10 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 06:46:25 GMT</lastBuildDate>
     <generator>tarkhisun-sitemap-generator</generator>
     <item>
       <title>قوانین امور گمرکی؛ از ماده ۱ تا ۱۳ | راهنمای کامل مبانی گمرک</title>
@@ -19,8 +19,10 @@
       <category>قوانین و مقررات</category>
       <category>قانون امور گمرکی</category>
       <category>ماده 1 قانون گمرک</category>
-      <category>حقوق ورودی</category>
-      <category>تضمین گمرکی</category>
+      <category>ماده 5 حقوق ورودی</category>
+      <category>ماده 10 تضمین گمرکی</category>
+      <category>ماده 13 HS</category>
+      <category>قوانین گمرک ایران</category>
     </item>
     <item>
       <title>لایحه بودجه ۱۴۰۵ | راهنمای کامل بودجه کل کشور با جداول و ارقام</title>
@@ -463,20 +465,6 @@
       <category>ارز گمرکی</category>
       <category>محاسبه حقوق</category>
       <category>هزینه واردات</category>
-    </item>
-    <item>
-      <title>تعریف و اهمیت تعرفه گمرکی در واردات و صادرات</title>
-      <link>https://tarkhisun.com/blog/customs-tariff-guide</link>
-      <guid isPermaLink="true">https://tarkhisun.com/blog/customs-tariff-guide</guid>
-      <pubDate>Thu, 04 Sep 2025 08:00:00 GMT</pubDate>
-      <description>راهنمای جامع تعرفه گمرکی: تعریف، انواع تعرفه، نحوه محاسبه حقوق ورودی و خروجی، تأثیر بر قیمت کالا و استراتژی‌های کاهش هزینه‌های گمرکی</description>
-      <author>info@tarkhisun.com (تیم ترخیصان)</author>
-      <enclosure url="https://tarkhisun.com/images/blog/customs-tariff-guide.webp" type="image/webp" />
-      <category>تعرفه و مالیات</category>
-      <category>تعرفه گمرکی</category>
-      <category>حقوق گمرکی</category>
-      <category>عوارض گمرکی</category>
-      <category>محاسبه تعرفه</category>
     </item>
   </channel>
 </rss>
