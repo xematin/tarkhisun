@@ -190,7 +190,7 @@ const InternationalShippingGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/international-shipping-cargo.webp"
+                  src="/images/blog/international-shipping-guide.webp"
                   alt="کشتی باری در حال حمل کانتینرهای کالا در حمل و نقل بین‌المللی"
                   caption="حمل دریایی پرکاربردترین روش حمل و نقل بین‌المللی است"
                   priority

@@ -152,7 +152,7 @@ const CustomsTariffGuide = () => {
                     
                     {/* Hero Image */}
                     <ArticleImage
-                      src="/images/blog/tariff-calculator.webp"
+                      src="/images/blog/customs-tariff-guide.webp"
                       alt="محاسبه تعرفه گمرکی و حقوق ورودی کالا"
                       caption="محاسبه دقیق تعرفه گمرکی برای تعیین هزینه نهایی واردات ضروری است"
                       priority

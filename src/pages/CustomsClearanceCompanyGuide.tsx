@@ -193,7 +193,7 @@ const CustomsClearanceCompanyGuide = () => {
               <div className="max-w-4xl mx-auto prose prose-lg">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/customs-clearance-warehouse.webp"
+                  src="/images/blog/customs-clearance-company-guide.webp"
                   alt="انبار گمرک و فرآیند ترخیص کالا توسط شرکت ترخیص‌کار"
                   caption="شرکت ترخیص کالا تمام مراحل ترخیص را از ورود تا تحویل انجام می‌دهد"
                   priority

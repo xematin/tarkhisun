@@ -160,7 +160,7 @@ const NTSWGuide = () => {
               <div className="max-w-4xl mx-auto">
                 {/* Hero Image */}
                 <ArticleImage
-                  src="/images/blog/ntsw-digital-trade.webp"
+                  src="/images/blog/ntsw-complete-guide.webp"
                   alt="سامانه جامع تجارت ایران - پلتفرم دیجیتال تجارت الکترونیک"
                   caption="سامانه جامع تجارت (NTSW) - پنجره واحد تجارت خارجی ایران"
                   priority

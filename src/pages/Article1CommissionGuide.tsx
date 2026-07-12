@@ -103,7 +103,7 @@ const Article1CommissionGuide = () => {
               </p>
 
               <ArticleImage
-                src="/images/blog/commission-legal.webp"
+                src="/images/blog/customs-article-1-commission-guide.webp"
                 alt="کمیسیون ماده 1 گمرک - رسیدگی به اختلافات ارزش گمرکی"
                 caption="جلسه کمیسیون ماده یک برای رسیدگی به اختلافات ارزش گمرکی"
                 priority

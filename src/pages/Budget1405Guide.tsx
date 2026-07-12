@@ -288,7 +288,7 @@ const Budget1405Guide = () => {
                   </div>
                 </section>
 
-                <ArticleImage src="/images/blog/tariff-documents.webp" alt="لایحه بودجه ۱۴۰۵ - سند مالی کل کشور با ارقام کلان و جداول" caption="لایحه بودجه ۱۴۰۵ - سند مالی سالانه کشور" priority={true} />
+                <ArticleImage src="/images/blog/budget-1405-guide.webp" alt="لایحه بودجه ۱۴۰۵ - سند مالی کل کشور با ارقام کلان و جداول" caption="لایحه بودجه ۱۴۰۵ - سند مالی سالانه کشور" priority={true} />
 
                 {/* Macro Figures */}
                 <section id="macro-figures" className="scroll-mt-24">

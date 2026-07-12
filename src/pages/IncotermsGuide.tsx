@@ -198,7 +198,7 @@ const IncotermsGuide = () => {
             <div className="max-w-4xl mx-auto">
               {/* Hero Image */}
               <ArticleImage
-                src="/images/blog/incoterms-shipping.webp"
+                src="/images/blog/incoterms-guide.webp"
                 alt="حمل دریایی کالا و شرایط تحویل اینکوترمز در تجارت بین‌المللی"
                 caption="اینکوترمز شرایط تحویل کالا در تجارت بین‌المللی را مشخص می‌کند"
                 priority

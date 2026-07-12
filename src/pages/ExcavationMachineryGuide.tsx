@@ -153,7 +153,7 @@ const ExcavationMachineryGuide = () => {
               </div>
 
               <ArticleImage
-                src="/images/blog/excavation-machinery.webp"
+                src="/images/blog/excavation-machinery-import-guide.webp"
                 alt="ماشین آلات حفاری و سنگین ساختمانی برای واردات و ترخیص از گمرک"
                 caption="ماشین آلات حفاری - بیل مکانیکی و لودر برای پروژه‌های ساختمانی"
                 priority
