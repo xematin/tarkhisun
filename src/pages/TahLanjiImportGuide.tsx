@@ -128,9 +128,8 @@ const TahLanjiImportGuide = () => {
 
                   <ArticleImage
                     src="/images/blog/tah-lanji-import-guide.webp"
-                    alt="لنج سنتی در بنادر جنوب ایران - واردات ته لنجی"
+                    alt="واردات ته لنجی یا ملوانی چیست؟ راهنمای کامل و ریسک‌های قانونی"
                     caption="لنج‌های سنتی در بنادر جنوبی ایران"
-                    priority
                     className="mt-8"
                   />
                 </div>

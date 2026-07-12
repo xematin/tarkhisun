@@ -133,9 +133,8 @@ const BusinessCardGuide = () => {
               {/* Hero Image */}
               <ArticleImage
                 src="/images/blog/business-card-complete-guide.webp"
-                alt="محیط کاری تجاری و دریافت کارت بازرگانی"
+                alt="کارت بازرگانی چیست؟ راهنمای کامل دریافت و شرایط صدور"
                 caption="کارت بازرگانی مجوز رسمی فعالیت در تجارت خارجی است"
-                priority
               />
 
               {/* Definition Section */}

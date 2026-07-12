@@ -191,9 +191,8 @@ const BusinessConsultingGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/business-consulting-guide.webp"
-                  alt="جلسه مشاوره بازرگانی و تجارت بین‌المللی"
+                  alt="مشاوره بازرگانی چیست؟ راهنمای کامل خدمات مشاوره تجارت و بازرگانی"
                   caption="مشاوره بازرگانی کلید موفقیت در تجارت بین‌المللی است"
-                  priority
                 />
 
                 {/* Definition Section */}

@@ -150,9 +150,8 @@ const HSCodeGuide = () => {
                     {/* Hero Image */}
                     <ArticleImage
                       src="/images/blog/hs-code-guide.webp"
-                      alt="کد HS کالا - اسناد گمرکی و تعرفه هماهنگ"
+                      alt="کد HS کالا چیست؟ راهنمای کامل تعرفه هماهنگ کالاها"
                       caption="سیستم کد HS - طبقه‌بندی استاندارد کالاها در تجارت بین‌المللی"
-                      priority
                     />
 
                     {/* Introduction */}

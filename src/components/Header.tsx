@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
   { title: "جستجوی تعرفه", href: "/hscode" },
   { title: "بلاگ", href: "/blog" },
   { title: "ترخیصان‌یار", href: "/#ai-assistant" },
-  { title: "تماس", href: "/#contact" },
+  { title: "تماس", href: "/contact" },
 ];
 
 const Header = () => {
@@ -144,7 +144,7 @@ const Header = () => {
 
           {/* Desktop CTA */}
           <a
-            href="/#contact"
+            href="/contact"
             className="hidden lg:inline-flex items-center gap-2 rounded-full bg-gradient-to-l from-accent to-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-[0_8px_22px_-6px_hsl(var(--accent)/0.55)] hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.6)] transition-shadow text-persian"
           >
             <Phone className="w-4 h-4" />
@@ -154,7 +154,7 @@ const Header = () => {
           {/* Mobile actions: contact shine + hamburger */}
           <div className="lg:hidden flex items-center gap-2">
             <a
-              href="/#contact"
+              href="/contact"
               aria-label="تماس با ما"
               title="تماس با ما"
               className="icon-badge-gradient w-10 h-10 shadow-[0_8px_22px_-6px_hsl(var(--accent)/0.55)] hover:shadow-[0_12px_28px_-8px_hsl(var(--primary)/0.6)] transition-shadow"
@@ -237,7 +237,7 @@ const Header = () => {
                 );
               })}
               <a
-                href="/#contact"
+                href="/contact"
                 onClick={() => setIsMenuOpen(false)}
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-l from-accent to-primary px-4 py-3 text-sm font-semibold text-primary-foreground text-persian"
               >

@@ -194,9 +194,8 @@ const CarPartsImportGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/car-parts-import-customs-clearance-guide.webp"
-                  alt="قطعات یدکی خودرو - موتور، گیربکس و قطعات مکانیکی"
+                  alt="ترخیص قطعات یدکی خودرو از گمرک | راهنمای کامل واردات قطعات"
                   caption="انواع قطعات یدکی خودرو قابل واردات از گمرک"
-                  priority
                 />
 
                 {/* Introduction */}

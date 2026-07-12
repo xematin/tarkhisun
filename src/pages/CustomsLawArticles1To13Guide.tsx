@@ -267,9 +267,8 @@ const CustomsLawArticles1To13Guide = () => {
 
                 <ArticleImage
                   src="/images/blog/customs-law-articles-1-to-13-guide.webp"
-                  alt="کتاب قانون امور گمرکی ایران و چکش قضایی – ماده ۱ تا ۱۳"
+                  alt="قوانین امور گمرکی؛ از ماده ۱ تا ۱۳ | راهنمای کامل مبانی گمرک"
                   caption="بخش نخست قانون امور گمرکی، ستون فقرات تجارت خارجی ایران است"
-                  priority
                   className="mt-4"
                 />
               </div>

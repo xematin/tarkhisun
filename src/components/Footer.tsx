@@ -8,7 +8,7 @@ const quickLinks = [
   { title: "جستجوی تعرفه گمرکی", href: "/hscode", isAnchor: false },
   { title: "ترخیصان‌یار", href: "/#ai-assistant", isAnchor: true },
   { title: "بلاگ", href: "/blog", isAnchor: false },
-  { title: "تماس با ما", href: "/#contact", isAnchor: true },
+  { title: "تماس با ما", href: "/contact", isAnchor: false },
 ];
 
 const popularArticles = [
@@ -93,14 +93,26 @@ const Footer = () => {
             <div>
               <ColumnHeader title="اطلاعات تماس" subtitle="CONTACT" />
               <div className="flex flex-col gap-2">
-                <div className="pill-row">
+                <a
+                  href="https://B2n.ir/tarkhisun-map"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pill-row"
+                  aria-label="نقشه شعبه ۱ - چهارراه سازمان"
+                >
                   <span className="text-persian">بندرعباس — چهارراه سازمان</span>
                   <MapPin className="w-4 h-4 text-accent" />
-                </div>
-                <div className="pill-row">
+                </a>
+                <a
+                  href="https://B2n.ir/Tarkhisun-Map1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="pill-row"
+                  aria-label="نقشه شعبه ۲ - بلوار رسالت"
+                >
                   <span className="text-persian">بندرعباس — بلوار رسالت</span>
                   <MapPin className="w-4 h-4 text-accent" />
-                </div>
+                </a>
                 <a href="tel:+989177380080" className="pill-row" dir="ltr">
                   <span className="tabular-nums">09177380080</span>
                   <Phone className="w-4 h-4 text-accent" />

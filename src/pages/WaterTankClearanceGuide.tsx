@@ -161,9 +161,8 @@ const WaterTankClearanceGuide = () => {
 
               <ArticleImage
                 src="/images/blog/water-tank-clearance-bandar-abbas-guide.webp"
-                alt="مخزن ذخیره آب - تانکر آب برای ترخیص از گمرک"
+                alt="ترخیص مخزن ذخیره آب از گمرک بندرعباس | راهنمای کامل واردات تانکر"
                 caption="انواع مخازن ذخیره آب قابل واردات و ترخیص از گمرک بندرعباس"
-                priority
               />
             </header>
 

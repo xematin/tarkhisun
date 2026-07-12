@@ -125,9 +125,8 @@ const GeneratorClearanceBandarAbbasGuide = () => {
 
               <ArticleImage
                 src="/images/blog/generator-clearance-bandar-abbas-guide.webp"
-                alt="دیزل ژنراتور صنعتی - ترخیص ژنراتور از گمرک بندرعباس"
+                alt="ترخیص ژنراتور از بندرعباس | راهنمای کامل واردات و گمرک ژنراتور"
                 caption="دیزل ژنراتور صنعتی قابل واردات و ترخیص از گمرک"
-                priority
               />
             </header>
 

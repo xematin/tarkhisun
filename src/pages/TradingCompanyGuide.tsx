@@ -191,9 +191,8 @@ const TradingCompanyGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/trading-company-guide.webp"
-                  alt="دفتر شرکت بازرگانی و خدمات تجارت بین‌المللی"
+                  alt="شرکت بازرگانی چیست؟ راهنمای کامل ثبت و راه‌اندازی شرکت بازرگانی"
                   caption="شرکت بازرگانی پل ارتباطی بین تولیدکننده و بازار است"
-                  priority
                 />
 
                 {/* Definition Section */}

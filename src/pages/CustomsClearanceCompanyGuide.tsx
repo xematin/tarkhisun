@@ -194,9 +194,8 @@ const CustomsClearanceCompanyGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/customs-clearance-company-guide.webp"
-                  alt="انبار گمرک و فرآیند ترخیص کالا توسط شرکت ترخیص‌کار"
+                  alt="شرکت ترخیص کالا چیست؟ راهنمای انتخاب بهترین شرکت ترخیص‌کار"
                   caption="شرکت ترخیص کالا تمام مراحل ترخیص را از ورود تا تحویل انجام می‌دهد"
-                  priority
                 />
 
                 {/* Definition Section */}

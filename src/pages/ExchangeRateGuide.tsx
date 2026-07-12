@@ -147,9 +147,8 @@ const ExchangeRateGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/customs-exchange-rate-guide.webp"
-                  alt="نمودار نرخ ارز و تأثیر آن بر هزینه‌های گمرکی"
+                  alt="نرخ ارز گمرکی چیست؟ راهنمای کامل محاسبه حقوق و عوارض گمرکی"
                   caption="نرخ ارز گمرکی تأثیر مستقیم بر هزینه ترخیص کالا دارد"
-                  priority
                 />
 
                 {/* Introduction */}

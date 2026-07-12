@@ -161,9 +161,8 @@ const NTSWGuide = () => {
                 {/* Hero Image */}
                 <ArticleImage
                   src="/images/blog/ntsw-complete-guide.webp"
-                  alt="سامانه جامع تجارت ایران - پلتفرم دیجیتال تجارت الکترونیک"
+                  alt="سامانه جامع تجارت (ntsw.ir) - راهنمای کامل ثبت‌نام و استفاده"
                   caption="سامانه جامع تجارت (NTSW) - پنجره واحد تجارت خارجی ایران"
-                  priority
                 />
 
                 {/* Introduction */}

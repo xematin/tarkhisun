@@ -174,9 +174,8 @@ const ManifestGuide = () => {
 
                 <ArticleImage
                   src="/images/blog/manifest-guide.webp"
-                  alt="مانیفست گمرکی - اسناد و مدارک حمل کالا در گمرک"
+                  alt="مانیفست در گمرک چیست؟ راهنمای جامع مانیفست بارنامه"
                   caption="مانیفست بارنامه - سند اصلی حمل و نقل کالا در گمرکات"
-                  priority
                   className="mt-8"
                 />
               </article>

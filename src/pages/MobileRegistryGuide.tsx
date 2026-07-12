@@ -132,9 +132,8 @@ const MobileRegistryGuide = () => {
 
               <ArticleImage
                 src="/images/blog/mobile-phone-customs-clearance-registry-guide.webp"
-                alt="گوشی‌های موبایل و کد IMEI برای رجیستری در گمرک"
+                alt="ترخیص موبایل و رجیستری گوشی از گمرک | راهنمای کامل ۱۴۰۴"
                 caption="راهنمای ترخیص موبایل و رجیستری گوشی از گمرک"
-                priority
               />
             </header>
 
