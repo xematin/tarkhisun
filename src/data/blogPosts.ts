@@ -518,7 +518,7 @@ export const blogPosts: BlogPost[] = [
       "قوانین گمرک ایران",
     ],
     relatedPosts: [13, 3, 2, 5],
-    image: "/images/blog/customs-law-articles-1-to-13.jpg",
+    image: "/images/blog/customs-law-articles-1-to-13-guide.webp",
   },
 
 ];

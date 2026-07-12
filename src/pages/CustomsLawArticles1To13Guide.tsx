@@ -19,7 +19,7 @@ const CustomsLawArticles1To13Guide = () => {
   const title = "قوانین امور گمرکی؛ از ماده ۱ تا ۱۳ | راهنمای کامل مبانی گمرک";
   const description =
     "بررسی ساده و کاربردی ماده ۱ تا ۱۳ قانون امور گمرکی؛ تعاریف، وظایف گمرک، حقوق ورودی، تضمین و کنترل‌های گمرکی برای واردکنندگان و صادرکنندگان.";
-  const image = "https://tarkhisun.com/images/blog/customs-law-articles-1-to-13.jpg";
+  const image = "https://tarkhisun.com/images/blog/customs-law-articles-1-to-13-guide.webp";
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -266,7 +266,7 @@ const CustomsLawArticles1To13Guide = () => {
                 </p>
 
                 <ArticleImage
-                  src="/images/blog/customs-law-articles-1-to-13.jpg"
+                  src="/images/blog/customs-law-articles-1-to-13-guide.webp"
                   alt="کتاب قانون امور گمرکی ایران و چکش قضایی – ماده ۱ تا ۱۳"
                   caption="بخش نخست قانون امور گمرکی، ستون فقرات تجارت خارجی ایران است"
                   priority
