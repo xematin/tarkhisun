@@ -11,6 +11,8 @@ import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
 import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
+import slide2Asset from "@/assets/SliderTarkhisun2.webp.asset.json";
+import slide3Asset from "@/assets/SliderTarkhisun3.webp.asset.json";
 
 const HeroSection = () => {
   const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک", "بندر سیریک", "بندر خرمشهر", "بندر آستارا", "بندر باشماق", "بندر سرخس", "بندر ماهیرود"];
