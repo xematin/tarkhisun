@@ -26,18 +26,25 @@
     <script>
       if (location.pathname === '/') {
         var preloads = [
-          { href: '/assets/images/hero-port-480-C3DLdLcH.avif', media: '(max-width: 767px)' },
-          { href: '/assets/images/hero-port-1024-CSHfTuOg.avif', media: '(min-width: 768px) and (max-width: 1439px)' },
-          { href: '/assets/images/hero-port-1920-zgaA1rQc.avif', media: '(min-width: 1440px)' }
+          { href: '/__l5e/assets-v1/f83fd280-634e-49a9-bd82-8f5c821c8887/hero-slider1-480.webp', media: '(max-width: 767px)' },
+          { href: '/__l5e/assets-v1/35d00dbf-b937-4c11-80aa-1745239d1db7/hero-slider1-1024.webp', media: '(min-width: 768px) and (max-width: 1439px)' },
+          { href: '/__l5e/assets-v1/54386ecb-0c98-4d29-b60e-f1676779f02d/hero-slider1-1920.webp', media: '(min-width: 1440px)' }
         ];
         preloads.forEach(function(p) {
           var link = document.createElement('link');
           link.rel = 'preload';
           link.as = 'image';
           link.href = p.href;
-          link.type = 'image/avif';
+          link.type = 'image/webp';
           link.fetchPriority = 'high';
           link.media = p.media;
+          document.head.appendChild(link);
+        });
+        // Prefetch remaining slides
+        ['/__l5e/assets-v1/bf46687a-fed9-4469-a2ff-9cb2ef63c74a/SliderTarkhisun2.webp',
+         '/__l5e/assets-v1/5109b9f8-c08a-4767-8774-72178ba502be/SliderTarkhisun3.webp'].forEach(function(href){
+          var link=document.createElement('link');
+          link.rel='preload'; link.as='image'; link.href=href; link.type='image/webp';
           document.head.appendChild(link);
         });
       }
@@ -253,21 +260,11 @@
   <body>
     
         <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <!-- Mobile: 480px only -->
-          <source media="(max-width: 767px)" type="image/avif" srcset="/assets/images/hero-port-480-C3DLdLcH.avif" />
-          <source media="(max-width: 767px)" type="image/webp" srcset="/assets/images/hero-port-480-QIkt1Vhw.webp" />
-          
-          <!-- Tablet: 1024px only -->
-          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcset="/assets/images/hero-port-1024-CSHfTuOg.avif" />
-          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/assets/images/hero-port-1024-aC-qP2YJ.webp" />
-          
-          <!-- Desktop: 1920px only -->
-          <source media="(min-width: 1440px)" type="image/avif" srcset="/assets/images/hero-port-1920-zgaA1rQc.avif" />
-          <source media="(min-width: 1440px)" type="image/webp" srcset="/assets/images/hero-port-1920-CzfqZNaw.webp" />
-          
-          <!-- Fallback for older browsers -->
-          <img 
-            src="/assets/images/hero-port-1024-aC-qP2YJ.webp"
+          <source media="(max-width: 767px)" type="image/webp" srcset="/__l5e/assets-v1/f83fd280-634e-49a9-bd82-8f5c821c8887/hero-slider1-480.webp" />
+          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/__l5e/assets-v1/35d00dbf-b937-4c11-80aa-1745239d1db7/hero-slider1-1024.webp" />
+          <source media="(min-width: 1440px)" type="image/webp" srcset="/__l5e/assets-v1/54386ecb-0c98-4d29-b60e-f1676779f02d/hero-slider1-1920.webp" />
+          <img
+            src="/__l5e/assets-v1/35d00dbf-b937-4c11-80aa-1745239d1db7/hero-slider1-1024.webp"
             alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"
             style="width:100%;height:100%;object-fit:cover;"
             width="1920"
