@@ -11,11 +11,21 @@ import hero768Webp from "@/assets/hero-port-768.webp";
 import hero1024Webp from "@/assets/hero-port-1024.webp";
 import hero1440Webp from "@/assets/hero-port-1440.webp";
 import hero1920Webp from "@/assets/hero-port-1920.webp";
+import slide2Asset from "@/assets/SliderTarkhisun2.webp.asset.json";
+import slide3Asset from "@/assets/SliderTarkhisun3.webp.asset.json";
 
 const HeroSection = () => {
   const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک", "بندر سیریک", "بندر خرمشهر", "بندر آستارا", "بندر باشماق", "بندر سرخس", "بندر ماهیرود"];
   const [currentPortIndex, setCurrentPortIndex] = useState(0);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const sceneRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlideIndex(prev => (prev + 1) % 3);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -145,7 +155,7 @@ const HeroSection = () => {
             <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
               {/* Image card (back layer) */}
               <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5]" style={{ opacity: 1 }}>
-                <picture>
+                <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${currentSlideIndex === 0 ? 'opacity-100' : 'opacity-0'}`}>
                   <source media="(max-width: 767px)" type="image/avif" srcSet={hero480Avif} />
                   <source media="(max-width: 767px)" type="image/webp" srcSet={hero480Webp} />
                   <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcSet={hero1024Avif} />
@@ -162,6 +172,20 @@ const HeroSection = () => {
                     decoding="async"
                   />
                 </picture>
+                <img
+                  src={slide2Asset.url}
+                  alt="حمل و نقل بین‌المللی کالا با کشتی، هواپیما، کامیون و قطار در ترخیصان"
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${currentSlideIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <img
+                  src={slide3Asset.url}
+                  alt="محوطه کانتینری بندر و عملیات لجستیک ترخیص کالا"
+                  className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${currentSlideIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" aria-hidden="true" />
               </div>
 
