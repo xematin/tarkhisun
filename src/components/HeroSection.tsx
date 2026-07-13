@@ -1,16 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import hero480Avif from "@/assets/hero-port-480.avif";
-import hero768Avif from "@/assets/hero-port-768.avif";
-import hero1024Avif from "@/assets/hero-port-1024.avif";
-import hero1440Avif from "@/assets/hero-port-1440.avif";
-import hero1920Avif from "@/assets/hero-port-1920.avif";
-import hero480Webp from "@/assets/hero-port-480.webp";
-import hero768Webp from "@/assets/hero-port-768.webp";
-import hero1024Webp from "@/assets/hero-port-1024.webp";
-import hero1440Webp from "@/assets/hero-port-1440.webp";
-import hero1920Webp from "@/assets/hero-port-1920.webp";
+import slide1_480 from "@/assets/hero-slider1-480.webp.asset.json";
+import slide1_1024 from "@/assets/hero-slider1-1024.webp.asset.json";
+import slide1_1920 from "@/assets/hero-slider1-1920.webp.asset.json";
 import slide2Asset from "@/assets/SliderTarkhisun2.webp.asset.json";
 import slide3Asset from "@/assets/SliderTarkhisun3.webp.asset.json";
 
