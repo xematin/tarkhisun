@@ -147,21 +147,19 @@ const HeroSection = () => {
           <div className="relative order-1 lg:order-2 fade-in-up animate animation-delay-200">
             <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
               {/* Image card (back layer) */}
-              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5]" style={{ opacity: 1 }}>
+              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5] relative overflow-hidden" style={{ opacity: 1 }}>
                 <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${currentSlideIndex === 0 ? 'opacity-100' : 'opacity-0'}`}>
-                  <source media="(max-width: 767px)" type="image/avif" srcSet={hero480Avif} />
-                  <source media="(max-width: 767px)" type="image/webp" srcSet={hero480Webp} />
-                  <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcSet={hero1024Avif} />
-                  <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcSet={hero1024Webp} />
-                  <source media="(min-width: 1440px)" type="image/avif" srcSet={hero1920Avif} />
-                  <source media="(min-width: 1440px)" type="image/webp" srcSet={hero1920Webp} />
+                  <source media="(max-width: 767px)" type="image/webp" srcSet={slide1_480.url} />
+                  <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcSet={slide1_1024.url} />
+                  <source media="(min-width: 1440px)" type="image/webp" srcSet={slide1_1920.url} />
                   <img
-                    src={hero1024Webp}
+                    src={slide1_1024.url}
                     alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا در بزرگترین بندر تجاری ایران"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                     width="1024"
                     height="1280"
                     loading="eager"
+                    fetchPriority="high"
                     decoding="async"
                   />
                 </picture>
@@ -169,17 +167,48 @@ const HeroSection = () => {
                   src={slide2Asset.url}
                   alt="حمل و نقل بین‌المللی کالا با کشتی، هواپیما، کامیون و قطار در ترخیصان"
                   className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${currentSlideIndex === 1 ? 'opacity-100' : 'opacity-0'}`}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                 />
                 <img
                   src={slide3Asset.url}
                   alt="محوطه کانتینری بندر و عملیات لجستیک ترخیص کالا"
                   className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${currentSlideIndex === 2 ? 'opacity-100' : 'opacity-0'}`}
-                  loading="lazy"
+                  loading="eager"
                   decoding="async"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" aria-hidden="true" />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent pointer-events-none" aria-hidden="true" />
+
+                {/* Prev / Next buttons */}
+                <button
+                  type="button"
+                  aria-label="اسلاید قبلی"
+                  onClick={() => setCurrentSlideIndex((currentSlideIndex + 2) % 3)}
+                  className="absolute top-1/2 right-3 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/25 hover:bg-white/50 backdrop-blur-md flex items-center justify-center text-white transition-all"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <button
+                  type="button"
+                  aria-label="اسلاید بعدی"
+                  onClick={() => setCurrentSlideIndex((currentSlideIndex + 1) % 3)}
+                  className="absolute top-1/2 left-3 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/25 hover:bg-white/50 backdrop-blur-md flex items-center justify-center text-white transition-all"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                {/* Pagination dots */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                  {[0, 1, 2].map((i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      aria-label={`اسلاید ${i + 1}`}
+                      onClick={() => setCurrentSlideIndex(i)}
+                      className={`h-2.5 rounded-full transition-all ${currentSlideIndex === i ? 'w-8 bg-white' : 'w-2.5 bg-white/50 hover:bg-white/75'}`}
+                    />
+                  ))}
+                </div>
               </div>
 
               {/* Customs stamp */}
