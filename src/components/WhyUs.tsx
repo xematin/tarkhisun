@@ -49,27 +49,8 @@ const WhyUs = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {reasons.map((reason, index) => {
-            const IconComponent = reason.icon;
-            return (
-              <div 
-                key={index}
-                className="group bg-background border border-border rounded-xl p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-300"
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <IconComponent className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-3 text-persian">
-                  {reason.title}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed text-persian">
-                  {reason.description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+        <WhyUsSlider reasons={reasons} />
+
 
         <div className="bg-gradient-to-l from-primary to-accent rounded-2xl p-8 md:p-12 text-center text-white">
           <h3 className="text-2xl md:text-3xl font-bold mb-4 text-persian">
