@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import slide1_480 from "@/assets/hero-slider1-480.webp.asset.json";
 import slide1_1024 from "@/assets/hero-slider1-1024.webp.asset.json";
