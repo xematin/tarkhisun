@@ -1,5 +1,6 @@
 import { Award, Users, Clock, Shield, TrendingUp, HeadphonesIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const WhyUs = () => {
   const reasons = [
