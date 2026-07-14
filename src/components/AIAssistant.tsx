@@ -114,13 +114,8 @@ const AIAssistant = () => {
             <CollapsibleContent className="mt-6 overflow-hidden transition-all duration-500 ease-in-out data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
               <div className="prose prose-lg mx-auto text-right" dir="rtl">
                 <div className="space-y-6 text-muted-foreground leading-relaxed">
-                  <p className="text-persian text-lg">ترخیصان‌یار اولین و پیشرفته‌ترین سیستم هوش مصنوعی تخصصی گمرکی در ایران است که با بهره‌گیری از جدیدترین تکنولوژی‌های یادگیری ماشین و پردازش زبان طبیعی، تمامی فرآیندهای مرتبط با ترخیص کالا و امور گمرکی را ساده‌تر و سریع‌تر می‌کند. این سیستم هوشمند با تحلیل هزاران پرونده ترخیصی و قوانین گمرکی ایران، قادر به ارائه مشاوره تخصصی فوری و راهنمایی گام‌به‌گام در تمام مراحل واردات و صادرات است.<strong className="text-primary">ترخیصان‌یار</strong> اولین 
-                    و پیشرفته‌ترین سیستم <strong className="text-primary">هوش مصنوعی تخصصی گمرکی</strong> در ایران است 
-                    که با بهره‌گیری از جدیدترین تکنولوژی‌های یادگیری ماشین و پردازش زبان طبیعی، 
-                    تمامی فرآیندهای مرتبط با <strong className="text-primary">ترخیص کالا</strong> و <strong className="text-primary">امور گمرکی</strong> را 
-                    ساده‌تر و سریع‌تر می‌کند. این سیستم هوشمند با تحلیل هزاران پرونده ترخیصی 
-                    و قوانین گمرکی ایران، قادر به ارائه <strong className="text-primary">مشاوره تخصصی فوری</strong> و 
-                    <strong className="text-primary">راهنمایی گام‌به‌گام</strong> در تمام مراحل واردات و صادرات است.
+                  <p className="text-persian text-lg">
+                    <strong className="text-primary">ترخیصان‌یار</strong> اولین و پیشرفته‌ترین سیستم <strong className="text-primary">هوش مصنوعی تخصصی گمرکی</strong> در ایران است که با بهره‌گیری از جدیدترین تکنولوژی‌های یادگیری ماشین و پردازش زبان طبیعی، تمامی فرآیندهای مرتبط با <strong className="text-primary">ترخیص کالا</strong> و <strong className="text-primary">امور گمرکی</strong> را ساده‌تر و سریع‌تر می‌کند. این سیستم هوشمند با تحلیل هزاران پرونده ترخیصی و قوانین گمرکی ایران، قادر به ارائه <strong className="text-primary">مشاوره تخصصی فوری</strong> و <strong className="text-primary">راهنمایی گام‌به‌گام</strong> در تمام مراحل واردات و صادرات است.
                   </p>
 
                   <p className="text-persian text-lg">
