@@ -102,4 +102,79 @@ const WhyUs = () => {
   );
 };
 
+type Reason = { icon: any; title: string; description: string };
+
+const WhyUsSlider = ({ reasons }: { reasons: Reason[] }) => {
+  const pages: Reason[][] = [];
+  for (let i = 0; i < reasons.length; i += 3) pages.push(reasons.slice(i, i + 3));
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setPage((p) => (p + 1) % pages.length), 5000);
+    return () => clearInterval(t);
+  }, [pages.length]);
+
+  return (
+    <div className="mb-16">
+      <div className="overflow-hidden">
+        <div
+          className="flex ease-in-out"
+          style={{
+            transform: `translateX(${page * 100}%)`,
+            transitionProperty: "transform",
+            transitionDuration: "1200ms",
+          }}
+        >
+          {pages.map((group, gi) => (
+            <div key={gi} className="w-full shrink-0 grid md:grid-cols-2 lg:grid-cols-3 gap-8 px-1">
+              {group.map((reason, index) => {
+                const IconComponent = reason.icon;
+                return (
+                  <div
+                    key={index}
+                    className="group bg-background border border-border rounded-xl p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-300"
+                  >
+                    <div className="w-14 h-14 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <IconComponent className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-3 text-persian">
+                      {reason.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed text-persian">
+                      {reason.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-center gap-4 mt-8" role="radiogroup" aria-label="اسلایدر مزایا">
+        {pages.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            role="radio"
+            aria-checked={page === i}
+            aria-label={`صفحه ${i + 1}`}
+            onClick={() => setPage(i)}
+            className={`w-5 h-5 rounded-full border-2 transition-all flex items-center justify-center ${
+              page === i ? "border-primary" : "border-muted-foreground/40 hover:border-primary/60"
+            }`}
+          >
+            <span
+              className={`block rounded-full transition-all ${
+                page === i ? "w-2.5 h-2.5 bg-primary" : "w-0 h-0 bg-transparent"
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export default WhyUs;
+
