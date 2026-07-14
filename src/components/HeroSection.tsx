@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import slide1_480 from "@/assets/hero-slider1-480.webp.asset.json";
 import slide1_1024 from "@/assets/hero-slider1-1024.webp.asset.json";
@@ -147,7 +147,21 @@ const HeroSection = () => {
           <div className="relative order-1 lg:order-2 fade-in-up animate animation-delay-200">
             <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
               {/* Image card (back layer) */}
-              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5] relative overflow-hidden" style={{ opacity: 1 }}>
+              <div
+                id="hero-react-image"
+                className="hero-image-card scene-layer scene-img aspect-[4/5] relative overflow-hidden touch-pan-y"
+                style={{ opacity: 1 }}
+                onTouchStart={(e) => { (e.currentTarget as any)._sx = e.touches[0].clientX; }}
+                onTouchEnd={(e) => {
+                  const sx = (e.currentTarget as any)._sx;
+                  if (sx == null) return;
+                  const dx = e.changedTouches[0].clientX - sx;
+                  if (Math.abs(dx) > 40) {
+                    // RTL: swipe left (dx<0) => next
+                    setCurrentSlideIndex((currentSlideIndex + (dx < 0 ? 1 : 2)) % 3);
+                  }
+                }}
+              >
                 <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${currentSlideIndex === 0 ? 'opacity-100' : 'opacity-0'}`}>
                   <source media="(max-width: 767px)" type="image/webp" srcSet={slide1_480.url} />
                   <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcSet={slide1_1024.url} />
@@ -179,25 +193,8 @@ const HeroSection = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-primary/10 to-transparent pointer-events-none" aria-hidden="true" />
 
-                {/* Prev / Next buttons */}
-                <button
-                  type="button"
-                  aria-label="اسلاید قبلی"
-                  onClick={() => setCurrentSlideIndex((currentSlideIndex + 2) % 3)}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/25 hover:bg-white/50 backdrop-blur-md flex items-center justify-center text-white transition-all"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-                <button
-                  type="button"
-                  aria-label="اسلاید بعدی"
-                  onClick={() => setCurrentSlideIndex((currentSlideIndex + 1) % 3)}
-                  className="absolute top-1/2 left-3 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/25 hover:bg-white/50 backdrop-blur-md flex items-center justify-center text-white transition-all"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
 
-                {/* Pagination dots */}
+
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
                   {[0, 1, 2].map((i) => (
                     <button
