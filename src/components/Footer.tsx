@@ -139,6 +139,12 @@ const Footer = () => {
                     </Link>
                   ),
                 )}
+                <Link
+                  to="/blog/business-card-guide"
+                  className="pill-row text-persian col-span-2"
+                >
+                  <span>اخذ کارت بازرگانی</span>
+                </Link>
               </div>
             </div>
 
