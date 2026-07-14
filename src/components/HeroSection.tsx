@@ -147,7 +147,21 @@ const HeroSection = () => {
           <div className="relative order-1 lg:order-2 fade-in-up animate animation-delay-200">
             <div ref={sceneRef} className="scene-3d mx-auto max-w-md lg:max-w-none">
               {/* Image card (back layer) */}
-              <div id="hero-react-image" className="hero-image-card scene-layer scene-img aspect-[4/5] relative overflow-hidden" style={{ opacity: 1 }}>
+              <div
+                id="hero-react-image"
+                className="hero-image-card scene-layer scene-img aspect-[4/5] relative overflow-hidden touch-pan-y"
+                style={{ opacity: 1 }}
+                onTouchStart={(e) => { (e.currentTarget as any)._sx = e.touches[0].clientX; }}
+                onTouchEnd={(e) => {
+                  const sx = (e.currentTarget as any)._sx;
+                  if (sx == null) return;
+                  const dx = e.changedTouches[0].clientX - sx;
+                  if (Math.abs(dx) > 40) {
+                    // RTL: swipe left (dx<0) => next
+                    setCurrentSlideIndex((currentSlideIndex + (dx < 0 ? 1 : 2)) % 3);
+                  }
+                }}
+              >
                 <picture className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ${currentSlideIndex === 0 ? 'opacity-100' : 'opacity-0'}`}>
                   <source media="(max-width: 767px)" type="image/webp" srcSet={slide1_480.url} />
                   <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcSet={slide1_1024.url} />
