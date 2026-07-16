@@ -297,7 +297,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                     <TableHead className="text-persian">موجودی کل (تومان)</TableHead>
                     <TableHead className="text-persian">سکشن‌ها</TableHead>
                     <TableHead className="text-persian hidden md:table-cell">کاربران</TableHead>
-                    <TableHead className="text-persian">وضعیت ادمین</TableHead>
+                    <TableHead></TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -363,16 +363,12 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                           const isCredit = diff > 0.0001;
                           const isSettled = Math.abs(diff) <= 0.0001;
                           const label = isSettled ? "تسویه" : isCredit ? "بستانکار" : "بدهکار";
-                          const color = isSettled ? "text-muted-foreground" : isCredit ? "text-emerald-600" : "text-destructive";
+                          const statusBtnClass = isSettled
+                            ? "bg-gradient-to-l from-slate-500 to-slate-400 text-white"
+                            : isCredit
+                              ? "bg-gradient-to-l from-emerald-600 to-green-500 text-white"
+                              : "bg-gradient-to-l from-rose-600 to-red-500 text-white";
                           return (
-                            <TableCell data-label="وضعیت ادمین" className="text-persian align-top whitespace-nowrap">
-                              <div className={`flex flex-col gap-0.5 ${color}`}>
-                                <span className="text-xs font-medium">{label}</span>
-                                <span className="font-bold tabular-nums text-sm">{fmtToman(Math.abs(diff))}</span>
-                              </div>
-                            </TableCell>
-                          );
-                        })()}
                         <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
                           <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[240px]">
                             <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
@@ -409,8 +405,21 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                                 <span className="text-persian text-xs truncate">صورتحساب</span>
                               </Button>
                             </div>
+                            <div className="col-span-3">
+                              <div
+                                title="وضعیت ادمین"
+                                className={`w-full h-9 rounded-md flex items-center justify-center gap-2 px-2 shadow-md ${statusBtnClass}`}
+                              >
+                                <span className="text-persian text-xs font-medium">{label}</span>
+                                <span className="text-persian text-xs tabular-nums font-bold">
+                                  {isSettled ? "—" : fmtToman(Math.abs(diff))}
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </TableCell>
+                          );
+                        })()}
                       </TableRow>
                     );
                   })}
