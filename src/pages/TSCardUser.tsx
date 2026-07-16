@@ -576,14 +576,14 @@ const KotajDialog = ({
       fd.append("payload", JSON.stringify(payload));
       attachFiles.forEach((f) => fd.append("files[]", f));
 
-      const res = await fetch(url, { method: "POST", credentials: "same-origin", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload(url, fd, setUploadPct);
+      if (!ok) throw new Error((data as { error?: string })?.error || `HTTP ${status}`);
       toast({ title: editing ? "کوتاژ ویرایش شد" : "کوتاژ ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
