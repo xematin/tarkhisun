@@ -258,33 +258,27 @@
   <link rel="manifest" href="/manifest.webmanifest"></head>
 
   <body>
-    <script>
-      // Only show pre-injected hero image on the homepage; hide on all other routes
-      // to prevent the port photo flashing during refresh/deep-link loads.
-      (function(){
-        try {
-          if (window.location.pathname !== '/') {
-            document.write('<style>#hero-initial-image{display:none !important;}</style>');
-          }
-        } catch(e) {}
-      })();
-    </script>
+    <!-- App loading skeleton (removed by React on mount) -->
+    <div id="app-skeleton" aria-hidden="true">
+      <div class="sk-topbar">
+        <div class="sk-logo"></div>
+        <div class="sk-pill"></div>
+        <div class="sk-pill"></div>
+        <div class="sk-pill"></div>
+      </div>
+      <div class="sk-main">
+        <div class="sk-block sk-h1"></div>
+        <div class="sk-block sk-h2"></div>
+        <div class="sk-block sk-line"></div>
+        <div class="sk-block sk-line" style="width:70%"></div>
+        <div class="sk-grid">
+          <div class="sk-card"></div>
+          <div class="sk-card"></div>
+          <div class="sk-card"></div>
+        </div>
+      </div>
+    </div>
 
-    
-        <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <source media="(max-width: 767px)" type="image/webp" srcset="/__l5e/assets-v1/f83fd280-634e-49a9-bd82-8f5c821c8887/hero-slider1-480.webp" />
-          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/__l5e/assets-v1/35d00dbf-b937-4c11-80aa-1745239d1db7/hero-slider1-1024.webp" />
-          <source media="(min-width: 1440px)" type="image/webp" srcset="/__l5e/assets-v1/54386ecb-0c98-4d29-b60e-f1676779f02d/hero-slider1-1920.webp" />
-          <img
-            src="/__l5e/assets-v1/35d00dbf-b937-4c11-80aa-1745239d1db7/hero-slider1-1024.webp"
-            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"
-            style="width:100%;height:100%;object-fit:cover;"
-            width="1920"
-            height="1080"
-            fetchpriority="high"
-            loading="eager"
-            decoding="async" />
-        </picture>
         
     <!-- Google Tag Manager (noscript) -->
     <noscript
