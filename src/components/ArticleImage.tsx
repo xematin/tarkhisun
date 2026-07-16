@@ -8,6 +8,7 @@ interface ArticleImageProps {
   caption?: string;
   className?: string;
   priority?: boolean;
+  /** Aspect ratio used only for the skeleton placeholder before load. */
   aspectRatio?: string;
 }
 
@@ -23,12 +24,12 @@ const ArticleImage = ({
 
   return (
     <figure className={cn("my-8", className)}>
-      <div
-        className="relative overflow-hidden rounded-lg w-full shadow-md bg-muted"
-        style={{ aspectRatio }}
-      >
+      <div className="relative w-full rounded-lg overflow-hidden shadow-md">
         {!isLoaded && (
-          <Skeleton className="absolute inset-0 w-full h-full rounded-lg" />
+          <Skeleton
+            className="w-full rounded-lg"
+            style={{ aspectRatio }}
+          />
         )}
         <img
           src={src}
@@ -38,8 +39,8 @@ const ArticleImage = ({
           onLoad={() => setIsLoaded(true)}
           onError={() => setIsLoaded(true)}
           className={cn(
-            "absolute inset-0 w-full h-full object-contain transition-opacity duration-700",
-            isLoaded ? "opacity-100" : "opacity-0"
+            "block w-full h-auto rounded-lg transition-opacity duration-700",
+            isLoaded ? "opacity-100 static" : "opacity-0 absolute inset-0"
           )}
         />
       </div>
