@@ -246,15 +246,9 @@ const Blog = () => {
               <div className="grid lg:grid-cols-2 gap-8">
                 {currentPosts.map((post) => (
                   <Card key={post.id} className="card-service group cursor-pointer overflow-hidden !p-0">
-                    <Link to={`/blog/${post.slug}`} aria-label={post.title} className="block w-full aspect-[3/2] bg-muted overflow-hidden">
+                    <Link to={`/blog/${post.slug}`} aria-label={post.title} className="block w-full aspect-[3/2] bg-muted overflow-hidden relative">
                       {post.image ? (
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        <BlogCardImage src={post.image} alt={post.title} />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-secondary to-muted" />
                       )}
