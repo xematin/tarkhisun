@@ -2975,6 +2975,7 @@ const AdminPayCardDialog = ({
   const [dateJ, setDateJ] = useState<string>(() => todayJ());
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const [fromTreasury, setFromTreasury] = useState<boolean>(true);
   const [treasuryBal, setTreasuryBal] = useState<number | null>(null);
 
