@@ -762,21 +762,46 @@ const KotajDialog = ({
                 ))}
               </div>
             )}
-            <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-3 cursor-pointer hover:bg-muted/30 transition">
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp,application/pdf"
-                multiple
-                className="hidden"
-                onChange={(e) => {
-                  const arr = Array.from(e.target.files || []);
-                  if (arr.length) setAttachFiles(prev => [...prev, ...arr]);
-                  e.target.value = "";
-                }}
-              />
-              <Upload className="w-4 h-4 text-muted-foreground" />
-              <span className="text-xs text-persian text-muted-foreground">افزودن فایل (JPG/PNG/PDF) — چندتایی مجاز، اختیاری</span>
-            </label>
+            {(attachFiles.length + keepAttachments.length) === 0 ? (
+              <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-3 cursor-pointer hover:bg-muted/30 transition">
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,application/pdf"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    const arr = Array.from(e.target.files || []);
+                    if (arr.length) setAttachFiles(prev => [...prev, ...arr]);
+                    e.target.value = "";
+                  }}
+                />
+                <Upload className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs text-persian text-muted-foreground">افزودن فایل (JPG/PNG/PDF) — چندتایی مجاز، اختیاری</span>
+              </label>
+            ) : (
+              <label
+                className="group inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full cursor-pointer text-xs text-persian
+                  bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/15
+                  shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_4px_16px_-6px_rgba(0,0,0,0.15)]
+                  hover:bg-white/60 dark:hover:bg-white/15 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_6px_20px_-6px_rgba(0,0,0,0.2)]
+                  transition-all"
+                title="افزودن فایل بیشتر"
+              >
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,application/pdf"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    const arr = Array.from(e.target.files || []);
+                    if (arr.length) setAttachFiles(prev => [...prev, ...arr]);
+                    e.target.value = "";
+                  }}
+                />
+                <Plus className="w-3.5 h-3.5 text-primary" />
+                <span className="text-muted-foreground group-hover:text-foreground">افزودن فایل بیشتر</span>
+              </label>
+            )}
           </div>
         </div>
 
