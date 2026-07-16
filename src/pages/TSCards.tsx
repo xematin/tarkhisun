@@ -4,6 +4,8 @@ import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus,
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import CardBillingDialog from "@/components/admin/CardBillingDialog";
+import { xhrUpload } from "@/lib/xhrUpload";
+import UploadProgressBar from "@/components/UploadProgressBar";
 import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 
 import { Button } from "@/components/ui/button";
@@ -2975,6 +2977,7 @@ const AdminPayCardDialog = ({
   const [dateJ, setDateJ] = useState<string>(() => todayJ());
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const [fromTreasury, setFromTreasury] = useState<boolean>(true);
   const [treasuryBal, setTreasuryBal] = useState<number | null>(null);
 
@@ -3030,14 +3033,14 @@ const AdminPayCardDialog = ({
       files.slice(1).forEach((f) => fd.append("receipts[]", f));
       fd.append("from_treasury", fromTreasury ? "1" : "0");
 
-      const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as any).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload("/api/admin/card-debt-pay.php", fd, setUploadPct);
+      if (!ok) throw new Error((data as any)?.error || `HTTP ${status}`);
       toast({ title: "پرداخت ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
@@ -3162,9 +3165,11 @@ const AdminPayCardDialog = ({
                       <button
                         type="button"
                         onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
-                        className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        disabled={busy}
+                        className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs disabled:opacity-40"
                         aria-label="حذف"
                       >×</button>
+                      <UploadProgressBar pct={uploadPct} active={busy} />
                     </div>
                   ))}
                 </div>

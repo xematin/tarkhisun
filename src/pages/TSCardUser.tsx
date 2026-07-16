@@ -5,6 +5,8 @@ import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { downloadBillingPdf } from "@/lib/billing-pdf";
 import { downloadAllBillingPdf, type BillingCardBundle } from "@/lib/billing-pdf-all";
 import type { BillingTimelineEntry } from "@/lib/billing-pdf";
+import { xhrUpload } from "@/lib/xhrUpload";
+import UploadProgressBar from "@/components/UploadProgressBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -463,6 +465,7 @@ const KotajDialog = ({
   const [attachFiles, setAttachFiles] = useState<File[]>([]);
   const [keepAttachments, setKeepAttachments] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const date = useMemo(() => gToJ(dateG), [dateG]);
@@ -573,14 +576,14 @@ const KotajDialog = ({
       fd.append("payload", JSON.stringify(payload));
       attachFiles.forEach((f) => fd.append("files[]", f));
 
-      const res = await fetch(url, { method: "POST", credentials: "same-origin", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload(url, fd, setUploadPct);
+      if (!ok) throw new Error((data as { error?: string })?.error || `HTTP ${status}`);
       toast({ title: editing ? "کوتاژ ویرایش شد" : "کوتاژ ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
@@ -755,9 +758,11 @@ const KotajDialog = ({
                     <button
                       type="button"
                       onClick={() => setAttachFiles(prev => prev.filter((_, idx) => idx !== i))}
-                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      disabled={busy}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs disabled:opacity-40"
                       aria-label="حذف"
                     >×</button>
+                    <UploadProgressBar pct={uploadPct} active={busy} />
                   </div>
                 ))}
               </div>
@@ -1070,6 +1075,7 @@ const PaymentDialog = ({
   const [note, setNote] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
   const [dateJ, setDateJ] = useState<string>(todayJ());
 
@@ -1103,18 +1109,14 @@ const PaymentDialog = ({
       files.forEach((f) => fd.append("receipts[]", f));
       fd.append("pay_date_gregorian", dateG);
       fd.append("pay_date_jalali", dateJ);
-      const res = await fetch("/api/cards/payment-create.php", {
-        method: "POST",
-        credentials: "same-origin",
-        body: fd,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload("/api/cards/payment-create.php", fd, setUploadPct);
+      if (!ok) throw new Error((data as { error?: string })?.error || `HTTP ${status}`);
       toast({ title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
@@ -1196,9 +1198,11 @@ const PaymentDialog = ({
                     <button
                       type="button"
                       onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
-                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      disabled={busy}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs disabled:opacity-40"
                       aria-label="حذف"
                     >×</button>
+                    <UploadProgressBar pct={uploadPct} active={busy} />
                   </div>
                 ))}
               </div>
