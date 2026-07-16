@@ -1156,31 +1156,45 @@ const PaymentDialog = ({
 
 
           <div className="space-y-2">
-            <Label className="text-persian">عکس فیش واریزی</Label>
+            <Label className="text-persian">تصاویر فیش واریزی</Label>
+            {files.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {files.map((f, i) => (
+                  <div key={i} className="relative border rounded-md p-1 bg-muted/30">
+                    {f.type.startsWith("image/") ? (
+                      <img src={URL.createObjectURL(f)} alt={f.name} className="h-20 w-20 object-cover rounded" />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-20 w-20 text-[10px] text-persian">
+                        <FileText className="w-6 h-6 text-primary" />
+                        <span className="truncate max-w-[70px]">{f.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
             <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-4 cursor-pointer hover:bg-muted/30 transition">
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp,application/pdf"
+                multiple
                 className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                onChange={(e) => {
+                  const arr = Array.from(e.target.files || []);
+                  if (arr.length) setFiles(prev => [...prev, ...arr]);
+                  e.target.value = "";
+                }}
               />
-              {file ? (
-                <>
-                  {preview ? (
-                    <img src={preview} alt="پیش‌نمایش فیش" className="max-h-40 rounded-md" />
-                  ) : (
-                    <FileText className="w-10 h-10 text-primary" />
-                  )}
-                  <div className="text-xs text-persian text-muted-foreground">{file.name}</div>
-                </>
-              ) : (
-                <>
-                  <Upload className="w-8 h-8 text-muted-foreground" />
-                  <div className="text-sm text-persian text-muted-foreground">
-                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB)
-                  </div>
-                </>
-              )}
+              <Upload className="w-8 h-8 text-muted-foreground" />
+              <div className="text-sm text-persian text-muted-foreground">
+                {files.length > 0 ? "افزودن فایل بیشتر" : "کلیک کنید و فایل‌ها را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB — چندتایی مجاز)"}
+              </div>
             </label>
           </div>
 
