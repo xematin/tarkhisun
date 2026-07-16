@@ -1054,6 +1054,27 @@ const PaymentDialog = ({
           </div>
 
           <div className="space-y-2">
+            <Label className="text-persian">تاریخ پرداخت (شمسی)</Label>
+            <DatePicker
+              value={dateJ ? new DateObject({ date: dateJ, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa }) : null}
+              onChange={(d: DateObject | null) => setDateJ(d ? d.format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              calendarPosition="bottom-right"
+              format="YYYY/MM/DD"
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="1404/03/12"
+              containerClassName="w-full"
+            />
+            {dateG ? (
+              <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {dateG}</div>
+            ) : (
+              <div className="text-[11px] text-destructive text-persian">تاریخ را انتخاب کنید</div>
+            )}
+          </div>
+
+
+          <div className="space-y-2">
             <Label className="text-persian">عکس فیش واریزی</Label>
             <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-4 cursor-pointer hover:bg-muted/30 transition">
               <input
