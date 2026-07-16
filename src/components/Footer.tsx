@@ -6,7 +6,7 @@ const quickLinks = [
   { title: "خدمات ترخیص", href: "/#services", isAnchor: true },
   { title: "نرخ ارز", href: "/currencies", isAnchor: false },
   { title: "جستجوی تعرفه گمرکی", href: "/hscode", isAnchor: false },
-  { title: "ترخیصان‌یار", href: "/#ai-assistant", isAnchor: true },
+  { title: "ترخیصان‌یار", href: "/tarkhisan-yar" },
   { title: "بلاگ", href: "/blog", isAnchor: false },
   { title: "تماس با ما", href: "/contact", isAnchor: false },
 ];
