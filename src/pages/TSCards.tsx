@@ -2981,7 +2981,7 @@ const AdminPayCardDialog = ({
   useEffect(() => {
     if (card) {
       setAmount(""); setNote(""); setDateJ(todayJ());
-      setFile(null); setFromTreasury(true);
+      setFiles([]); setFromTreasury(true);
       fetch("/api/admin/treasury-summary.php", { credentials: "same-origin" })
         .then((r) => r.json()).then((d) => setTreasuryBal(typeof d?.balance === "number" ? d.balance : 0))
         .catch(() => setTreasuryBal(null));
