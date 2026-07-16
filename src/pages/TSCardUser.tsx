@@ -714,7 +714,72 @@ const KotajDialog = ({
               <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
             </div>
           </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">پیوست فایل‌ها (اختیاری)</Label>
+            {keepAttachments.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {keepAttachments.map((p) => (
+                  <div key={p} className="relative group border rounded-md p-1 bg-muted/30">
+                    {/\.(jpg|jpeg|png|webp)$/i.test(p) ? (
+                      <a href={p} target="_blank" rel="noreferrer">
+                        <img src={p} alt="پیوست" className="h-16 w-16 object-cover rounded" />
+                      </a>
+                    ) : (
+                      <a href={p} target="_blank" rel="noreferrer" className="flex items-center justify-center h-16 w-16 text-xs text-primary text-persian">
+                        <FileText className="w-6 h-6" />
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setKeepAttachments(prev => prev.filter(x => x !== p))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف پیوست"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {attachFiles.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {attachFiles.map((f, i) => (
+                  <div key={i} className="relative border rounded-md p-1 bg-muted/30">
+                    {f.type.startsWith("image/") ? (
+                      <img src={URL.createObjectURL(f)} alt={f.name} className="h-16 w-16 object-cover rounded" />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-16 w-16 text-[10px] text-persian">
+                        <FileText className="w-6 h-6 text-primary" />
+                        <span className="truncate max-w-[60px]">{f.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setAttachFiles(prev => prev.filter((_, idx) => idx !== i))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-3 cursor-pointer hover:bg-muted/30 transition">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  const arr = Array.from(e.target.files || []);
+                  if (arr.length) setAttachFiles(prev => [...prev, ...arr]);
+                  e.target.value = "";
+                }}
+              />
+              <Upload className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs text-persian text-muted-foreground">افزودن فایل (JPG/PNG/PDF) — چندتایی مجاز، اختیاری</span>
+            </label>
+          </div>
         </div>
+
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
