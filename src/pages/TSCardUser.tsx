@@ -552,7 +552,7 @@ const KotajDialog = ({
     setBusy(true);
     try {
       const numClean = normDigits(num).replace(/\D/g, "");
-      const payload = {
+      const payload: Record<string, unknown> = {
         entry_id: Number(entryId),
         kotaj_number: numClean,
         kotaj_date_jalali: date,
@@ -565,19 +565,18 @@ const KotajDialog = ({
           unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
         })),
       };
-      if (editing) {
-        await api("/api/cards/kotaj-update.php", {
-          method: "POST",
-          body: JSON.stringify({ id: editing.id, ...payload }),
-        });
-        toast({ title: "کوتاژ ویرایش شد" });
-      } else {
-        await api("/api/cards/kotaj-create.php", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        toast({ title: "کوتاژ ثبت شد" });
-      }
+      const url = editing ? "/api/cards/kotaj-update.php" : "/api/cards/kotaj-create.php";
+      if (editing) payload.id = editing.id;
+      if (editing) payload.keep_attachments = keepAttachments;
+
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(payload));
+      attachFiles.forEach((f) => fd.append("files[]", f));
+
+      const res = await fetch(url, { method: "POST", credentials: "same-origin", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      toast({ title: editing ? "کوتاژ ویرایش شد" : "کوتاژ ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
