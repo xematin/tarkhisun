@@ -2973,7 +2973,7 @@ const AdminPayCardDialog = ({
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [dateJ, setDateJ] = useState<string>(() => todayJ());
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const [fromTreasury, setFromTreasury] = useState<boolean>(true);
   const [treasuryBal, setTreasuryBal] = useState<number | null>(null);
