@@ -7,6 +7,7 @@ import PageBreadcrumb from "@/components/PageBreadcrumb";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, Clock, User, ArrowLeft, Filter, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
