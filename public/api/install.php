@@ -285,6 +285,14 @@ try {
         $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN to_treasury TINYINT(1) NOT NULL DEFAULT 1 AFTER status");
         echo "OK: added ts_card_payments.to_treasury\n";
     }
+    if (!ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian')) {
+        $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN pay_date_gregorian DATE NULL AFTER note");
+        echo "OK: added ts_card_payments.pay_date_gregorian\n";
+    }
+    if (!ts_column_exists($pdo, 'ts_card_payments', 'pay_date_jalali')) {
+        $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN pay_date_jalali VARCHAR(20) NULL AFTER pay_date_gregorian");
+        echo "OK: added ts_card_payments.pay_date_jalali\n";
+    }
     if (ts_ensure_card_admin_payments_schema($pdo)) echo "OK: ensured ts_card_admin_payments schema\n";
     else echo "WARN: could not auto-ensure ts_card_admin_payments schema; run migrations manually\n";
     if (ts_ensure_treasury_schema($pdo)) echo "OK: ensured ts_treasury_ledger schema\n";

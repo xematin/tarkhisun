@@ -8,6 +8,9 @@ $u = ts_carduser_require();
 $card_id = (int)($_POST['card_id'] ?? 0);
 $amountRaw = (string)($_POST['amount_irt'] ?? '');
 $note = trim((string)($_POST['note'] ?? ''));
+$payG = trim((string)($_POST['pay_date_gregorian'] ?? ''));
+$payJ = trim((string)($_POST['pay_date_jalali'] ?? ''));
+if ($payG !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $payG)) $payG = '';
 
 $amount = (float) ts_normalize_digits($amountRaw);
 if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
@@ -54,18 +57,41 @@ if (!empty($_FILES['receipt']) && is_array($_FILES['receipt']) && (int)$_FILES['
 }
 
 $now = date('Y-m-d H:i:s');
-$ins = $pdo->prepare(
-    "INSERT INTO ts_card_payments (card_id, card_user_id, amount_irt, receipt_path, note, status, to_treasury, created_at)
-     VALUES (?, ?, ?, ?, ?, 'confirmed', 1, ?)"
-);
-$ins->execute([$card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null, $now]);
+
+// Auto-add pay_date columns if missing (backward compatibility)
+if (!ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian')) {
+    try { $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN pay_date_gregorian DATE NULL"); } catch (Throwable $e) {}
+}
+if (!ts_column_exists($pdo, 'ts_card_payments', 'pay_date_jalali')) {
+    try { $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN pay_date_jalali VARCHAR(20) NULL"); } catch (Throwable $e) {}
+}
+$hasPayDates = ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian')
+            && ts_column_exists($pdo, 'ts_card_payments', 'pay_date_jalali');
+
+if ($hasPayDates) {
+    $ins = $pdo->prepare(
+        "INSERT INTO ts_card_payments (card_id, card_user_id, amount_irt, receipt_path, note, pay_date_gregorian, pay_date_jalali, status, to_treasury, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, 'confirmed', 1, ?)"
+    );
+    $ins->execute([
+        $card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null,
+        $payG !== '' ? $payG : null, $payJ !== '' ? $payJ : null, $now,
+    ]);
+} else {
+    $ins = $pdo->prepare(
+        "INSERT INTO ts_card_payments (card_id, card_user_id, amount_irt, receipt_path, note, status, to_treasury, created_at)
+         VALUES (?, ?, ?, ?, ?, 'confirmed', 1, ?)"
+    );
+    $ins->execute([$card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null, $now]);
+}
 $paymentId = (int)$pdo->lastInsertId();
 
-// Treasury: deposit (cash IN)
+// Treasury: use payment date as occurred_at when provided
+$occurredAt = $payG !== '' ? ($payG . ' ' . date('H:i:s')) : $now;
 ts_treasury_log(
     'in', $amount, $card_id, 'user_payment', $paymentId,
     'پرداخت کاربر #' . (int)$u['id'] . ($note !== '' ? ' — ' . $note : ''),
-    $now
+    $occurredAt
 );
 
 ts_json(200, ['ok' => true, 'id' => $paymentId, 'receipt_path' => $receiptPath]);

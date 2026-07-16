@@ -958,12 +958,15 @@ const PaymentDialog = ({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
+  const [dateJ, setDateJ] = useState<string>(todayJ());
 
   useEffect(() => {
     if (card) {
       const debt = card.debt_toman ?? 0;
       setAmount(debt > 0 ? String(Math.round(debt)) : "");
       setNote(""); setFile(null); setPreview(null);
+      setDateJ(todayJ());
     }
   }, [card]);
 
@@ -979,10 +982,13 @@ const PaymentDialog = ({
   const debt = card.debt_toman ?? 0;
   const amtNum = parseFloat(normDigits(amount)) || 0;
 
+  const dateG = jToG(dateJ);
+
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
     if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
     if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
+    if (!dateG) { toast({ title: "تاریخ پرداخت را انتخاب کنید", variant: "destructive" }); return; }
     setBusy(true);
     try {
       const fd = new FormData();
@@ -990,6 +996,8 @@ const PaymentDialog = ({
       fd.append("amount_irt", String(amtNum));
       if (note.trim()) fd.append("note", note.trim());
       fd.append("receipt", file);
+      fd.append("pay_date_gregorian", dateG);
+      fd.append("pay_date_jalali", dateJ);
       const res = await fetch("/api/cards/payment-create.php", {
         method: "POST",
         credentials: "same-origin",
@@ -1044,6 +1052,27 @@ const PaymentDialog = ({
               </div>
             )}
           </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">تاریخ پرداخت (شمسی)</Label>
+            <DatePicker
+              value={dateJ ? new DateObject({ date: dateJ, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa }) : null}
+              onChange={(d: DateObject | null) => setDateJ(d ? d.format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              calendarPosition="bottom-right"
+              format="YYYY/MM/DD"
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              placeholder="1404/03/12"
+              containerClassName="w-full"
+            />
+            {dateG ? (
+              <div className="text-[11px] text-muted-foreground opacity-70 tabular-nums">میلادی: {dateG}</div>
+            ) : (
+              <div className="text-[11px] text-destructive text-persian">تاریخ را انتخاب کنید</div>
+            )}
+          </div>
+
 
           <div className="space-y-2">
             <Label className="text-persian">عکس فیش واریزی</Label>
