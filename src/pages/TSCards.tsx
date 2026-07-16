@@ -3145,9 +3145,70 @@ const AdminPayCardDialog = ({
               <Label className="text-persian text-xs">یادداشت</Label>
               <Input value={note} onChange={(e) => setNote(e.target.value)} className="text-persian" />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label className="text-persian text-xs">رسید (اختیاری)</Label>
-              <Input type="file" accept="image/*,application/pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+              {files.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {files.map((f, i) => (
+                    <div key={i} className="relative border rounded-md p-1 bg-muted/30">
+                      {f.type.startsWith("image/") ? (
+                        <img src={URL.createObjectURL(f)} alt={f.name} className="h-16 w-16 object-cover rounded" />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center h-16 w-16 text-[10px] text-persian">
+                          <FileText className="w-6 h-6 text-primary" />
+                          <span className="truncate max-w-[60px]">{f.name}</span>
+                        </div>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
+                        className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                        aria-label="حذف"
+                      >×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {files.length === 0 ? (
+                <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-3 cursor-pointer hover:bg-muted/30 transition">
+                  <input
+                    type="file"
+                    accept="image/*,application/pdf"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const arr = Array.from(e.target.files || []);
+                      if (arr.length) setFiles(prev => [...prev, ...arr]);
+                      e.target.value = "";
+                    }}
+                  />
+                  <Upload className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-xs text-persian text-muted-foreground">افزودن رسید (JPG/PNG/PDF) — چندتایی مجاز</span>
+                </label>
+              ) : (
+                <label
+                  className="group inline-flex items-center gap-2 self-start px-3 py-1.5 rounded-full cursor-pointer text-xs text-persian
+                    bg-white/40 dark:bg-white/10 backdrop-blur-md border border-white/40 dark:border-white/15
+                    shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_4px_16px_-6px_rgba(0,0,0,0.15)]
+                    hover:bg-white/60 dark:hover:bg-white/15 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_6px_20px_-6px_rgba(0,0,0,0.2)]
+                    transition-all"
+                  title="افزودن فایل بیشتر"
+                >
+                  <input
+                    type="file"
+                    accept="image/*,application/pdf"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const arr = Array.from(e.target.files || []);
+                      if (arr.length) setFiles(prev => [...prev, ...arr]);
+                      e.target.value = "";
+                    }}
+                  />
+                  <Plus className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-muted-foreground group-hover:text-foreground">افزودن فایل بیشتر</span>
+                </label>
+              )}
             </div>
           </div>
         )}
