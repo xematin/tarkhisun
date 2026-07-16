@@ -988,6 +988,24 @@ const KotajListDialog = ({
                         <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total ?? 0)}</span>
                       </div>
                     )}
+                    {Array.isArray(k.attachments) && k.attachments.length > 0 && (
+                      <div className="border-t pt-2 mt-2 space-y-1">
+                        <div className="text-persian text-xs text-muted-foreground">پیوست‌ها</div>
+                        <div className="flex flex-wrap gap-2">
+                          {k.attachments.map((p) => (
+                            /\.(jpg|jpeg|png|webp)$/i.test(p) ? (
+                              <a key={p} href={p} target="_blank" rel="noreferrer">
+                                <img src={p} alt="پیوست" className="h-14 w-14 object-cover rounded border" />
+                              </a>
+                            ) : (
+                              <a key={p} href={p} target="_blank" rel="noreferrer" className="text-primary underline text-xs text-persian flex items-center gap-1">
+                                <FileText className="w-3 h-3" /> فایل
+                              </a>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
