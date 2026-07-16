@@ -5,6 +5,8 @@ import { downloadKotajPdf } from "@/lib/kotaj-pdf";
 import { downloadBillingPdf } from "@/lib/billing-pdf";
 import { downloadAllBillingPdf, type BillingCardBundle } from "@/lib/billing-pdf-all";
 import type { BillingTimelineEntry } from "@/lib/billing-pdf";
+import { xhrUpload } from "@/lib/xhrUpload";
+import UploadProgressBar from "@/components/UploadProgressBar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
