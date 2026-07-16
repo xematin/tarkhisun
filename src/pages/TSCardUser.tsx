@@ -465,6 +465,7 @@ const KotajDialog = ({
   const [attachFiles, setAttachFiles] = useState<File[]>([]);
   const [keepAttachments, setKeepAttachments] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const date = useMemo(() => gToJ(dateG), [dateG]);
