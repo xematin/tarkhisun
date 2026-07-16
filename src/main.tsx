@@ -24,3 +24,17 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </HelmetProvider>,
 );
+
+// Remove the initial HTML app skeleton once React has painted the first frame.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    const sk = document.getElementById("app-skeleton");
+    if (sk) {
+      sk.classList.add("sk-hide");
+      setTimeout(() => sk.remove(), 300);
+    }
+    // Also remove any legacy pre-injected hero image from cached builds
+    const legacyHero = document.getElementById("hero-initial-image");
+    if (legacyHero) legacyHero.remove();
+  });
+});
