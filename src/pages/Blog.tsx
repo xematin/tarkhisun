@@ -20,6 +20,34 @@ import {
 } from "@/components/ui/pagination";
 import { blogPosts as importedBlogPosts } from "@/data/blogPosts";
 
+interface BlogCardImageProps {
+  src: string;
+  alt: string;
+}
+
+const BlogCardImage = ({ src, alt }: BlogCardImageProps) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  return (
+    <div className="relative w-full h-full">
+      {!isLoaded && (
+        <Skeleton className="absolute inset-0 w-full h-full" />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setIsLoaded(true)}
+        onError={() => setIsLoaded(true)}
+        className={`w-full h-full object-cover group-hover:scale-105 transition-all duration-500 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      />
+    </div>
+  );
+};
+
 const Blog = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState<string>("همه");
