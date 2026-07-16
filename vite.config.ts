@@ -20,101 +20,10 @@ export default defineConfig(({ mode }) => ({
       enforce: 'post' as const,
       transformIndexHtml: {
         order: 'post' as const,
-        handler(html: string, ctx: any) {
-          const { bundle } = ctx;
-          if (!bundle) return html;
-          
-          // Find ALL hero image variants with hashed URLs
-          const hero480Avif = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-480') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero768Avif = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-768') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero1024Avif = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero1440Avif = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1440') && chunk.fileName?.endsWith('.avif')
-          );
-          const hero1920Avif = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.avif')
-          );
-          
-          // WebP fallbacks
-          const hero480Webp = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-480') && chunk.fileName?.endsWith('.webp')
-          );
-          const hero768Webp = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-768') && chunk.fileName?.endsWith('.webp')
-          );
-          const hero1024Webp = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1024') && chunk.fileName?.endsWith('.webp')
-          );
-          const hero1440Webp = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1440') && chunk.fileName?.endsWith('.webp')
-          );
-          const hero1920Webp = Object.values(bundle).find(
-            (chunk: any) => chunk.fileName?.includes('hero-port-1920') && chunk.fileName?.endsWith('.webp')
-          );
-          
-          if (!hero1920Avif || !hero1024Webp) return html;
-          
-          // Create full <picture> element with media queries for each device size
-          const pictureElement = `
-        <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
-          <!-- Mobile: 480px only -->
-          <source media="(max-width: 767px)" type="image/avif" srcset="/${(hero480Avif as any).fileName}" />
-          <source media="(max-width: 767px)" type="image/webp" srcset="/${(hero480Webp as any).fileName}" />
-          
-          <!-- Tablet: 1024px only -->
-          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/avif" srcset="/${(hero1024Avif as any).fileName}" />
-          <source media="(min-width: 768px) and (max-width: 1439px)" type="image/webp" srcset="/${(hero1024Webp as any).fileName}" />
-          
-          <!-- Desktop: 1920px only -->
-          <source media="(min-width: 1440px)" type="image/avif" srcset="/${(hero1920Avif as any).fileName}" />
-          <source media="(min-width: 1440px)" type="image/webp" srcset="/${(hero1920Webp as any).fileName}" />
-          
-          <!-- Fallback for older browsers -->
-          <img 
-            src="/${(hero1024Webp as any).fileName}"
-            alt="بندر شهید رجایی بندرعباس و عملیات گمرکی ترخیص کالا"
-            style="width:100%;height:100%;object-fit:cover;"
-            width="1920"
-            height="1080"
-            fetchpriority="high"
-            loading="eager"
-            decoding="async" />
-        </picture>`;
-          
-          // Conditional preload tags - only for homepage
-          const conditionalPreloadScript = `
-    <script>
-      if (location.pathname === '/') {
-        var preloads = [
-          { href: '/${(hero480Avif as any).fileName}', media: '(max-width: 767px)' },
-          { href: '/${(hero1024Avif as any).fileName}', media: '(min-width: 768px) and (max-width: 1439px)' },
-          { href: '/${(hero1920Avif as any).fileName}', media: '(min-width: 1440px)' }
-        ];
-        preloads.forEach(function(p) {
-          var link = document.createElement('link');
-          link.rel = 'preload';
-          link.as = 'image';
-          link.href = p.href;
-          link.type = 'image/avif';
-          link.fetchPriority = 'high';
-          link.media = p.media;
-          document.head.appendChild(link);
-        });
-      }
-    </script>`;
-          
-          // Inject conditional preload script in <head>
-          html = html.replace('<!-- LCP Hero Image Preload - Generated dynamically by vite-plugin-lcp-preload -->', conditionalPreloadScript);
-          
-          // Inject picture element right after <body>
-          html = html.replace('<body>', `<body>\n    ${pictureElement}`);
-          
+        handler(html: string) {
+          // Hero image pre-injection was removed to avoid the port photo flashing
+          // during refresh/deep-link loads. The React app now renders the hero
+          // itself, and index.html shows a skeleton placeholder until mount.
           return html;
         }
       }
