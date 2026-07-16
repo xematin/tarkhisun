@@ -258,6 +258,18 @@
   <link rel="manifest" href="/manifest.webmanifest"></head>
 
   <body>
+    <script>
+      // Only show pre-injected hero image on the homepage; hide on all other routes
+      // to prevent the port photo flashing during refresh/deep-link loads.
+      (function(){
+        try {
+          if (window.location.pathname !== '/') {
+            document.write('<style>#hero-initial-image{display:none !important;}</style>');
+          }
+        } catch(e) {}
+      })();
+    </script>
+
     
         <picture id="hero-initial-image" style="position:absolute;inset:0;z-index:0;pointer-events:none;">
           <source media="(max-width: 767px)" type="image/webp" srcset="/__l5e/assets-v1/f83fd280-634e-49a9-bd82-8f5c821c8887/hero-slider1-480.webp" />
