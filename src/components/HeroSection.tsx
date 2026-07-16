@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Sparkles, Star, Award, Anchor, FileCheck2, ShieldCheck } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import slide1_480 from "@/assets/hero-slider1-480.webp.asset.json";
-import slide1_1024 from "@/assets/hero-slider1-1024.webp.asset.json";
-import slide1_1920 from "@/assets/hero-slider1-1920.webp.asset.json";
-import slide2Asset from "@/assets/SliderTarkhisun2.webp.asset.json";
-import slide3Asset from "@/assets/SliderTarkhisun3.webp.asset.json";
+const slide1_480 = { url: "/images/slider/hero-slider1-480.webp" };
+const slide1_1024 = { url: "/images/slider/hero-slider1-1024.webp" };
+const slide1_1920 = { url: "/images/slider/hero-slider1-1920.webp" };
+const slide2Asset = { url: "/images/slider/SliderTarkhisun2.webp" };
+const slide3Asset = { url: "/images/slider/SliderTarkhisun3.webp" };
 
 const HeroSection = () => {
   const ports = ["بندرعباس شهید رجایی", "بندر امام خمینی", "بندر چابهار", "بندر بوشهر", "بندر انزلی", "بندر جاسک", "بندر سیریک", "بندر خرمشهر", "بندر آستارا", "بندر باشماق", "بندر سرخس", "بندر ماهیرود"];

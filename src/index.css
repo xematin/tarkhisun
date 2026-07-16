@@ -681,18 +681,17 @@
   }
 
   /* Larger Persian font scoped to admin/cards/user panels only */
-  .panel-fa { font-size: 15px; font-family: 'Bonyade Koodak', 'Noto Sans Arabic', sans-serif; }
-  .panel-fa .text-persian { font-size: 15.5px; line-height: 1.95; }
+  .panel-fa { font-size: 15px; font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
+  .panel-fa .text-persian { font-size: 15.5px; line-height: 1.95; font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
+  .panel-fa h1, .panel-fa h2, .panel-fa h3, .panel-fa h4 { font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
   .panel-fa h1 { font-size: 1.3rem; }
   .panel-fa h2 { font-size: 1.15rem; }
-  .panel-fa table { font-size: 15px; }
+  .panel-fa table { font-size: 15px; font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
   .panel-fa .text-xs { font-size: 13px; }
   .panel-fa .text-sm { font-size: 14.5px; }
-  .panel-fa label { font-size: 14.5px; }
-  .panel-fa input, .panel-fa button, .panel-fa select { font-size: 15px; }
-  /* Admin panel: numbers (usually wrapped in <strong>/<b>) use Regular weight */
-  .panel-fa strong,
-  .panel-fa b { font-weight: 400 !important; }
+  .panel-fa label { font-size: 14.5px; font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
+  .panel-fa input, .panel-fa button, .panel-fa select { font-size: 15px; font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
+  .panel-fa *, .panel-fa strong, .panel-fa b { font-family: 'Yekan Bakh', 'Noto Sans Arabic', sans-serif; }
 
   /* CSS Containment برای بهبود Performance */
   .contain-layout {
