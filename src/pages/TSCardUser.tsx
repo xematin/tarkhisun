@@ -89,6 +89,7 @@ interface Kotaj {
   kotaj_date_gregorian?: string | null;
   total_value_usd: number;
   toman_total?: number;
+  attachments?: string[] | null;
   created_at: string;
   items: KotajItem[];
 }
@@ -459,6 +460,8 @@ const KotajDialog = ({
   // Primary date is gregorian (YYYY-MM-DD); jalali shown faded below
   const [dateG, setDateG] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
+  const [attachFiles, setAttachFiles] = useState<File[]>([]);
+  const [keepAttachments, setKeepAttachments] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
