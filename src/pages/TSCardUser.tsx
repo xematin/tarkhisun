@@ -1198,9 +1198,11 @@ const PaymentDialog = ({
                     <button
                       type="button"
                       onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
-                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      disabled={busy}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs disabled:opacity-40"
                       aria-label="حذف"
                     >×</button>
+                    <UploadProgressBar pct={uploadPct} active={busy} />
                   </div>
                 ))}
               </div>
