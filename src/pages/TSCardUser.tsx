@@ -1043,8 +1043,7 @@ const PaymentDialog = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
   const [dateJ, setDateJ] = useState<string>(todayJ());
@@ -1053,18 +1052,10 @@ const PaymentDialog = ({
     if (card) {
       const debt = card.debt_toman ?? 0;
       setAmount(debt > 0 ? String(Math.round(debt)) : "");
-      setNote(""); setFile(null); setPreview(null);
+      setNote(""); setFiles([]);
       setDateJ(todayJ());
     }
   }, [card]);
-
-  useEffect(() => {
-    if (!file) { setPreview(null); return; }
-    if (!file.type.startsWith("image/")) { setPreview(null); return; }
-    const u = URL.createObjectURL(file);
-    setPreview(u);
-    return () => URL.revokeObjectURL(u);
-  }, [file]);
 
   if (!card) return null;
   const debt = card.debt_toman ?? 0;
@@ -1074,8 +1065,10 @@ const PaymentDialog = ({
 
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
-    if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
-    if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
+    if (files.length === 0) { toast({ title: "حداقل یک تصویر فیش واریزی الزامی است", variant: "destructive" }); return; }
+    for (const f of files) {
+      if (f.size > 10 * 1024 * 1024) { toast({ title: `حجم فایل ${f.name} بیش از ۱۰ مگابایت است`, variant: "destructive" }); return; }
+    }
     if (!dateG) { toast({ title: "تاریخ پرداخت را انتخاب کنید", variant: "destructive" }); return; }
     setBusy(true);
     try {
@@ -1083,7 +1076,7 @@ const PaymentDialog = ({
       fd.append("card_id", String(card.id));
       fd.append("amount_irt", String(amtNum));
       if (note.trim()) fd.append("note", note.trim());
-      fd.append("receipt", file);
+      files.forEach((f) => fd.append("receipts[]", f));
       fd.append("pay_date_gregorian", dateG);
       fd.append("pay_date_jalali", dateJ);
       const res = await fetch("/api/cards/payment-create.php", {
