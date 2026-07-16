@@ -958,12 +958,15 @@ const PaymentDialog = ({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
+  const [dateJ, setDateJ] = useState<string>(todayJ());
 
   useEffect(() => {
     if (card) {
       const debt = card.debt_toman ?? 0;
       setAmount(debt > 0 ? String(Math.round(debt)) : "");
       setNote(""); setFile(null); setPreview(null);
+      setDateJ(todayJ());
     }
   }, [card]);
 
