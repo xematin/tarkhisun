@@ -482,6 +482,7 @@ const KotajDialog = ({
               unit_price_irt: String(it.unit_price_irt),
             }))
           : [emptyItem()]);
+        setKeepAttachments(Array.isArray(editing.attachments) ? [...editing.attachments] : []);
       } else {
         const firstEntry = usdEntries[0];
         setEntryId(firstEntry?.entry_id ? String(firstEntry.entry_id) : "");
@@ -489,7 +490,9 @@ const KotajDialog = ({
         setDateG("");
         const defPrice = firstEntry?.has_custom_price ? firstEntry.unit_price_irt : 0;
         setItems([emptyItem(defPrice)]);
+        setKeepAttachments([]);
       }
+      setAttachFiles([]);
     }
   }, [card, editing]);
 
