@@ -690,12 +690,9 @@
   .panel-fa .text-sm { font-size: 14.5px; }
   .panel-fa label { font-size: 14.5px; }
   .panel-fa input, .panel-fa button, .panel-fa select { font-size: 15px; }
-  /* Admin panel: numbers use Regular weight (not Bold) */
-  .panel-fa,
+  /* Admin panel: numbers (usually wrapped in <strong>/<b>) use Regular weight */
   .panel-fa strong,
-  .panel-fa b,
-  .panel-fa .font-bold,
-  .panel-fa .font-semibold { font-weight: 400 !important; }
+  .panel-fa b { font-weight: 400 !important; }
 
   /* CSS Containment برای بهبود Performance */
   .contain-layout {
