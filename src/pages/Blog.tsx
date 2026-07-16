@@ -264,11 +264,11 @@ const Blog = () => {
                           {post.category}
                         </span>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground text-persian">
-                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Bonyade Koodak', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                             <Calendar className="w-3 h-3" />
                             {post.date}
                           </div>
-                          <div className="flex items-center gap-1" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
+                          <div className="flex items-center gap-1" style={{ fontFamily: "'Bonyade Koodak', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                             <Clock className="w-3 h-3" />
                             {post.readTime}
                           </div>
@@ -277,7 +277,7 @@ const Blog = () => {
 
                       <CardTitle
                         className="text-xl group-hover:text-accent transition-colors text-persian"
-                        style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}
+                        style={{ fontFamily: "'Bonyade Koodak', 'Noto Sans Arabic', sans-serif" }}
                       >
                         {post.title}
                       </CardTitle>
@@ -285,13 +285,13 @@ const Blog = () => {
 
                       <CardDescription
                         className="text-persian line-clamp-3"
-                        style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif" }}
+                        style={{ fontFamily: "'Bonyade Koodak', 'Noto Sans Arabic', sans-serif" }}
                       >{post.excerpt}</CardDescription>
                     </CardHeader>
 
                     <CardContent className="pt-0 pb-6">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 text-base text-muted-foreground text-persian" style={{ fontFamily: "'Yekan Bakh', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
+                        <div className="flex items-center gap-2 text-base text-muted-foreground text-persian" style={{ fontFamily: "'Bonyade Koodak', 'Noto Sans Arabic', sans-serif", fontWeight: 700 }}>
                           <User className="w-4 h-4" />
                           {post.author}
                         </div>

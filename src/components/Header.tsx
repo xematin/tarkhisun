@@ -21,7 +21,7 @@ const navItems: NavItem[] = [
   { title: "نرخ ارز", href: "/currencies" },
   { title: "جستجوی تعرفه", href: "/hscode" },
   { title: "بلاگ", href: "/blog" },
-  { title: "ترخیصان‌یار", href: "/#ai-assistant" },
+  { title: "ترخیصان‌یار", href: "/tarkhisan-yar" },
   { title: "تماس", href: "/contact" },
 ];
 

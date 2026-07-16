@@ -53,6 +53,7 @@ const CustomsLawArticles1To13Guide = lazy(() => import("./pages/CustomsLawArticl
 const ServicesPage = lazy(() => import("./pages/Services"));
 const BusinessCardService = lazy(() => import("./pages/BusinessCardService"));
 const ContactPage = lazy(() => import("./pages/Contact"));
+const TarkhisanYar = lazy(() => import("./pages/TarkhisanYar"));
 
 const queryClient = new QueryClient();
 
@@ -117,6 +118,7 @@ const AppContent = () => {
         <Route path="/install" element={<Install />} />
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/services/business-card" element={<BusinessCardService />} />
+        <Route path="/tarkhisan-yar" element={<TarkhisanYar />} />
         <Route path="/contact" element={<ContactRedirect />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
