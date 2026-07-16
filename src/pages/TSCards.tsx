@@ -3031,14 +3031,14 @@ const AdminPayCardDialog = ({
       files.slice(1).forEach((f) => fd.append("receipts[]", f));
       fd.append("from_treasury", fromTreasury ? "1" : "0");
 
-      const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as any).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload("/api/admin/card-debt-pay.php", fd, setUploadPct);
+      if (!ok) throw new Error((data as any)?.error || `HTTP ${status}`);
       toast({ title: "پرداخت ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
