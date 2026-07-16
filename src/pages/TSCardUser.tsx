@@ -1109,18 +1109,14 @@ const PaymentDialog = ({
       files.forEach((f) => fd.append("receipts[]", f));
       fd.append("pay_date_gregorian", dateG);
       fd.append("pay_date_jalali", dateJ);
-      const res = await fetch("/api/cards/payment-create.php", {
-        method: "POST",
-        credentials: "same-origin",
-        body: fd,
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      setUploadPct(0);
+      const { ok, status, data } = await xhrUpload("/api/cards/payment-create.php", fd, setUploadPct);
+      if (!ok) throw new Error((data as { error?: string })?.error || `HTTP ${status}`);
       toast({ title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
-    } finally { setBusy(false); }
+    } finally { setBusy(false); setUploadPct(0); }
   };
 
   return (
