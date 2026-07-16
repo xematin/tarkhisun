@@ -71,10 +71,10 @@ foreach ($queue as $f) {
     $savedPaths[] = '/uploads/payments/' . (int)$u['id'] . '/' . $name;
 }
 
-if (!$savedPaths) ts_json_error(400, 'حداقل یک تصویر فیش واریزی الزامی است');
+if (!$savedPaths) $savedPaths = [];
 
-$receiptPath = $savedPaths[0];
-$receiptPathsJson = json_encode($savedPaths, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+$receiptPath = $savedPaths[0] ?? null;
+$receiptPathsJson = $savedPaths ? json_encode($savedPaths, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : null;
 
 $now = date('Y-m-d H:i:s');
 
