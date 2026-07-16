@@ -8,6 +8,9 @@ $u = ts_carduser_require();
 $card_id = (int)($_POST['card_id'] ?? 0);
 $amountRaw = (string)($_POST['amount_irt'] ?? '');
 $note = trim((string)($_POST['note'] ?? ''));
+$payG = trim((string)($_POST['pay_date_gregorian'] ?? ''));
+$payJ = trim((string)($_POST['pay_date_jalali'] ?? ''));
+if ($payG !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $payG)) $payG = '';
 
 $amount = (float) ts_normalize_digits($amountRaw);
 if ($card_id <= 0) ts_json_error(400, 'کارت معتبر نیست');
