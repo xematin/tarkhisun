@@ -1413,12 +1413,22 @@ const BillingDialog = ({
                         </td>
                         <td className="p-2 text-xs text-muted-foreground">
                           {p.note || "—"}
-                          {p.receipt_path ? (
-                            <>
-                              {" • "}
-                              <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">فیش</a>
-                            </>
-                          ) : null}
+                          {(() => {
+                            const paths = (p.receipt_paths && p.receipt_paths.length > 0)
+                              ? p.receipt_paths
+                              : (p.receipt_path ? [p.receipt_path] : []);
+                            return paths.length > 0 ? (
+                              <>
+                                {" • "}
+                                {paths.map((rp, idx) => (
+                                  <span key={rp}>
+                                    <a href={rp} target="_blank" rel="noreferrer" className="text-primary underline">فیش {paths.length > 1 ? idx + 1 : ""}</a>
+                                    {idx < paths.length - 1 ? " " : ""}
+                                  </span>
+                                ))}
+                              </>
+                            ) : null;
+                          })()}
                         </td>
                         <td className="p-2 tabular-nums font-bold text-emerald-700">{fmtToman(p.amount_irt)}</td>
                         <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
