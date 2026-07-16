@@ -7,7 +7,11 @@ $u = ts_carduser_require();
 $card_id = isset($_GET['card_id']) ? (int)$_GET['card_id'] : 0;
 
 $pdo = ts_db();
-$sql = "SELECT id, card_id, amount_irt, receipt_path, note, status, created_at
+$hasPayG = ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian');
+$hasPayJ = ts_column_exists($pdo, 'ts_card_payments', 'pay_date_jalali');
+$payGCol = $hasPayG ? 'pay_date_gregorian' : 'NULL AS pay_date_gregorian';
+$payJCol = $hasPayJ ? 'pay_date_jalali'    : 'NULL AS pay_date_jalali';
+$sql = "SELECT id, card_id, amount_irt, receipt_path, note, $payGCol, $payJCol, status, created_at
         FROM ts_card_payments
         WHERE card_user_id = ?";
 $params = [(int)$u['id']];
