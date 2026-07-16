@@ -1075,6 +1075,7 @@ const PaymentDialog = ({
   const [note, setNote] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
+  const [uploadPct, setUploadPct] = useState(0);
   const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
   const [dateJ, setDateJ] = useState<string>(todayJ());
 
