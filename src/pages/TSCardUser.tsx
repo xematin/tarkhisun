@@ -89,6 +89,7 @@ interface Kotaj {
   kotaj_date_gregorian?: string | null;
   total_value_usd: number;
   toman_total?: number;
+  attachments?: string[] | null;
   created_at: string;
   items: KotajItem[];
 }
@@ -459,6 +460,8 @@ const KotajDialog = ({
   // Primary date is gregorian (YYYY-MM-DD); jalali shown faded below
   const [dateG, setDateG] = useState<string>("");
   const [items, setItems] = useState<ItemDraft[]>([emptyItem()]);
+  const [attachFiles, setAttachFiles] = useState<File[]>([]);
+  const [keepAttachments, setKeepAttachments] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -479,6 +482,7 @@ const KotajDialog = ({
               unit_price_irt: String(it.unit_price_irt),
             }))
           : [emptyItem()]);
+        setKeepAttachments(Array.isArray(editing.attachments) ? [...editing.attachments] : []);
       } else {
         const firstEntry = usdEntries[0];
         setEntryId(firstEntry?.entry_id ? String(firstEntry.entry_id) : "");
@@ -486,7 +490,9 @@ const KotajDialog = ({
         setDateG("");
         const defPrice = firstEntry?.has_custom_price ? firstEntry.unit_price_irt : 0;
         setItems([emptyItem(defPrice)]);
+        setKeepAttachments([]);
       }
+      setAttachFiles([]);
     }
   }, [card, editing]);
 
@@ -546,7 +552,7 @@ const KotajDialog = ({
     setBusy(true);
     try {
       const numClean = normDigits(num).replace(/\D/g, "");
-      const payload = {
+      const payload: Record<string, unknown> = {
         entry_id: Number(entryId),
         kotaj_number: numClean,
         kotaj_date_jalali: date,
@@ -559,19 +565,18 @@ const KotajDialog = ({
           unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
         })),
       };
-      if (editing) {
-        await api("/api/cards/kotaj-update.php", {
-          method: "POST",
-          body: JSON.stringify({ id: editing.id, ...payload }),
-        });
-        toast({ title: "کوتاژ ویرایش شد" });
-      } else {
-        await api("/api/cards/kotaj-create.php", {
-          method: "POST",
-          body: JSON.stringify(payload),
-        });
-        toast({ title: "کوتاژ ثبت شد" });
-      }
+      const url = editing ? "/api/cards/kotaj-update.php" : "/api/cards/kotaj-create.php";
+      if (editing) payload.id = editing.id;
+      if (editing) payload.keep_attachments = keepAttachments;
+
+      const fd = new FormData();
+      fd.append("payload", JSON.stringify(payload));
+      attachFiles.forEach((f) => fd.append("files[]", f));
+
+      const res = await fetch(url, { method: "POST", credentials: "same-origin", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error((data as { error?: string }).error || `HTTP ${res.status}`);
+      toast({ title: editing ? "کوتاژ ویرایش شد" : "کوتاژ ثبت شد" });
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
@@ -709,7 +714,72 @@ const KotajDialog = ({
               <span className="font-bold text-lg tabular-nums text-primary">{fmtToman(totalToman)}</span>
             </div>
           </div>
+
+          <div className="space-y-2">
+            <Label className="text-persian">پیوست فایل‌ها (اختیاری)</Label>
+            {keepAttachments.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {keepAttachments.map((p) => (
+                  <div key={p} className="relative group border rounded-md p-1 bg-muted/30">
+                    {/\.(jpg|jpeg|png|webp)$/i.test(p) ? (
+                      <a href={p} target="_blank" rel="noreferrer">
+                        <img src={p} alt="پیوست" className="h-16 w-16 object-cover rounded" />
+                      </a>
+                    ) : (
+                      <a href={p} target="_blank" rel="noreferrer" className="flex items-center justify-center h-16 w-16 text-xs text-primary text-persian">
+                        <FileText className="w-6 h-6" />
+                      </a>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setKeepAttachments(prev => prev.filter(x => x !== p))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف پیوست"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {attachFiles.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {attachFiles.map((f, i) => (
+                  <div key={i} className="relative border rounded-md p-1 bg-muted/30">
+                    {f.type.startsWith("image/") ? (
+                      <img src={URL.createObjectURL(f)} alt={f.name} className="h-16 w-16 object-cover rounded" />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-16 w-16 text-[10px] text-persian">
+                        <FileText className="w-6 h-6 text-primary" />
+                        <span className="truncate max-w-[60px]">{f.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setAttachFiles(prev => prev.filter((_, idx) => idx !== i))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label className="flex items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-3 cursor-pointer hover:bg-muted/30 transition">
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,application/pdf"
+                multiple
+                className="hidden"
+                onChange={(e) => {
+                  const arr = Array.from(e.target.files || []);
+                  if (arr.length) setAttachFiles(prev => [...prev, ...arr]);
+                  e.target.value = "";
+                }}
+              />
+              <Upload className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs text-persian text-muted-foreground">افزودن فایل (JPG/PNG/PDF) — چندتایی مجاز، اختیاری</span>
+            </label>
+          </div>
         </div>
+
 
         <DialogFooter>
           <Button variant="outline" onClick={onClose} className="text-persian">انصراف</Button>
@@ -918,6 +988,24 @@ const KotajListDialog = ({
                         <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total ?? 0)}</span>
                       </div>
                     )}
+                    {Array.isArray(k.attachments) && k.attachments.length > 0 && (
+                      <div className="border-t pt-2 mt-2 space-y-1">
+                        <div className="text-persian text-xs text-muted-foreground">پیوست‌ها</div>
+                        <div className="flex flex-wrap gap-2">
+                          {k.attachments.map((p) => (
+                            /\.(jpg|jpeg|png|webp)$/i.test(p) ? (
+                              <a key={p} href={p} target="_blank" rel="noreferrer">
+                                <img src={p} alt="پیوست" className="h-14 w-14 object-cover rounded border" />
+                              </a>
+                            ) : (
+                              <a key={p} href={p} target="_blank" rel="noreferrer" className="text-primary underline text-xs text-persian flex items-center gap-1">
+                                <FileText className="w-3 h-3" /> فایل
+                              </a>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -955,8 +1043,7 @@ const PaymentDialog = ({
 }) => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
   const todayJ = () => new DateObject({ calendar: persian, locale: persian_fa }).format("YYYY/MM/DD");
   const [dateJ, setDateJ] = useState<string>(todayJ());
@@ -965,18 +1052,10 @@ const PaymentDialog = ({
     if (card) {
       const debt = card.debt_toman ?? 0;
       setAmount(debt > 0 ? String(Math.round(debt)) : "");
-      setNote(""); setFile(null); setPreview(null);
+      setNote(""); setFiles([]);
       setDateJ(todayJ());
     }
   }, [card]);
-
-  useEffect(() => {
-    if (!file) { setPreview(null); return; }
-    if (!file.type.startsWith("image/")) { setPreview(null); return; }
-    const u = URL.createObjectURL(file);
-    setPreview(u);
-    return () => URL.revokeObjectURL(u);
-  }, [file]);
 
   if (!card) return null;
   const debt = card.debt_toman ?? 0;
@@ -986,8 +1065,10 @@ const PaymentDialog = ({
 
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
-    if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
-    if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
+    if (files.length === 0) { toast({ title: "حداقل یک تصویر فیش واریزی الزامی است", variant: "destructive" }); return; }
+    for (const f of files) {
+      if (f.size > 10 * 1024 * 1024) { toast({ title: `حجم فایل ${f.name} بیش از ۱۰ مگابایت است`, variant: "destructive" }); return; }
+    }
     if (!dateG) { toast({ title: "تاریخ پرداخت را انتخاب کنید", variant: "destructive" }); return; }
     setBusy(true);
     try {
@@ -995,7 +1076,7 @@ const PaymentDialog = ({
       fd.append("card_id", String(card.id));
       fd.append("amount_irt", String(amtNum));
       if (note.trim()) fd.append("note", note.trim());
-      fd.append("receipt", file);
+      files.forEach((f) => fd.append("receipts[]", f));
       fd.append("pay_date_gregorian", dateG);
       fd.append("pay_date_jalali", dateJ);
       const res = await fetch("/api/cards/payment-create.php", {
@@ -1075,31 +1156,45 @@ const PaymentDialog = ({
 
 
           <div className="space-y-2">
-            <Label className="text-persian">عکس فیش واریزی</Label>
+            <Label className="text-persian">تصاویر فیش واریزی</Label>
+            {files.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {files.map((f, i) => (
+                  <div key={i} className="relative border rounded-md p-1 bg-muted/30">
+                    {f.type.startsWith("image/") ? (
+                      <img src={URL.createObjectURL(f)} alt={f.name} className="h-20 w-20 object-cover rounded" />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-20 w-20 text-[10px] text-persian">
+                        <FileText className="w-6 h-6 text-primary" />
+                        <span className="truncate max-w-[70px]">{f.name}</span>
+                      </div>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setFiles(prev => prev.filter((_, idx) => idx !== i))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                      aria-label="حذف"
+                    >×</button>
+                  </div>
+                ))}
+              </div>
+            )}
             <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-border rounded-md p-4 cursor-pointer hover:bg-muted/30 transition">
               <input
                 type="file"
                 accept="image/jpeg,image/png,image/webp,application/pdf"
+                multiple
                 className="hidden"
-                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                onChange={(e) => {
+                  const arr = Array.from(e.target.files || []);
+                  if (arr.length) setFiles(prev => [...prev, ...arr]);
+                  e.target.value = "";
+                }}
               />
-              {file ? (
-                <>
-                  {preview ? (
-                    <img src={preview} alt="پیش‌نمایش فیش" className="max-h-40 rounded-md" />
-                  ) : (
-                    <FileText className="w-10 h-10 text-primary" />
-                  )}
-                  <div className="text-xs text-persian text-muted-foreground">{file.name}</div>
-                </>
-              ) : (
-                <>
-                  <Upload className="w-8 h-8 text-muted-foreground" />
-                  <div className="text-sm text-persian text-muted-foreground">
-                    کلیک کنید و فایل را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB)
-                  </div>
-                </>
-              )}
+              <Upload className="w-8 h-8 text-muted-foreground" />
+              <div className="text-sm text-persian text-muted-foreground">
+                {files.length > 0 ? "افزودن فایل بیشتر" : "کلیک کنید و فایل‌ها را انتخاب کنید (JPG/PNG/PDF تا ۱۰MB — چندتایی مجاز)"}
+              </div>
             </label>
           </div>
 
@@ -1124,6 +1219,7 @@ interface Payment {
   card_id: number;
   amount_irt: number;
   receipt_path?: string | null;
+  receipt_paths?: string[] | null;
   note?: string | null;
   status: string;
   created_at: string;
@@ -1317,12 +1413,22 @@ const BillingDialog = ({
                         </td>
                         <td className="p-2 text-xs text-muted-foreground">
                           {p.note || "—"}
-                          {p.receipt_path ? (
-                            <>
-                              {" • "}
-                              <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">فیش</a>
-                            </>
-                          ) : null}
+                          {(() => {
+                            const paths = (p.receipt_paths && p.receipt_paths.length > 0)
+                              ? p.receipt_paths
+                              : (p.receipt_path ? [p.receipt_path] : []);
+                            return paths.length > 0 ? (
+                              <>
+                                {" • "}
+                                {paths.map((rp, idx) => (
+                                  <span key={rp}>
+                                    <a href={rp} target="_blank" rel="noreferrer" className="text-primary underline">فیش {paths.length > 1 ? idx + 1 : ""}</a>
+                                    {idx < paths.length - 1 ? " " : ""}
+                                  </span>
+                                ))}
+                              </>
+                            ) : null;
+                          })()}
                         </td>
                         <td className="p-2 tabular-nums font-bold text-emerald-700">{fmtToman(p.amount_irt)}</td>
                         <td className={`p-2 text-xs font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>
@@ -1610,12 +1716,22 @@ const OverallBillingDialog = ({
                                       </td>
                                       <td className="p-2 text-[11px] text-muted-foreground">
                                         {p.note || "—"}
-                                        {p.receipt_path ? (
-                                          <>
-                                            {" • "}
-                                            <a href={p.receipt_path} target="_blank" rel="noreferrer" className="text-primary underline">فیش</a>
-                                          </>
-                                        ) : null}
+                                        {(() => {
+                                          const paths = (p.receipt_paths && p.receipt_paths.length > 0)
+                                            ? p.receipt_paths
+                                            : (p.receipt_path ? [p.receipt_path] : []);
+                                          return paths.length > 0 ? (
+                                            <>
+                                              {" • "}
+                                              {paths.map((rp, idx) => (
+                                                <span key={rp}>
+                                                  <a href={rp} target="_blank" rel="noreferrer" className="text-primary underline">فیش {paths.length > 1 ? idx + 1 : ""}</a>
+                                                  {idx < paths.length - 1 ? " " : ""}
+                                                </span>
+                                              ))}
+                                            </>
+                                          ) : null;
+                                        })()}
                                       </td>
                                       <td className="p-2 tabular-nums font-bold text-emerald-700">{fmtToman(p.amount_irt)}</td>
                                       <td className={`p-2 text-[11px] font-bold ${STATUS_CLASS[st] || ""}`}>{STATUS_LABEL[st] || st}</td>

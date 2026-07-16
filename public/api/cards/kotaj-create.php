@@ -4,7 +4,14 @@ require __DIR__ . '/../db.php';
 ts_cors_same_origin();
 $u = ts_carduser_require();
 
-$body = ts_read_json_body();
+// Accept either JSON body OR multipart/form-data with a `payload` field + optional files[]
+$body = null;
+$hasMultipart = !empty($_POST) || !empty($_FILES);
+if ($hasMultipart && isset($_POST['payload'])) {
+    $body = json_decode((string)$_POST['payload'], true);
+}
+if (!is_array($body)) $body = ts_read_json_body();
+
 $entry_id     = (int)($body['entry_id'] ?? 0);
 $kotaj_number = preg_replace('/\D+/', '', ts_normalize_digits((string)($body['kotaj_number'] ?? '')));
 $kotaj_date_j = trim(ts_normalize_digits((string)($body['kotaj_date_jalali'] ?? '')));
@@ -18,6 +25,12 @@ if ($kotaj_date_g !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $kotaj_date_g))
 if (!$itemsRaw) ts_json_error(400, 'حداقل یک قلم لازم است');
 
 $pdo = ts_db();
+
+// Auto-add attachments column if missing
+if (!ts_column_exists($pdo, 'ts_kotaj', 'attachments')) {
+    try { $pdo->exec("ALTER TABLE ts_kotaj ADD COLUMN attachments TEXT NULL"); } catch (Throwable $e) {}
+}
+$hasAttach = ts_column_exists($pdo, 'ts_kotaj', 'attachments');
 
 // Verify access
 $ac = $pdo->prepare("SELECT id, card_id, allocated FROM ts_card_user_access WHERE card_user_id=? AND entry_id=? LIMIT 1");
@@ -52,22 +65,56 @@ if ($totalUsd - $remain > 0.0001) {
     ts_json_error(400, "ارزش کل کوتاژ ($totalUsd) از مانده سکشن ($remain) بیشتر است");
 }
 
+// Handle optional attachments (multi)
+$savedPaths = [];
+if (!empty($_FILES['files']) && is_array($_FILES['files']) && is_array($_FILES['files']['name'])) {
+    $allowed = [
+        'image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'application/pdf' => 'pdf',
+    ];
+    $baseDir = realpath(__DIR__ . '/../../uploads');
+    if ($baseDir === false) { @mkdir(__DIR__ . '/../../uploads/kotaj', 0775, true); $baseDir = realpath(__DIR__ . '/../../uploads'); }
+    $dir = $baseDir . '/kotaj/' . (int)$u['id'];
+    if (!is_dir($dir)) @mkdir($dir, 0775, true);
+    if (!is_dir($dir) || !is_writable($dir)) ts_json_error(500, 'خطا در آماده‌سازی پوشه آپلود');
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $n = count($_FILES['files']['name']);
+    for ($i = 0; $i < $n; $i++) {
+        if ((int)$_FILES['files']['error'][$i] !== UPLOAD_ERR_OK) continue;
+        $size = (int)$_FILES['files']['size'][$i];
+        if ($size <= 0 || $size > 10 * 1024 * 1024) ts_json_error(400, 'حجم یکی از فایل‌ها بیش از ۱۰ مگابایت است');
+        $tmp = $_FILES['files']['tmp_name'][$i];
+        $mime = $finfo->file($tmp) ?: '';
+        if (!isset($allowed[$mime])) ts_json_error(400, 'فقط تصویر (JPG/PNG/WEBP) یا PDF مجاز است');
+        $ext = $allowed[$mime];
+        $name = bin2hex(random_bytes(12)) . '.' . $ext;
+        $dest = $dir . '/' . $name;
+        if (!move_uploaded_file($tmp, $dest)) ts_json_error(500, 'آپلود فایل ناموفق بود');
+        $savedPaths[] = '/uploads/kotaj/' . (int)$u['id'] . '/' . $name;
+    }
+}
+$attachJson = $savedPaths ? json_encode($savedPaths, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : null;
+
 $now = date('Y-m-d H:i:s');
 $pdo->beginTransaction();
 try {
-    // Try insert with gregorian first, fallback to without if column missing
+    $cols = ['card_user_id','card_id','entry_id','kotaj_number','kotaj_date_jalali'];
+    $vals = [(int)$u['id'], $cardId, $entry_id, $kotaj_number, $kotaj_date_j];
+    if ($kotaj_date_g !== '') { $cols[] = 'kotaj_date_gregorian'; $vals[] = $kotaj_date_g; }
+    $cols[] = 'total_value_usd'; $vals[] = $totalUsd;
+    if ($hasAttach && $attachJson !== null) { $cols[] = 'attachments'; $vals[] = $attachJson; }
+    $cols[] = 'created_at'; $vals[] = $now;
+
+    $place = implode(',', array_fill(0, count($cols), '?'));
     try {
-        $ins = $pdo->prepare(
-            "INSERT INTO ts_kotaj (card_user_id, card_id, entry_id, kotaj_number, kotaj_date_jalali, kotaj_date_gregorian, total_value_usd, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        );
-        $ins->execute([(int)$u['id'], $cardId, $entry_id, $kotaj_number, $kotaj_date_j, ($kotaj_date_g ?: null), $totalUsd, $now]);
+        $ins = $pdo->prepare("INSERT INTO ts_kotaj (" . implode(',', $cols) . ") VALUES ($place)");
+        $ins->execute($vals);
     } catch (Throwable $e) {
-        $ins = $pdo->prepare(
-            "INSERT INTO ts_kotaj (card_user_id, card_id, entry_id, kotaj_number, kotaj_date_jalali, total_value_usd, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?)"
-        );
-        $ins->execute([(int)$u['id'], $cardId, $entry_id, $kotaj_number, $kotaj_date_j, $totalUsd, $now]);
+        // Fallback without gregorian if column missing
+        $ci = array_search('kotaj_date_gregorian', $cols, true);
+        if ($ci !== false) { array_splice($cols, $ci, 1); array_splice($vals, $ci, 1); }
+        $place = implode(',', array_fill(0, count($cols), '?'));
+        $ins = $pdo->prepare("INSERT INTO ts_kotaj (" . implode(',', $cols) . ") VALUES ($place)");
+        $ins->execute($vals);
     }
     $kid = (int)$pdo->lastInsertId();
 
@@ -83,4 +130,4 @@ try {
     ts_json_error(500, 'ثبت کوتاژ با خطا مواجه شد: ' . $e->getMessage());
 }
 
-ts_json(200, ['ok' => true, 'id' => $kid]);
+ts_json(200, ['ok' => true, 'id' => $kid, 'attachments' => $savedPaths]);
