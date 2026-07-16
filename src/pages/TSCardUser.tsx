@@ -1065,7 +1065,6 @@ const PaymentDialog = ({
 
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
-    if (files.length === 0) { toast({ title: "حداقل یک تصویر فیش واریزی الزامی است", variant: "destructive" }); return; }
     for (const f of files) {
       if (f.size > 10 * 1024 * 1024) { toast({ title: `حجم فایل ${f.name} بیش از ۱۰ مگابایت است`, variant: "destructive" }); return; }
     }
@@ -1156,7 +1155,7 @@ const PaymentDialog = ({
 
 
           <div className="space-y-2">
-            <Label className="text-persian">تصاویر فیش واریزی</Label>
+            <Label className="text-persian">تصاویر فیش واریزی (اختیاری)</Label>
             {files.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {files.map((f, i) => (
