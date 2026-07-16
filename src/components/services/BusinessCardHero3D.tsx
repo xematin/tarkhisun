@@ -48,11 +48,11 @@ function useCardTexture(face: "front" | "back") {
 
     if (face === "front") {
       // Top header
-      ctx.font = "bold 56px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "bold 56px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "#ffd877";
       ctx.fillText("کارت بازرگانی", 980, 110);
 
-      ctx.font = "28px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "28px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "rgba(255,255,255,0.85)";
       ctx.fillText("اتاق بازرگانی، صنایع، معادن و کشاورزی ایران", 980, 160);
 
@@ -70,11 +70,11 @@ function useCardTexture(face: "front" | "back") {
       // Holder
       ctx.direction = "rtl";
       ctx.textAlign = "right";
-      ctx.font = "28px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "28px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.fillText("صادر شده برای: شرکت بازرگانی نمونه", 980, 470);
 
-      ctx.font = "22px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "22px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "rgba(255,255,255,0.55)";
       ctx.fillText("کد اقتصادی: 411 263 489 552", 980, 510);
 
@@ -100,12 +100,12 @@ function useCardTexture(face: "front" | "back") {
       ctx.fillStyle = "#c9a84c";
       ctx.fill();
       ctx.fillStyle = "#0a2540";
-      ctx.font = "bold 30px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "bold 30px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.textAlign = "center";
       ctx.fillText("ت", 110, 572);
 
       ctx.textAlign = "right";
-      ctx.font = "22px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "22px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "rgba(255,255,255,0.7)";
       ctx.fillText("ترخیصان | صدور و تمدید کارت بازرگانی", 980, 575);
     } else {
@@ -114,7 +114,7 @@ function useCardTexture(face: "front" | "back") {
       ctx.fillStyle = "rgba(0,0,0,0.6)";
       ctx.fillRect(0, 90, 1024, 90);
 
-      ctx.font = "26px 'Noto Sans Arabic', Tahoma, sans-serif";
+      ctx.font = "26px 'Bonyade Koodak', 'Noto Sans Arabic', Tahoma, sans-serif";
       ctx.fillStyle = "rgba(255,255,255,0.8)";
       ctx.fillText("این کارت متعلق به اتاق بازرگانی ایران است", 980, 260);
       ctx.fillText("در صورت یافتن لطفاً به نزدیک‌ترین شعبه تحویل دهید", 980, 305);
