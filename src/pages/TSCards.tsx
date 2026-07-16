@@ -3026,7 +3026,8 @@ const AdminPayCardDialog = ({
       fd.append("note", note);
       fd.append("pay_date_gregorian", dateG);
       if (jalali) fd.append("pay_date_jalali", jalali);
-      if (file) fd.append("receipt", file);
+      if (files[0]) fd.append("receipt", files[0]);
+      files.slice(1).forEach((f) => fd.append("receipts[]", f));
       fd.append("from_treasury", fromTreasury ? "1" : "0");
 
       const res = await fetch("/api/admin/card-debt-pay.php", { method: "POST", credentials: "same-origin", body: fd });
