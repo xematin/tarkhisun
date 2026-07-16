@@ -38,7 +38,8 @@ const ArticleImage = ({
           onLoad={() => setIsLoaded(true)}
           onError={() => setIsLoaded(true)}
           className={cn(
-            "absolute inset-0 w-full h-full object-cover transition-opacity duration-700",
+            "absolute inset-0 w-full h-full transition-opacity duration-700",
+            priority ? "object-contain" : "object-cover",
             isLoaded ? "opacity-100" : "opacity-0"
           )}
         />
