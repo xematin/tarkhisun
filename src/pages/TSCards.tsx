@@ -357,6 +357,22 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                           ) : "—"}
                         </TableCell>
+                        {(() => {
+                          const paid = Number(r.admin_paid_irt || 0);
+                          const diff = paid - (bal || 0);
+                          const isCredit = diff > 0.0001;
+                          const isSettled = Math.abs(diff) <= 0.0001;
+                          const label = isSettled ? "تسویه" : isCredit ? "بستانکار" : "بدهکار";
+                          const color = isSettled ? "text-muted-foreground" : isCredit ? "text-emerald-600" : "text-destructive";
+                          return (
+                            <TableCell data-label="وضعیت ادمین" className="text-persian align-top whitespace-nowrap">
+                              <div className={`flex flex-col gap-0.5 ${color}`}>
+                                <span className="text-xs font-medium">{label}</span>
+                                <span className="font-bold tabular-nums text-sm">{fmtToman(Math.abs(diff))}</span>
+                              </div>
+                            </TableCell>
+                          );
+                        })()}
                         <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
                           <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[240px]">
                             <Button size="sm" variant="ghost" onClick={() => setReportFor(r)} title="گزارش کوتاژها" className="md:!justify-center justify-start gap-1.5 h-9">
