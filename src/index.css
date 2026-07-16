@@ -205,7 +205,7 @@
 
   /* Persian RTL Support */
   html[dir="rtl"] {
-    font-family: 'Noto Sans Arabic', sans-serif;
+    font-family: 'Bonyade Koodak', 'Noto Sans Arabic', sans-serif;
   }
 
   html[dir="rtl"] body {
