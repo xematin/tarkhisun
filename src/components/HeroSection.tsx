@@ -90,7 +90,7 @@ const HeroSection = () => {
           <div className="text-center lg:text-right order-2 lg:order-1">
             <div className="inline-flex hero-chip mb-6 fade-in-up animate text-persian">
               <Sparkles className="w-4 h-4 text-accent-light" />
-              <span>۲۰+ سال تجربه در بنادر ایران</span>
+              <span className="font-bonyade-koodak-bold">۲۰+ سال تجربه در بنادر ایران</span>
             </div>
 
             <h1 className="heading-primary text-white mb-6 fade-in-up animate text-persian leading-tight">
@@ -129,15 +129,15 @@ const HeroSection = () => {
             {/* Trust indicators */}
             <div className="grid grid-cols-3 gap-3 mt-10 max-w-md mx-auto lg:mx-0 fade-in-up animate animation-delay-600">
               <div className="glass-card !rounded-2xl !bg-white/10 !border-white/20 px-3 py-4 text-center">
-                <div className="text-2xl text-white"><strong>۲۰+</strong></div>
+                <div className="text-2xl text-white"><strong className="font-bonyade-koodak-bold">۲۰+</strong></div>
                 <div className="text-xs text-white/75 text-persian mt-1">سال تجربه</div>
               </div>
               <div className="glass-card !rounded-2xl !bg-white/10 !border-white/20 px-3 py-4 text-center">
-                <div className="text-2xl text-white"><strong>۲۴/۷</strong></div>
+                <div className="text-2xl text-white"><strong className="font-bonyade-koodak-bold">۲۴/۷</strong></div>
                 <div className="text-xs text-white/75 text-persian mt-1">پشتیبانی</div>
               </div>
               <div className="glass-card !rounded-2xl !bg-white/10 !border-white/20 px-3 py-4 text-center">
-                <div className="text-2xl text-white"><strong>۱۰۰۰+</strong></div>
+                <div className="text-2xl text-white"><strong className="font-bonyade-koodak-bold">۱۰۰۰+</strong></div>
                 <div className="text-xs text-white/75 text-persian mt-1">پرونده موفق</div>
               </div>
             </div>
