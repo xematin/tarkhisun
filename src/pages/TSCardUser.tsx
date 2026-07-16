@@ -982,10 +982,13 @@ const PaymentDialog = ({
   const debt = card.debt_toman ?? 0;
   const amtNum = parseFloat(normDigits(amount)) || 0;
 
+  const dateG = jToG(dateJ);
+
   const submit = async () => {
     if (amtNum <= 0) { toast({ title: "مبلغ معتبر نیست", variant: "destructive" }); return; }
     if (!file) { toast({ title: "تصویر فیش الزامی است", variant: "destructive" }); return; }
     if (file.size > 10 * 1024 * 1024) { toast({ title: "حجم فایل بیش از ۱۰ مگابایت است", variant: "destructive" }); return; }
+    if (!dateG) { toast({ title: "تاریخ پرداخت را انتخاب کنید", variant: "destructive" }); return; }
     setBusy(true);
     try {
       const fd = new FormData();
@@ -993,6 +996,8 @@ const PaymentDialog = ({
       fd.append("amount_irt", String(amtNum));
       if (note.trim()) fd.append("note", note.trim());
       fd.append("receipt", file);
+      fd.append("pay_date_gregorian", dateG);
+      fd.append("pay_date_jalali", dateJ);
       const res = await fetch("/api/cards/payment-create.php", {
         method: "POST",
         credentials: "same-origin",
