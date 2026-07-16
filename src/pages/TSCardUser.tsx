@@ -1219,6 +1219,7 @@ interface Payment {
   card_id: number;
   amount_irt: number;
   receipt_path?: string | null;
+  receipt_paths?: string[] | null;
   note?: string | null;
   status: string;
   created_at: string;
