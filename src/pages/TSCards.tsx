@@ -362,14 +362,15 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         {(() => {
                           const paid = Number(r.admin_paid_irt || 0);
                           const diff = paid - (bal || 0);
-                          const isCredit = diff > 0.0001;
+                          // Reversed labels per business rule: admin overpaid => admin is debtor to card owner
+                          const isOver = diff > 0.0001;
                           const isSettled = Math.abs(diff) <= 0.0001;
-                          const label = isSettled ? "تسویه" : isCredit ? "بستانکار" : "بدهکار";
+                          const label = isSettled ? "تسویه" : isOver ? "بدهکار" : "بستانکار";
                           const statusBtnClass = isSettled
                             ? "bg-gradient-to-l from-slate-500 to-slate-400 text-white"
-                            : isCredit
-                              ? "bg-gradient-to-l from-emerald-600 to-green-500 text-white"
-                              : "bg-gradient-to-l from-rose-600 to-red-500 text-white";
+                            : isOver
+                              ? "bg-gradient-to-l from-rose-600 to-red-500 text-white"
+                              : "bg-gradient-to-l from-emerald-600 to-green-500 text-white";
                           return (
                         <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
                           <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[240px]">
@@ -410,10 +411,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             <div className="col-span-3">
                               <div
                                 title="وضعیت ادمین"
-                                className={`w-full h-9 rounded-md flex items-center justify-center gap-2 px-2 shadow-md ${statusBtnClass}`}
+                                className={`w-full min-h-9 rounded-md flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-2 py-1 shadow-md ${statusBtnClass}`}
                               >
-                                <span className="text-persian text-xs font-medium">{label}</span>
-                                <span className="text-persian text-xs tabular-nums font-bold">
+                                <span className="text-persian text-xs font-medium whitespace-nowrap">{label}</span>
+                                <span className="text-persian text-[11px] leading-tight tabular-nums font-bold break-all text-center">
                                   {isSettled ? "—" : fmtToman(Math.abs(diff))}
                                 </span>
                               </div>
@@ -1209,6 +1210,7 @@ interface ReportKotaj {
   total_value_usd: number;
   toman_total?: number;
   created_at: string;
+  attachments?: string[] | null;
   items: { name: string; value_usd: number; unit_price_irt: number; toman?: number }[];
 }
 interface ReportUser {
@@ -1430,6 +1432,18 @@ const KotajReportDialog = ({
                             <div className="border-t pt-2 mt-2 flex justify-between text-persian text-sm">
                               <span className="font-bold">مجموع تومانی</span>
                               <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total || 0)}</span>
+                            </div>
+                          )}
+                          {Array.isArray(k.attachments) && k.attachments.length > 0 && (
+                            <div className="border-t pt-2 mt-2">
+                              <div className="text-persian text-xs text-muted-foreground mb-1">فایل‌های پیوست:</div>
+                              <div className="flex flex-wrap gap-2">
+                                {k.attachments.map((p, i) => (
+                                  <a key={i} href={p} target="_blank" rel="noopener noreferrer" className="text-xs text-primary underline break-all">
+                                    فایل {(i + 1).toLocaleString("fa-IR")}
+                                  </a>
+                                ))}
+                              </div>
                             </div>
                           )}
                         </div>
@@ -2052,11 +2066,12 @@ const UsersManagementPanel = ({
                       <TableHead className="text-persian">تاریخ</TableHead>
                       <TableHead className="text-persian">دلار</TableHead>
                       <TableHead className="text-persian">تومان</TableHead>
+                      <TableHead className="text-persian">پیوست</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {kotajData.items.length === 0 ? (
-                      <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کوتاژی ثبت نشده است.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">کوتاژی ثبت نشده است.</TableCell></TableRow>
                     ) : kotajData.items.map((k: any) => (
                       <TableRow key={k.id}>
                         <TableCell className="text-persian">{k.kotaj_number}</TableCell>
@@ -2067,6 +2082,17 @@ const UsersManagementPanel = ({
                         </TableCell>
                         <TableCell className="tabular-nums">{Number(k.total_value_usd||0).toLocaleString("fa-IR")}</TableCell>
                         <TableCell className="tabular-nums text-primary">{fmtToman(k.toman_total)}</TableCell>
+                        <TableCell className="text-xs">
+                          {Array.isArray(k.attachments) && k.attachments.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {k.attachments.map((p: string, i: number) => (
+                                <a key={i} href={p} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                                  {(i + 1).toLocaleString("fa-IR")}
+                                </a>
+                              ))}
+                            </div>
+                          ) : <span className="text-muted-foreground">—</span>}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

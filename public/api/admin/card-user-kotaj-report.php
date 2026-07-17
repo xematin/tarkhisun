@@ -16,10 +16,13 @@ if (!$user) ts_json_error(404, 'کاربر یافت نشد');
 
 $hasG = false;
 try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
+$hasAtt = false;
+try { $pdo->query("SELECT attachments FROM ts_kotaj LIMIT 0"); $hasAtt = true; } catch (Throwable $e) {}
 $gSel = $hasG ? "k.kotaj_date_gregorian," : "";
+$aSel = $hasAtt ? "k.attachments," : "";
 
 $rows = $pdo->prepare(
-    "SELECT k.id, k.card_id, k.entry_id, k.kotaj_number, k.kotaj_date_jalali, $gSel
+    "SELECT k.id, k.card_id, k.entry_id, k.kotaj_number, k.kotaj_date_jalali, $gSel $aSel
             k.total_value_usd, k.created_at,
             c.name AS card_name, e.title AS entry_title
      FROM ts_kotaj k
@@ -56,6 +59,11 @@ $out = [];
 foreach ($rows as $r) {
     $kid = (int)$r['id'];
     $kt = $tomanByK[$kid] ?? 0.0;
+    $atts = [];
+    if (!empty($r['attachments'])) {
+        $d = json_decode((string)$r['attachments'], true);
+        if (is_array($d)) $atts = array_values(array_filter(array_map('strval', $d)));
+    }
     $out[] = [
         'id' => $kid,
         'card_id' => (int)$r['card_id'],
@@ -68,6 +76,7 @@ foreach ($rows as $r) {
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $kt,
         'created_at' => $r['created_at'],
+        'attachments' => $atts,
         'items' => $itemsByK[$kid] ?? [],
     ];
     $totalUsd += (float)$r['total_value_usd'];

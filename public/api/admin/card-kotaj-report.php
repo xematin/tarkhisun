@@ -79,6 +79,11 @@ foreach ($rows as $r) {
     }
     $kid = (int)$r['id'];
     $kt = $tomanByK[$kid] ?? 0.0;
+    $atts = [];
+    if (!empty($r['attachments'])) {
+        $d = json_decode((string)$r['attachments'], true);
+        if (is_array($d)) $atts = array_values(array_filter(array_map('strval', $d)));
+    }
     $users[$uid]['kotajs'][] = [
         'id' => $kid,
         'entry_id' => (int)$r['entry_id'],
@@ -89,6 +94,7 @@ foreach ($rows as $r) {
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $kt,
         'created_at' => $r['created_at'],
+        'attachments' => $atts,
         'items' => $itemsByK[$kid] ?? [],
     ];
     $users[$uid]['total_usd'] += (float)$r['total_value_usd'];
