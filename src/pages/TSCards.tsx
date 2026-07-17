@@ -362,14 +362,15 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         {(() => {
                           const paid = Number(r.admin_paid_irt || 0);
                           const diff = paid - (bal || 0);
-                          const isCredit = diff > 0.0001;
+                          // Reversed labels per business rule: admin overpaid => admin is debtor to card owner
+                          const isOver = diff > 0.0001;
                           const isSettled = Math.abs(diff) <= 0.0001;
-                          const label = isSettled ? "تسویه" : isCredit ? "بستانکار" : "بدهکار";
+                          const label = isSettled ? "تسویه" : isOver ? "بدهکار" : "بستانکار";
                           const statusBtnClass = isSettled
                             ? "bg-gradient-to-l from-slate-500 to-slate-400 text-white"
-                            : isCredit
-                              ? "bg-gradient-to-l from-emerald-600 to-green-500 text-white"
-                              : "bg-gradient-to-l from-rose-600 to-red-500 text-white";
+                            : isOver
+                              ? "bg-gradient-to-l from-rose-600 to-red-500 text-white"
+                              : "bg-gradient-to-l from-emerald-600 to-green-500 text-white";
                           return (
                         <TableCell data-label="عملیات" className="align-top md:pt-2 pt-3 md:border-t-0 border-t border-white/10">
                           <div className="grid grid-cols-3 md:grid-cols-3 gap-1.5 md:justify-end md:max-w-[240px]">
