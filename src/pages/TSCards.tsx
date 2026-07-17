@@ -3729,6 +3729,9 @@ const KotajItemsSearchPanel = ({
   const [items, setItems] = useState<KotajItemRow[]>([]);
   const [totals, setTotals] = useState<{ count: number; usd: number; toman: number }>({ count: 0, usd: 0, toman: 0 });
   const [loading, setLoading] = useState(false);
+  const [attachRow, setAttachRow] = useState<KotajItemRow | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const isImg = (p?: string | null) => !!p && /\.(jpe?g|png|webp|gif)$/i.test(p);
 
   const load = useCallback(async () => {
     setLoading(true);
