@@ -115,6 +115,11 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
     setTimeout(() => {
       isDraggingRef.current = false;
     }, 200);
+    // restart auto-slide
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (posts.length > 1) {
+      intervalRef.current = setInterval(nextSlide, 4000);
+    }
   };
 
   if (posts.length === 0) return null;
