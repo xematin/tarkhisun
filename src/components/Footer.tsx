@@ -192,7 +192,10 @@ const Footer = () => {
           {/* Bottom bar */}
           <div className="mt-6 pt-5 border-t border-white/60 flex flex-col md:flex-row items-center justify-between gap-3">
             <p className="text-xs sm:text-sm text-muted-foreground text-persian text-center md:text-right">
-              © {persianYear} — تمامی حقوق برای تیم ترخیصان محفوظ است. طراحی و توسعه توسط{" "}
+              © {persianYear} — تمامی حقوق برای تیم ترخیصان محفوظ است.
+            </p>
+            <p className="text-xs sm:text-sm text-muted-foreground text-persian text-center">
+              طراحی و توسعه توسط{" "}
               <a
                 href="https://octanco.de"
                 target="_blank"
