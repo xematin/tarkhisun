@@ -63,12 +63,14 @@ interface MyEntry {
   allocated: number;
   used_usd: number;
   remaining: number;
+  remaining_with_tolerance?: number;
   total_irt: number;
 }
 interface MyCard {
   id: number;
   name: string;
   updated_at?: string;
+  tolerance_percent?: number;
   entries: MyEntry[];
   total_irt: number;
   total_usd: number;
