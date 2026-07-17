@@ -670,7 +670,7 @@ const KotajDialog = ({
             <div className="flex items-center justify-between">
               <Label className="text-persian">قلم‌های کوتاژ</Label>
               <div className={`text-sm font-bold tabular-nums text-persian ${over ? "text-destructive" : "text-emerald-600"}`}>
-                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remainLive)}`}
+                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده${tol > 0 ? ` با ${tol}% تلورانس` : ""}: ${fmtUSD(remainLive)}`}
               </div>
             </div>
             {items.map((it, i) => {
