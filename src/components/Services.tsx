@@ -1,4 +1,4 @@
-import { Truck, FileCheck, Users, Search, Shield, Clock, CreditCard, ChevronLeft } from "lucide-react";
+import { Truck, FileCheck, Users, Search, Shield, Clock, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
