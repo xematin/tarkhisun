@@ -295,6 +295,8 @@ try {
     }
     if (ts_ensure_card_admin_payments_schema($pdo)) echo "OK: ensured ts_card_admin_payments schema\n";
     else echo "WARN: could not auto-ensure ts_card_admin_payments schema; run migrations manually\n";
+    if (ts_ensure_cards_tolerance_schema($pdo)) echo "OK: ensured ts_cards tolerance/display columns\n";
+    else echo "WARN: could not auto-ensure ts_cards tolerance columns\n";
     if (ts_ensure_treasury_schema($pdo)) echo "OK: ensured ts_treasury_ledger schema\n";
     else echo "WARN: could not auto-ensure ts_treasury_ledger schema; run treasury migration manually\n";
     $bf = ts_treasury_backfill($pdo);
