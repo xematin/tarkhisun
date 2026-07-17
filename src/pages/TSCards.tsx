@@ -806,9 +806,18 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
               </div>
               <div className="space-y-2">
                 <Label className="text-persian text-xs">موجودی کل (تومان)</Label>
-                <div className="h-10 px-3 flex items-center rounded-md border bg-primary/5 font-bold tabular-nums text-persian">
-                  {fmtToman(grandTotal)}
-                </div>
+                {(() => {
+                  const tol = parseFloat(normDigits(tolerancePercent)) || 0;
+                  const withTol = grandTotal * (1 + tol / 100);
+                  return (
+                    <div className="h-10 px-3 flex flex-col justify-center rounded-md border bg-primary/5 tabular-nums text-persian leading-tight">
+                      <span className="font-bold text-sm">{fmtToman(grandTotal)}</span>
+                      {tol > 0 && (
+                        <span className="text-[10px] text-muted-foreground">با تلورانس: {fmtToman(withTol)}</span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
 
