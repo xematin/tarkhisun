@@ -16,10 +16,13 @@ if (!$user) ts_json_error(404, 'کاربر یافت نشد');
 
 $hasG = false;
 try { $pdo->query("SELECT kotaj_date_gregorian FROM ts_kotaj LIMIT 0"); $hasG = true; } catch (Throwable $e) {}
+$hasAtt = false;
+try { $pdo->query("SELECT attachments FROM ts_kotaj LIMIT 0"); $hasAtt = true; } catch (Throwable $e) {}
 $gSel = $hasG ? "k.kotaj_date_gregorian," : "";
+$aSel = $hasAtt ? "k.attachments," : "";
 
 $rows = $pdo->prepare(
-    "SELECT k.id, k.card_id, k.entry_id, k.kotaj_number, k.kotaj_date_jalali, $gSel
+    "SELECT k.id, k.card_id, k.entry_id, k.kotaj_number, k.kotaj_date_jalali, $gSel $aSel
             k.total_value_usd, k.created_at,
             c.name AS card_name, e.title AS entry_title
      FROM ts_kotaj k
