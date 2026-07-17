@@ -79,16 +79,19 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
     $pdo = ts_db();
     $now = date('Y-m-d H:i:s');
 
+    // Ensure tolerance/display columns exist before we try to write them
+    ts_ensure_cards_tolerance_schema($pdo);
+
     $customMap = [];
     $pdo->beginTransaction();
     try {
         if ($cardId === null) {
             // create
             $stmt = $pdo->prepare(
-                'INSERT INTO ts_cards (name, balance, currency, cost_unit_price_irt, created_by, created_at, updated_at)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)'
+                'INSERT INTO ts_cards (name, balance, currency, cost_unit_price_irt, tolerance_percent, created_by, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
             );
-            $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $adminId, $now, $now]);
+            $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $tolerance, $adminId, $now, $now]);
             $cardId = (int)$pdo->lastInsertId();
 
             // create-path: simple inserts for entries
@@ -105,16 +108,18 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
             $exists = $pdo->prepare('SELECT id FROM ts_cards WHERE id=?');
             $exists->execute([$cardId]);
             if (!$exists->fetch()) ts_json_error(404, 'کارت یافت نشد');
+            // Note: display_balance_usd and finalized_at are intentionally not touched here;
+            // only card-finalize.php / card-finalize-reset.php modify them.
             if ($costUnit !== null) {
                 $stmt = $pdo->prepare(
-                    'UPDATE ts_cards SET name=?, balance=?, currency=?, cost_unit_price_irt=?, updated_at=? WHERE id=?'
+                    'UPDATE ts_cards SET name=?, balance=?, currency=?, cost_unit_price_irt=?, tolerance_percent=?, updated_at=? WHERE id=?'
                 );
-                $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $now, $cardId]);
+                $stmt->execute([$name, $balanceIrt, 'IRT', $costUnit, $tolerance, $now, $cardId]);
             } else {
                 $stmt = $pdo->prepare(
-                    'UPDATE ts_cards SET name=?, balance=?, currency=?, updated_at=? WHERE id=?'
+                    'UPDATE ts_cards SET name=?, balance=?, currency=?, tolerance_percent=?, updated_at=? WHERE id=?'
                 );
-                $stmt->execute([$name, $balanceIrt, 'IRT', $now, $cardId]);
+                $stmt->execute([$name, $balanceIrt, 'IRT', $tolerance, $now, $cardId]);
             }
 
             // Snapshot custom_unit_price_irt by (card_user_id, entry_title)
