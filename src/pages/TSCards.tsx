@@ -3831,6 +3831,40 @@ const KotajItemsSearchPanel = ({
             </Table>
           </div>
         )}
+
+        <Dialog open={!!attachRow} onOpenChange={(v) => !v && setAttachRow(null)}>
+          <DialogContent className="panel-fa max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-persian">پیوست‌های کوتاژ #{attachRow?.kotaj_number}</DialogTitle>
+            </DialogHeader>
+            {!attachRow?.attachments || attachRow.attachments.length === 0 ? (
+              <p className="py-6 text-center text-muted-foreground text-persian text-sm">فایلی برای این کوتاژ ثبت نشده است.</p>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {attachRow.attachments.map((p, i) => (
+                  <div key={i} className="border rounded-md p-2 bg-muted/30">
+                    {isImg(p) ? (
+                      <button type="button" onClick={() => setPreview(p)} className="block w-full">
+                        <img src={p} alt={`پیوست ${i + 1}`} className="w-full h-32 object-cover rounded" />
+                      </button>
+                    ) : (
+                      <a href={p} target="_blank" rel="noreferrer" className="text-primary text-persian text-sm underline block text-center py-8">
+                        مشاهده فایل {i + 1}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!preview} onOpenChange={(v) => !v && setPreview(null)}>
+          <DialogContent className="max-w-3xl panel-fa">
+            <DialogHeader><DialogTitle className="text-persian">پیش‌نمایش</DialogTitle></DialogHeader>
+            {preview && <img src={preview} alt="پیش‌نمایش" className="w-full h-auto rounded" />}
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
