@@ -33,7 +33,7 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
     const children = container.querySelectorAll(".article-slide");
     const target = children[clamped] as HTMLElement | undefined;
     if (target) {
-      container.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
+      target.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
     }
     setActiveIndex(clamped);
   }, [posts.length]);
