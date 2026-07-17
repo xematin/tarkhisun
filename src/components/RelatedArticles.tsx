@@ -29,7 +29,7 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
         </div>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {relatedPosts.map((post) => (
+          {posts.map((post) => (
             <Link 
               key={post.id} 
               to={`/blog/${post.slug}`}
