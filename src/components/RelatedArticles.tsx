@@ -19,6 +19,104 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
       ? getRelatedPosts(currentPostId, limit)
       : [];
 
+  const isMobile = useIsMobile();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isDraggingRef = useRef(false);
+
+  const scrollToIndex = useCallback((index: number) => {
+    const container = scrollRef.current;
+    if (!container || posts.length === 0) return;
+    const clamped = Math.max(0, Math.min(index, posts.length - 1));
+    const children = container.querySelectorAll(".article-slide");
+    const target = children[clamped] as HTMLElement | undefined;
+    if (target) {
+      container.scrollTo({ left: target.offsetLeft, behavior: "smooth" });
+    }
+    setActiveIndex(clamped);
+  }, [posts.length]);
+
+  const nextSlide = useCallback(() => {
+    const next = activeIndex >= posts.length - 1 ? 0 : activeIndex + 1;
+    scrollToIndex(next);
+  }, [activeIndex, posts.length, scrollToIndex]);
+
+  useEffect(() => {
+    if (!isMobile || posts.length <= 1) return;
+    intervalRef.current = setInterval(nextSlide, 4000);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [isMobile, posts.length, nextSlide]);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      if (!container || isDraggingRef.current) return;
+      const children = Array.from(container.querySelectorAll(".article-slide")) as HTMLElement[];
+      const containerCenter = container.scrollLeft + container.clientWidth / 2;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+      children.forEach((child, i) => {
+        const childCenter = child.offsetLeft + child.clientWidth / 2;
+        const distance = Math.abs(childCenter - containerCenter);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = i;
+        }
+      });
+      setActiveIndex(closestIndex);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [posts.length]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+    isDraggingRef.current = true;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const touch = e.touches[0];
+    const dx = touchStartRef.current.x - touch.clientX;
+    const dy = touchStartRef.current.y - touch.clientY;
+    if (Math.abs(dx) > Math.abs(dy)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current || !scrollRef.current) {
+      touchStartRef.current = null;
+      isDraggingRef.current = false;
+      return;
+    }
+    const touch = e.changedTouches[0];
+    const dx = touchStartRef.current.x - touch.clientX;
+    const dy = touchStartRef.current.y - touch.clientY;
+    const threshold = 40;
+
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > threshold) {
+      if (dx > 0) {
+        scrollToIndex(activeIndex + 1);
+      } else {
+        scrollToIndex(activeIndex - 1);
+      }
+    }
+    touchStartRef.current = null;
+    setTimeout(() => {
+      isDraggingRef.current = false;
+    }, 200);
+  };
+
   if (posts.length === 0) return null;
 
   return (
@@ -30,15 +128,23 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
             {mode === "latest" ? "جدیدترین مقالات" : "مقالات مرتبط"}
           </h2>
         </div>
-        
-        {/* Mobile: horizontal snap carousel to prevent long scrolling */}
-        <div className="md:hidden -mx-4 px-4 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" dir="rtl">
-          <div className="flex gap-4 pb-2">
-            {posts.map((post) => (
+
+        {/* Mobile: horizontal snap carousel with auto-slide and swipe */}
+        <div className="md:hidden -mx-4 px-4">
+          <div
+            ref={scrollRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-4"
+            dir="rtl"
+          >
+            {posts.map((post, index) => (
               <Link
                 key={post.id}
                 to={`/blog/${post.slug}`}
-                className="group snap-start shrink-0 w-[82%]"
+                className="article-slide group snap-start shrink-0 w-[82%]"
+                data-index={index}
               >
                 <Card className="h-full overflow-hidden !p-0 transition-all duration-300 hover:shadow-lg hover:border-primary/50">
                   {post.image ? (
@@ -77,13 +183,28 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
               </Link>
             ))}
           </div>
+
+          {/* Pagination dots */}
+          <div className="flex justify-center gap-2 mt-2">
+            {posts.map((_, index) => (
+              <button
+                key={index}
+                type="button"
+                aria-label={`مقاله ${index + 1}`}
+                onClick={() => scrollToIndex(index)}
+                className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
+                  index === activeIndex ? "bg-primary" : "bg-primary/30"
+                }`}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Tablet/Desktop: grid */}
         <div className="hidden md:grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <Link 
-              key={post.id} 
+            <Link
+              key={post.id}
               to={`/blog/${post.slug}`}
               className="group"
             >
@@ -124,9 +245,9 @@ const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: Related
             </Link>
           ))}
         </div>
-        
+
         <div className="text-center mt-8">
-          <Link 
+          <Link
             to="/blog"
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
           >
