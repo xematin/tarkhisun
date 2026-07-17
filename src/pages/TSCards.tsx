@@ -634,6 +634,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     if (!open) return;
     setStep(1);
     setName(editing?.name ?? "");
+    setTolerancePercent(editing?.tolerance_percent !== undefined && editing?.tolerance_percent !== null ? String(editing.tolerance_percent) : "0");
     if (editing?.entries && editing.entries.length > 0) {
       setEntries(editing.entries.map(e => ({
         title: e.title,
