@@ -2066,11 +2066,12 @@ const UsersManagementPanel = ({
                       <TableHead className="text-persian">تاریخ</TableHead>
                       <TableHead className="text-persian">دلار</TableHead>
                       <TableHead className="text-persian">تومان</TableHead>
+                      <TableHead className="text-persian">پیوست</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {kotajData.items.length === 0 ? (
-                      <TableRow><TableCell colSpan={5} className="text-center text-muted-foreground text-persian py-6">کوتاژی ثبت نشده است.</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">کوتاژی ثبت نشده است.</TableCell></TableRow>
                     ) : kotajData.items.map((k: any) => (
                       <TableRow key={k.id}>
                         <TableCell className="text-persian">{k.kotaj_number}</TableCell>
@@ -2081,6 +2082,17 @@ const UsersManagementPanel = ({
                         </TableCell>
                         <TableCell className="tabular-nums">{Number(k.total_value_usd||0).toLocaleString("fa-IR")}</TableCell>
                         <TableCell className="tabular-nums text-primary">{fmtToman(k.toman_total)}</TableCell>
+                        <TableCell className="text-xs">
+                          {Array.isArray(k.attachments) && k.attachments.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {k.attachments.map((p: string, i: number) => (
+                                <a key={i} href={p} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                                  {(i + 1).toLocaleString("fa-IR")}
+                                </a>
+                              ))}
+                            </div>
+                          ) : <span className="text-muted-foreground">—</span>}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
