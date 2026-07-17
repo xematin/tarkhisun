@@ -567,6 +567,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
   const [name, setName] = useState("");
   const [entries, setEntries] = useState<EntryDraft[]>([emptyEntry()]);
   const [allocs, setAllocs] = useState<AllocMap[]>([{}]);
+  const [sectionCategories, setSectionCategories] = useState<string[]>([]);
 
   const [users, setUsers] = useState<CardUser[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
@@ -606,6 +607,16 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
   }, [toast]);
 
   useEffect(() => { if (open && step === 2) void loadUsers(); }, [open, step, loadUsers]);
+
+  useEffect(() => {
+    if (!open) return;
+    (async () => {
+      try {
+        const res = await api<{ items: { id: number; name: string }[] }>("/api/section-categories-list.php");
+        setSectionCategories((res.items || []).map(i => i.name));
+      } catch { /* ignore */ }
+    })();
+  }, [open]);
 
   const entryTotals = useMemo(() => entries.map(e => {
     const a = parseFloat(e.amount) || 0;
@@ -739,7 +750,27 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="space-y-1">
                         <Label className="text-persian text-xs">عنوان مبلغ</Label>
-                        <Input value={e.title} onChange={(ev) => updateEntry(i, { title: ev.target.value })} className="text-persian" placeholder="مثلاً تره بار" />
+                        {(() => {
+                          const options = Array.from(new Set([...(sectionCategories || []), ...(e.title && !sectionCategories.includes(e.title) ? [e.title] : [])]));
+                          return (
+                            <Select value={e.title || undefined} onValueChange={(v) => updateEntry(i, { title: v })}>
+                              <SelectTrigger className="text-persian">
+                                <SelectValue placeholder="یک دسته را انتخاب کنید" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {options.length === 0 ? (
+                                  <div className="px-2 py-2 text-xs text-muted-foreground text-persian">
+                                    ابتدا از تنظیمات دسته‌بندی سکشن‌ها اضافه کنید
+                                  </div>
+                                ) : options.map(opt => (
+                                  <SelectItem key={opt} value={opt} className="text-persian">
+                                    {opt}{!sectionCategories.includes(opt) ? " (سفارشی)" : ""}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          );
+                        })()}
                       </div>
                       <div className="space-y-1">
                         <Label className="text-persian text-xs">مبلغ موجودی</Label>

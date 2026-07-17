@@ -15,8 +15,18 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import CustomsCodesSettings from "@/components/admin/CustomsCodesSettings";
+import SectionCategoriesSettings from "@/components/admin/SectionCategoriesSettings";
 
-const SettingsPanel = () => <CustomsCodesSettings />;
+const SettingsPanel = () => (
+  <Tabs defaultValue="customs" className="space-y-4">
+    <TabsList className="h-11 rounded-full bg-secondary p-1.5 border border-border gap-1 text-persian">
+      <TabsTrigger value="customs" className="h-full px-4 rounded-full text-persian text-xs md:text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold transition-all">کدهای گمرکی</TabsTrigger>
+      <TabsTrigger value="section-categories" className="h-full px-4 rounded-full text-persian text-xs md:text-sm text-muted-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:font-bold transition-all">دسته‌بندی سکشن‌ها</TabsTrigger>
+    </TabsList>
+    <TabsContent value="customs"><CustomsCodesSettings /></TabsContent>
+    <TabsContent value="section-categories"><SectionCategoriesSettings /></TabsContent>
+  </Tabs>
+);
 
 
 type AdminState = "loading" | "setup" | "login" | "auth";
