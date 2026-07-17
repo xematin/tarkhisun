@@ -611,11 +611,15 @@ const KotajDialog = ({
               <Select value={entryId} onValueChange={setEntryId}>
                 <SelectTrigger className="text-persian"><SelectValue placeholder="انتخاب سکشن" /></SelectTrigger>
                 <SelectContent>
-                  {usdEntries.map(e => (
-                    <SelectItem key={e.entry_id} value={String(e.entry_id)} className="text-persian">
-                      {e.title} (مانده: {fmtUSD(e.remaining)})
-                    </SelectItem>
-                  ))}
+                  {usdEntries.map(e => {
+                    const rt = e.remaining_with_tolerance ?? e.remaining;
+                    const showTol = tol > 0 && rt > e.remaining;
+                    return (
+                      <SelectItem key={e.entry_id} value={String(e.entry_id)} className="text-persian">
+                        {e.title} (مانده: {fmtUSD(e.remaining)}{showTol ? ` — با تلورانس: ${fmtUSD(rt)}` : ""})
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
