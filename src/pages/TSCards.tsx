@@ -737,6 +737,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
       const payload = {
         id: editing?.id,
         name: name.trim(),
+        tolerance_percent: parseFloat(normDigits(tolerancePercent)) || 0,
         entries: entries.map(e => ({
           title: e.title.trim(),
           amount: parseFloat(e.amount) || 0,
