@@ -269,7 +269,7 @@ const Index = () => {
           <Suspense fallback={<LoadingFallback />}>
             <FAQ />
           </Suspense>
-          <RelatedArticles currentPostId={1} limit={3} />
+          <RelatedArticles mode="latest" limit={3} />
           <PortsMapSection />
           <Suspense fallback={<LoadingFallback />}>
             <Contact />
