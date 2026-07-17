@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Bot, Sparkles, MessageCircle, FileText, CheckCircle, ArrowLeft, Zap, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
 const AIAssistant = () => {
@@ -21,9 +22,6 @@ const AIAssistant = () => {
     title: "تشخیص نوع مجوز",
     description: "شناسایی دقیق انواع مجوزهای مورد نیاز برای کالاهای مختلف"
   }];
-  const handleAIClick = () => {
-    window.open('https://t.me/N8NAutoBotBot', '_blank');
-  };
   return <section id="ai-assistant" className="contain-layout gpu-accelerated py-20 bg-gradient-to-br from-accent-lighter via-white to-primary-lighter">
       <div className="container mx-auto px-4" dir="rtl">
         {/* Main AI Card */}
@@ -62,10 +60,12 @@ const AIAssistant = () => {
             </div>
 
             {/* CTA Button */}
-            <Button size="lg" className="btn-ai text-white text-sm md:text-lg px-4 md:px-8 py-3 md:py-4 text-persian" onClick={handleAIClick}>
-              <MessageCircle className="mr-2 md:mr-3 h-5 md:h-6 w-5 md:w-6" />
-              مشاوره رایگان با ترخیصان‌یار
-              <ArrowLeft className="ml-2 md:ml-3 h-4 md:h-5 w-4 md:w-5" />
+            <Button size="lg" className="btn-ai text-white text-sm md:text-lg px-4 md:px-8 py-3 md:py-4 text-persian" asChild>
+              <Link to="/tarkhisan-yar">
+                <MessageCircle className="mr-2 md:mr-3 h-5 md:h-6 w-5 md:w-6" />
+                مشاوره رایگان با ترخیصان‌یار
+                <ArrowLeft className="ml-2 md:ml-3 h-4 md:h-5 w-4 md:w-5" />
+              </Link>
             </Button>
 
             <p className="text-sm text-muted-foreground mt-4 text-persian">
