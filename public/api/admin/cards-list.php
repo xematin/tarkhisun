@@ -107,6 +107,22 @@ if ($rows) {
         $kotajByEntry[$eid] = $t;
     }
 
+    // kotaj USD totals per card & per entry (independent of unit price)
+    $kUStmt = $pdo->prepare(
+        "SELECT k.card_id, k.entry_id, COALESCE(SUM(k.total_value_usd),0) AS usd
+         FROM ts_kotaj k
+         WHERE k.card_id IN ($place)
+         GROUP BY k.card_id, k.entry_id"
+    );
+    $kUStmt->execute($ids);
+    $kotajUsdByCard = [];
+    $kotajUsdByEntry = [];
+    foreach ($kUStmt->fetchAll() as $kr) {
+        $cid = (int)$kr['card_id']; $eid = (int)$kr['entry_id']; $u = (float)$kr['usd'];
+        $kotajUsdByCard[$cid] = ($kotajUsdByCard[$cid] ?? 0) + $u;
+        $kotajUsdByEntry[$eid] = $u;
+    }
+
     // admin payments to card owner (confirmed)
     $apByCard = [];
     try {
