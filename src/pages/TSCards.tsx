@@ -3808,7 +3808,19 @@ const KotajItemsSearchPanel = ({
                     <TableCell data-label="جمع (تومان)" className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
                     <TableCell data-label="کارت / سکشن" className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
                     <TableCell data-label="کاربر" className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
-                    <TableCell data-label="کوتاژ" className="text-persian text-xs">#{r.kotaj_number}</TableCell>
+                    <TableCell data-label="کوتاژ" className="text-persian text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setAttachRow(r)}
+                        className="text-primary hover:underline font-bold tabular-nums inline-flex items-center gap-1"
+                        title="مشاهده پیوست‌ها"
+                      >
+                        #{r.kotaj_number}
+                        {r.attachments && r.attachments.length > 0 && (
+                          <Paperclip className="w-3 h-3" />
+                        )}
+                      </button>
+                    </TableCell>
                     <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums">{r.kotaj_date_gregorian || "—"}</div>
                       <div className="text-muted-foreground opacity-70 tabular-nums">{r.kotaj_date_jalali || ""}</div>
