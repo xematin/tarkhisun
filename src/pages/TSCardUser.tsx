@@ -517,8 +517,12 @@ const KotajDialog = ({
   const usdEntries = usdEntriesAll;
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
   const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
+  const tol = card?.tolerance_percent ?? 0;
+  const remainTolBase = selected
+    ? ((selected.remaining_with_tolerance ?? selected.remaining) + editingOwn)
+    : 0;
   const remainBase = selected ? selected.remaining + editingOwn : 0;
-  const remainLive = remainBase - totalUsd;
+  const remainLive = remainTolBase - totalUsd;
   const over = selected ? remainLive < -0.0001 : false;
   const totalToman = items.reduce((s, it) => {
     const v = parseFloat(normDigits(it.value_usd)) || 0;
