@@ -451,6 +451,19 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                               </Button>
                             </div>
                             <div className="col-span-3">
+                              {r.finalized_at ? (
+                                <Button size="sm" onClick={() => handleFinalize(r, "reset")} title="لغو اتمام و بازگشت به سقف اصلی" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-slate-600 to-slate-500 text-white hover:opacity-90 shadow-md">
+                                  <RotateCcw className="w-4 h-4 shrink-0" />
+                                  <span className="text-persian text-xs truncate">لغو اتمام</span>
+                                </Button>
+                              ) : (
+                                <Button size="sm" onClick={() => handleFinalize(r, "finalize")} title="اتمام کارت — جایگزینی موجودی کل با مجموع کوتاژها" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-amber-600 to-orange-500 text-white hover:opacity-90 shadow-md">
+                                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                  <span className="text-persian text-xs truncate">اتمام</span>
+                                </Button>
+                              )}
+                            </div>
+                            <div className="col-span-3">
                               <div
                                 title="وضعیت ادمین"
                                 className={`w-full min-h-9 rounded-md flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-2 py-1 shadow-md ${statusBtnClass}`}
