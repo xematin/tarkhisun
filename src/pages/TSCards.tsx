@@ -620,6 +620,7 @@ const emptyEntry = (): EntryDraft => ({
 const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [name, setName] = useState("");
+  const [tolerancePercent, setTolerancePercent] = useState<string>("0");
   const [entries, setEntries] = useState<EntryDraft[]>([emptyEntry()]);
   const [allocs, setAllocs] = useState<AllocMap[]>([{}]);
   const [sectionCategories, setSectionCategories] = useState<string[]>([]);
