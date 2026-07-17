@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Bot, Sparkles, MessageCircle, FileText, CheckCircle, ArrowLeft, Zap, ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useState } from "react";
 const AIAssistant = () => {
