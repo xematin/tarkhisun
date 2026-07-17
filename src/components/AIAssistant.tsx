@@ -75,7 +75,7 @@ const AIAssistant = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
           {features.map((feature, index) => {
           const IconComponent = feature.icon;
           return <div key={index} className="card-service text-center">
@@ -95,7 +95,7 @@ const AIAssistant = () => {
         </div>
 
         {/* About Tarkhisan-yar AI - Rich Content Section */}
-        <div className="mt-16 max-w-4xl mx-auto">
+        <div className="hidden md:block mt-16 max-w-4xl mx-auto">
           <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
             <CollapsibleTrigger className="w-full group">
               <div className={`card-service cursor-pointer transition-all duration-300 ${isOpen ? 'shadow-lg border-2 border-accent/30 bg-accent/5' : 'hover:shadow-md hover:border-accent/20'}`}>
