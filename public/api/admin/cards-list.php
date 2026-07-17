@@ -159,13 +159,6 @@ if ($rows) {
         $r['kotaj_toman_total'] = $kotajByCard[$cid] ?? 0.0;
         $r['kotaj_usd_total']   = $kotajUsdByCard[$cid] ?? 0.0;
         $paid = $apByCard[$cid] ?? 0.0;
-        $r['users']   = array_values($usersByCard[$cid] ?? []);
-        $r['user_count'] = count($r['users']);
-        $r['allocated_total'] = 0.0;
-        foreach ($r['users'] as $u) $r['allocated_total'] += $u['allocated'];
-        $r['remaining'] = max(0, (float)$r['balance'] - (float)$r['allocated_total']);
-        $r['kotaj_toman_total'] = $kotajByCard[$cid] ?? 0.0;
-        $paid = $apByCard[$cid] ?? 0.0;
         $r['admin_paid_irt'] = $paid;
         $r['admin_debt_remaining_irt'] = max(0, (float)$r['balance'] - $paid);
     }
