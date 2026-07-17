@@ -41,11 +41,20 @@ if (!$access) ts_json_error(403, 'دسترسی به این سکشن ندارید
 $cardId = (int)$access['card_id'];
 $alloc  = (float)$access['allocated'];
 
+// Read tolerance for this card (default 0)
+$tolerance = 0.0;
+try {
+    $ts = $pdo->prepare('SELECT tolerance_percent FROM ts_cards WHERE id=? LIMIT 1');
+    $ts->execute([$cardId]);
+    $tolerance = (float)($ts->fetchColumn() ?: 0);
+} catch (Throwable $e) { $tolerance = 0.0; }
+$allowedMax = $alloc * (1 + $tolerance / 100.0);
+
 // Used so far
 $us = $pdo->prepare("SELECT COALESCE(SUM(total_value_usd),0) FROM ts_kotaj WHERE card_user_id=? AND entry_id=?");
 $us->execute([(int)$u['id'], $entry_id]);
 $used = (float)$us->fetchColumn();
-$remain = $alloc - $used;
+$remain = $allowedMax - $used;
 
 // Validate items
 $items = [];
@@ -62,7 +71,8 @@ foreach ($itemsRaw as $i => $it) {
 }
 
 if ($totalUsd - $remain > 0.0001) {
-    ts_json_error(400, "ارزش کل کوتاژ ($totalUsd) از مانده سکشن ($remain) بیشتر است");
+    $tolMsg = $tolerance > 0 ? " با احتساب " . rtrim(rtrim(number_format($tolerance, 3, '.', ''), '0'), '.') . "٪ تلورانس" : '';
+    ts_json_error(400, "ارزش کل کوتاژ ($totalUsd) از سقف مجاز سکشن$tolMsg (مانده: $remain دلار) بیشتر است");
 }
 
 // Handle optional attachments (multi)
