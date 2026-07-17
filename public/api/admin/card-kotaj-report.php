@@ -94,6 +94,7 @@ foreach ($rows as $r) {
         'total_value_usd' => (float)$r['total_value_usd'],
         'toman_total' => $kt,
         'created_at' => $r['created_at'],
+        'attachments' => $atts,
         'items' => $itemsByK[$kid] ?? [],
     ];
     $users[$uid]['total_usd'] += (float)$r['total_value_usd'];
