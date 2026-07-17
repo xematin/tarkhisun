@@ -772,16 +772,37 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
         {step === 1 && (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <div className="space-y-2">
                 <Label className="text-persian">نام کارت</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} className="text-persian" />
               </div>
               <div className="space-y-2">
+                <Label className="text-persian text-xs">تلورانس (٪)</Label>
+                <Input
+                  dir="ltr"
+                  inputMode="decimal"
+                  value={tolerancePercent}
+                  onChange={(e) => setTolerancePercent(normDigits(e.target.value))}
+                  placeholder="0"
+                  className="tabular-nums"
+                />
+              </div>
+              <div className="space-y-2">
                 <Label className="text-persian text-xs">موجودی کل (دلار)</Label>
-                <div className="h-10 px-3 flex items-center rounded-md border bg-muted/40 font-bold tabular-nums text-persian">
-                  {entries.filter(e => e.currency === "USD").reduce((s, e) => s + (parseFloat(e.amount) || 0), 0).toLocaleString("fa-IR")} دلار
-                </div>
+                {(() => {
+                  const usd = entries.filter(e => e.currency === "USD").reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+                  const tol = parseFloat(normDigits(tolerancePercent)) || 0;
+                  const withTol = usd * (1 + tol / 100);
+                  return (
+                    <div className="h-10 px-3 flex flex-col justify-center rounded-md border bg-muted/40 tabular-nums text-persian leading-tight">
+                      <span className="font-bold text-sm">{usd.toLocaleString("fa-IR")} دلار</span>
+                      {tol > 0 && (
+                        <span className="text-[10px] text-muted-foreground">با تلورانس: {withTol.toLocaleString("fa-IR", { maximumFractionDigits: 2 })} دلار</span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
               <div className="space-y-2">
                 <Label className="text-persian text-xs">موجودی کل (تومان)</Label>
@@ -790,6 +811,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
                 </div>
               </div>
             </div>
+
 
             <div className="space-y-3">
               <Label className="text-persian">سکشن‌های مبلغ</Label>
