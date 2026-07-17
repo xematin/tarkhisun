@@ -2498,8 +2498,24 @@ const AllPaymentsPanel = ({
             </SelectContent>
           </Select>
           <div className="grid grid-cols-2 gap-2 md:col-span-1">
-            <Input value={dateFrom} onChange={(e) => setDateFrom(normDigits(e.target.value))} placeholder="از تاریخ (1405/01/01)" className="text-persian" dir="ltr" />
-            <Input value={dateTo} onChange={(e) => setDateTo(normDigits(e.target.value))} placeholder="تا تاریخ (1405/12/29)" className="text-persian" dir="ltr" />
+            <DatePicker
+              value={dateFrom || ""}
+              onChange={(d) => setDateFrom(d ? (d as DateObject).format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-persian"
+              format="YYYY/MM/DD"
+              placeholder="از تاریخ (شمسی)"
+            />
+            <DatePicker
+              value={dateTo || ""}
+              onChange={(d) => setDateTo(d ? (d as DateObject).format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-persian"
+              format="YYYY/MM/DD"
+              placeholder="تا تاریخ (شمسی)"
+            />
           </div>
           {hasFilter && (
             <div className="md:col-span-3 flex justify-end">
