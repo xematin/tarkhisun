@@ -355,6 +355,12 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                           <span className="tabular-nums">{fmtUSD(e.remaining)}</span>
                         </div>
                       )}
+                      {e.currency === "USD" && (c.tolerance_percent ?? 0) > 0 && (e.remaining_with_tolerance ?? 0) > e.remaining && (
+                        <div className="flex justify-between text-xs text-amber-600">
+                          <span>مانده با تلورانس ({c.tolerance_percent}%)</span>
+                          <span className="tabular-nums">{fmtUSD(e.remaining_with_tolerance ?? e.remaining)}</span>
+                        </div>
+                      )}
                       {e.currency !== "IRT" && e.has_custom_price && (
                         <div className="text-xs text-muted-foreground tabular-nums">
                           قیمت هر {CURRENCY_LABEL[e.currency]}: {e.unit_price_irt.toLocaleString("fa-IR")} تومان
