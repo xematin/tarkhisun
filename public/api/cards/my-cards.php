@@ -87,6 +87,8 @@ foreach ($accessRows as $r) {
     $eid   = $r['entry_id'] !== null ? (int)$r['entry_id'] : null;
     $used  = $eid !== null ? ($usedByEntry[$eid] ?? 0.0) : 0.0;
     $remain = max(0, $alloc - $used);
+    $tol = (float)$cards[$cid]['tolerance_percent'];
+    $remainTol = max(0, $alloc * (1 + $tol / 100.0) - $used);
     $totalIrt = $hasCustom ? round($alloc * $unit, 2) : 0.0;
     $cards[$cid]['entries'][] = [
         'entry_id' => $eid,
@@ -97,6 +99,7 @@ foreach ($accessRows as $r) {
         'allocated' => $alloc,
         'used_usd' => $used,
         'remaining' => $remain,
+        'remaining_with_tolerance' => $remainTol,
         'total_irt' => $totalIrt,
     ];
     $cards[$cid]['total_irt'] += $totalIrt;
