@@ -1210,6 +1210,7 @@ interface ReportKotaj {
   total_value_usd: number;
   toman_total?: number;
   created_at: string;
+  attachments?: string[] | null;
   items: { name: string; value_usd: number; unit_price_irt: number; toman?: number }[];
 }
 interface ReportUser {
