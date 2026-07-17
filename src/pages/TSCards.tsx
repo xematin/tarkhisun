@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import CardBillingDialog from "@/components/admin/CardBillingDialog";
@@ -73,9 +73,13 @@ interface CardRow {
   updated_at?: string;
   created_at?: string;
   kotaj_toman_total?: number;
+  kotaj_usd_total?: number;
   cost_unit_price_irt?: number | null;
   admin_paid_irt?: number;
   admin_debt_remaining_irt?: number;
+  tolerance_percent?: number;
+  display_balance_usd?: number | null;
+  finalized_at?: string | null;
 }
 
 const CURRENCY_LABEL: Record<Currency, string> = {
@@ -237,6 +241,24 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
     }
   };
 
+  const handleFinalize = async (r: CardRow, mode: "finalize" | "reset") => {
+    const isFinalize = mode === "finalize";
+    const msg = isFinalize
+      ? `با تأیید، ستون «موجودی کل (دلار)» این کارت با مجموع دلاری کوتاژ‌های ثبت‌شده جایگزین می‌شود.\nسقف اصلی کارت دست‌نخورده باقی می‌ماند.\nادامه؟`
+      : `ستون «موجودی کل (دلار)» به مقدار اصلی (سقف کارت) بازگردانده شود؟`;
+    if (!confirm(msg)) return;
+    try {
+      await api("/api/admin/card-finalize.php", {
+        method: "POST",
+        body: JSON.stringify({ id: r.id, mode }),
+      });
+      toast({ title: isFinalize ? "اتمام ثبت شد" : "لغو اتمام انجام شد" });
+      void load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
   return (
     <Tabs dir="rtl" defaultValue="cards" className="space-y-6">
       <div className="-mx-2 px-2 overflow-x-auto md:overflow-visible">
@@ -313,8 +335,28 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                       <TableRow key={r.id}>
                         <TableCell data-label="نام کارت" className="text-persian font-medium align-top md:!text-sm text-base md:!font-medium !font-bold">{r.name}</TableCell>
                         <TableCell data-label="موجودی کل (دلار)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
-                          {usdTotal > 0 ? `${usdTotal.toLocaleString("fa-IR")} دلار` : "—"}
+                          {(() => {
+                            const hasDisplay = r.display_balance_usd !== null && r.display_balance_usd !== undefined;
+                            const shown = hasDisplay ? Number(r.display_balance_usd) : usdTotal;
+                            const tol = Number(r.tolerance_percent || 0);
+                            return (
+                              <div className="flex flex-col gap-0.5">
+                                <span>{shown > 0 ? `${shown.toLocaleString("fa-IR")} دلار` : "—"}</span>
+                                {hasDisplay && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    سقف: {usdTotal.toLocaleString("fa-IR")} دلار
+                                  </span>
+                                )}
+                                {tol > 0 && !hasDisplay && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    با {tol.toLocaleString("fa-IR")}٪ تلورانس: {(usdTotal * (1 + tol / 100)).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} دلار
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </TableCell>
+
                         <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
@@ -407,6 +449,19 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                                 <Receipt className="w-4 h-4 shrink-0" />
                                 <span className="text-persian text-xs truncate">صورتحساب</span>
                               </Button>
+                            </div>
+                            <div className="col-span-3">
+                              {r.finalized_at ? (
+                                <Button size="sm" onClick={() => handleFinalize(r, "reset")} title="لغو اتمام و بازگشت به سقف اصلی" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-slate-600 to-slate-500 text-white hover:opacity-90 shadow-md">
+                                  <RotateCcw className="w-4 h-4 shrink-0" />
+                                  <span className="text-persian text-xs truncate">لغو اتمام</span>
+                                </Button>
+                              ) : (
+                                <Button size="sm" onClick={() => handleFinalize(r, "finalize")} title="اتمام کارت — جایگزینی موجودی کل با مجموع کوتاژها" className="w-full justify-center gap-1.5 px-2 h-9 bg-gradient-to-l from-amber-600 to-orange-500 text-white hover:opacity-90 shadow-md">
+                                  <CheckCircle2 className="w-4 h-4 shrink-0" />
+                                  <span className="text-persian text-xs truncate">اتمام</span>
+                                </Button>
+                              )}
                             </div>
                             <div className="col-span-3">
                               <div
@@ -565,6 +620,7 @@ const emptyEntry = (): EntryDraft => ({
 const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => {
   const [step, setStep] = useState<1 | 2>(1);
   const [name, setName] = useState("");
+  const [tolerancePercent, setTolerancePercent] = useState<string>("0");
   const [entries, setEntries] = useState<EntryDraft[]>([emptyEntry()]);
   const [allocs, setAllocs] = useState<AllocMap[]>([{}]);
   const [sectionCategories, setSectionCategories] = useState<string[]>([]);
@@ -578,6 +634,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     if (!open) return;
     setStep(1);
     setName(editing?.name ?? "");
+    setTolerancePercent(editing?.tolerance_percent !== undefined && editing?.tolerance_percent !== null ? String(editing.tolerance_percent) : "0");
     if (editing?.entries && editing.entries.length > 0) {
       setEntries(editing.entries.map(e => ({
         title: e.title,
@@ -680,6 +737,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
       const payload = {
         id: editing?.id,
         name: name.trim(),
+        tolerance_percent: parseFloat(normDigits(tolerancePercent)) || 0,
         entries: entries.map(e => ({
           title: e.title.trim(),
           amount: parseFloat(e.amount) || 0,
@@ -714,16 +772,37 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
         {step === 1 && (
           <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               <div className="space-y-2">
                 <Label className="text-persian">نام کارت</Label>
                 <Input value={name} onChange={(e) => setName(e.target.value)} className="text-persian" />
               </div>
               <div className="space-y-2">
+                <Label className="text-persian text-xs">تلورانس (٪)</Label>
+                <Input
+                  dir="ltr"
+                  inputMode="decimal"
+                  value={tolerancePercent}
+                  onChange={(e) => setTolerancePercent(normDigits(e.target.value))}
+                  placeholder="0"
+                  className="tabular-nums"
+                />
+              </div>
+              <div className="space-y-2">
                 <Label className="text-persian text-xs">موجودی کل (دلار)</Label>
-                <div className="h-10 px-3 flex items-center rounded-md border bg-muted/40 font-bold tabular-nums text-persian">
-                  {entries.filter(e => e.currency === "USD").reduce((s, e) => s + (parseFloat(e.amount) || 0), 0).toLocaleString("fa-IR")} دلار
-                </div>
+                {(() => {
+                  const usd = entries.filter(e => e.currency === "USD").reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+                  const tol = parseFloat(normDigits(tolerancePercent)) || 0;
+                  const withTol = usd * (1 + tol / 100);
+                  return (
+                    <div className="h-10 px-3 flex flex-col justify-center rounded-md border bg-muted/40 tabular-nums text-persian leading-tight">
+                      <span className="font-bold text-sm">{usd.toLocaleString("fa-IR")} دلار</span>
+                      {tol > 0 && (
+                        <span className="text-[10px] text-muted-foreground">با تلورانس: {withTol.toLocaleString("fa-IR", { maximumFractionDigits: 2 })} دلار</span>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
               <div className="space-y-2">
                 <Label className="text-persian text-xs">موجودی کل (تومان)</Label>
@@ -732,6 +811,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
                 </div>
               </div>
             </div>
+
 
             <div className="space-y-3">
               <Label className="text-persian">سکشن‌های مبلغ</Label>
