@@ -550,7 +550,7 @@ const KotajDialog = ({
       const v = parseFloat(normDigits(it.value_usd)) || 0;
       if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return false; }
     }
-    if (over) { toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" }); return false; }
+    if (over) { toast({ title: `ارزش کل کوتاژ از سقف مجاز${tol > 0 ? ` (با ${tol}% تلورانس)` : ""} بیشتر است`, variant: "destructive" }); return false; }
     return true;
   };
 
