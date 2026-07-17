@@ -713,7 +713,7 @@ const KotajDialog = ({
                       قیمت هر دلار (تومان)
                       {refPrice ? <span className="text-muted-foreground"> — مرجع: {refPrice.toLocaleString("fa-IR")}</span> : null}
                     </Label>
-                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} inputMode="decimal" dir="ltr" placeholder="5200" className={priceClass} />
+                    <Input value={it.unit_price_irt} onChange={(e) => update(i, { unit_price_irt: normDigits(e.target.value) })} inputMode="decimal" dir="ltr" placeholder={refPrice > 0 ? String(refPrice) : "5200"} className={priceClass} />
                   </div>
                 </div>
               </div>
