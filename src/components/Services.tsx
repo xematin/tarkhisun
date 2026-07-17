@@ -145,30 +145,6 @@ const Services = () => {
             );
           })}
         </div>
-
-        {/* CTA Section */}
-        <div className="text-center mt-10 md:mt-16">
-          <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl p-6 md:p-8 max-w-3xl mx-auto">
-            <h3 className="heading-tertiary mb-4">نیاز به مشاوره تخصصی <strong>ترخیصان</strong> دارید؟</h3>
-            <p className="text-muted-foreground mb-6 text-persian">
-              کارشناسان ما آماده ارائه مشاوره رایگان و بررسی پرونده شما هستند
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                className="btn-hero"
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                درخواست مشاوره رایگان
-              </button>
-              <button
-                className="btn-ai"
-                onClick={() => window.open('https://t.me/N8NAutoBotBot', '_blank')}
-              >
-                مشاوره با ترخیصان‌یار
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
