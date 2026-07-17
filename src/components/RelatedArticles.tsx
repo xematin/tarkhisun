@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { getRelatedPosts, getLatestPosts } from "@/data/blogPosts";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 
 interface RelatedArticlesProps {
