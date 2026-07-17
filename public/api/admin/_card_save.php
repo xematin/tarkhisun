@@ -50,6 +50,13 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
         if ($costUnit < 0) ts_json_error(400, 'قیمت خرید هر دلار معتبر نیست');
     }
 
+    // Tolerance percent (per-section overage allowance)
+    $tolerance = 0.0;
+    if (array_key_exists('tolerance_percent', $body) && $body['tolerance_percent'] !== '' && $body['tolerance_percent'] !== null) {
+        $tolerance = (float) ts_normalize_digits((string)$body['tolerance_percent']);
+        if ($tolerance < 0 || $tolerance > 100) ts_json_error(400, 'درصد تلورانس باید بین ۰ تا ۱۰۰ باشد');
+    }
+
     // users: [{entry_index, id, allocated}]
     $rawUsers = isset($body['users']) && is_array($body['users']) ? $body['users'] : [];
     $allocByEntry = array_fill(0, count($entries), 0.0);
