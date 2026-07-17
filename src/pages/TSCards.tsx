@@ -3716,6 +3716,7 @@ interface KotajItemRow {
   id: number; name: string; value_usd: number; unit_price_irt: number; toman: number;
   kotaj_number: string; kotaj_date_jalali: string | null; kotaj_date_gregorian: string | null;
   card_name: string; user_name: string; username: string; entry_title: string | null;
+  attachments?: string[];
 }
 const KotajItemsSearchPanel = ({
   toast, cards,
