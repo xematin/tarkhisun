@@ -70,6 +70,12 @@ foreach ($rows as &$r) {
     $r['unit_price_irt'] = (float)$r['unit_price_irt'];
     $r['toman'] = round($r['value_usd'] * $r['unit_price_irt'], 2);
     $r['user_name'] = trim(($r['first_name'] ?? '') . ' ' . ($r['last_name'] ?? ''));
+    $att = [];
+    if (!empty($r['attachments'])) {
+        $dec = json_decode((string)$r['attachments'], true);
+        if (is_array($dec)) $att = array_values(array_filter(array_map('strval', $dec)));
+    }
+    $r['attachments'] = $att;
 }
 unset($r);
 
