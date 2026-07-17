@@ -567,6 +567,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
   const [name, setName] = useState("");
   const [entries, setEntries] = useState<EntryDraft[]>([emptyEntry()]);
   const [allocs, setAllocs] = useState<AllocMap[]>([{}]);
+  const [sectionCategories, setSectionCategories] = useState<string[]>([]);
 
   const [users, setUsers] = useState<CardUser[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
