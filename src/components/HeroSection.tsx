@@ -195,7 +195,7 @@ const HeroSection = () => {
 
 
 
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+                <div className="absolute bottom-4 z-20 flex gap-2 right-4 sm:left-1/2 sm:-translate-x-1/2 sm:right-auto">
                   {[0, 1, 2].map((i) => (
                     <button
                       key={i}
