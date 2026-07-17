@@ -608,6 +608,16 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
 
   useEffect(() => { if (open && step === 2) void loadUsers(); }, [open, step, loadUsers]);
 
+  useEffect(() => {
+    if (!open) return;
+    (async () => {
+      try {
+        const res = await api<{ items: { id: number; name: string }[] }>("/api/section-categories-list.php");
+        setSectionCategories((res.items || []).map(i => i.name));
+      } catch { /* ignore */ }
+    })();
+  }, [open]);
+
   const entryTotals = useMemo(() => entries.map(e => {
     const a = parseFloat(e.amount) || 0;
     const u = e.currency === "IRT" ? 1 : (parseFloat(e.unit_price_irt) || 0);
