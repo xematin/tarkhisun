@@ -70,6 +70,7 @@ foreach ($accessRows as $r) {
             'id' => $cid,
             'name' => $r['card_name'],
             'updated_at' => $r['updated_at'],
+            'tolerance_percent' => (float)($r['tolerance_percent'] ?? 0),
             'entries' => [],
             'total_irt' => 0.0,
             'total_usd' => 0.0,
