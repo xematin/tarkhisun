@@ -80,11 +80,11 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Three columns */}
-          <div className="grid md:grid-cols-3 gap-5 py-7">
+          {/* Two columns */}
+          <div className="grid md:grid-cols-2 gap-5 py-7">
             {/* Contact */}
             <div>
-              <ColumnHeader title="اطلاعات تماس" subtitle="CONTACT" />
+              <ColumnHeader title="اطلاعات تماس" subtitle="CONTACT" icon={Phone} />
               <div className="flex flex-col gap-2">
                 <a
                   href="https://B2n.ir/tarkhisun-map"
@@ -119,7 +119,7 @@ const Footer = () => {
 
             {/* Quick links */}
             <div>
-              <ColumnHeader title="دسترسی سریع" subtitle="QUICK LINKS" />
+              <ColumnHeader title="دسترسی سریع" subtitle="QUICK LINKS" icon={Link2} />
               <div className="grid grid-cols-2 gap-2">
                 {quickLinks.map((l) =>
                   l.isAnchor ? (
@@ -138,18 +138,6 @@ const Footer = () => {
                 >
                   <span>اخذ کارت بازرگانی</span>
                 </Link>
-              </div>
-            </div>
-
-            {/* Articles */}
-            <div>
-              <ColumnHeader title="مقالات پربازدید" subtitle="ARTICLES" />
-              <div className="flex flex-col gap-2">
-                {popularArticles.map((a) => (
-                  <Link key={a.slug} to={a.slug} className="pill-row text-persian">
-                    <span>{a.title}</span>
-                  </Link>
-                ))}
               </div>
             </div>
           </div>
