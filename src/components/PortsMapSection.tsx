@@ -311,8 +311,43 @@ const PortsMapSection = () => {
           </div>
         </div>
 
-        {/* Mobile-friendly list under map */}
-        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
+        {/* Mobile: collapsible list to avoid long scrolling */}
+        <details className="md:hidden mt-8 max-w-3xl mx-auto group bg-white/10 border border-white/20 rounded-2xl overflow-hidden backdrop-blur-sm">
+          <summary className="list-none cursor-pointer flex items-center justify-between gap-3 px-4 py-3 text-white text-persian">
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-accent-light" />
+              <strong>مشاهده لیست بنادر ({ports.length})</strong>
+            </span>
+            <svg
+              className="w-5 h-5 transition-transform group-open:rotate-180"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </summary>
+          <div className="grid grid-cols-2 gap-2 p-3 border-t border-white/15">
+            {ports.map((p) => (
+              <div
+                key={`list-m-${p.name}`}
+                className="!bg-white/95 !border-white/40 border rounded-xl p-2.5 flex items-center gap-2 shadow-sm"
+              >
+                <span className="w-2 h-2 rounded-full bg-accent-light shadow-[0_0_10px_hsl(var(--accent-light)/0.8)] flex-shrink-0" />
+                <span className="text-slate-900 text-xs text-persian leading-tight">
+                  <strong>{p.name}</strong>
+                </span>
+              </div>
+            ))}
+          </div>
+        </details>
+
+        {/* Tablet/Desktop list under map */}
+        <div className="hidden md:grid mt-10 grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
           {ports.map((p) => (
             <div
               key={`list-${p.name}`}
