@@ -5,8 +5,12 @@ ts_cors_same_origin();
 $u = ts_carduser_require();
 
 $pdo = ts_db();
+
+$hasTol = ts_column_exists($pdo, 'ts_cards', 'tolerance_percent');
+$tolSel = $hasTol ? 'c.tolerance_percent' : '0 AS tolerance_percent';
+
 $stmt = $pdo->prepare(
-    "SELECT c.id AS card_id, c.name AS card_name, c.updated_at,
+    "SELECT c.id AS card_id, c.name AS card_name, c.updated_at, $tolSel,
             a.id AS access_id, a.entry_id, a.allocated,
             a.custom_unit_price_irt AS unit_price_irt,
             e.title AS entry_title, e.currency AS entry_currency
@@ -66,6 +70,7 @@ foreach ($accessRows as $r) {
             'id' => $cid,
             'name' => $r['card_name'],
             'updated_at' => $r['updated_at'],
+            'tolerance_percent' => (float)($r['tolerance_percent'] ?? 0),
             'entries' => [],
             'total_irt' => 0.0,
             'total_usd' => 0.0,
@@ -82,6 +87,8 @@ foreach ($accessRows as $r) {
     $eid   = $r['entry_id'] !== null ? (int)$r['entry_id'] : null;
     $used  = $eid !== null ? ($usedByEntry[$eid] ?? 0.0) : 0.0;
     $remain = max(0, $alloc - $used);
+    $tol = (float)$cards[$cid]['tolerance_percent'];
+    $remainTol = max(0, $alloc * (1 + $tol / 100.0) - $used);
     $totalIrt = $hasCustom ? round($alloc * $unit, 2) : 0.0;
     $cards[$cid]['entries'][] = [
         'entry_id' => $eid,
@@ -92,6 +99,7 @@ foreach ($accessRows as $r) {
         'allocated' => $alloc,
         'used_usd' => $used,
         'remaining' => $remain,
+        'remaining_with_tolerance' => $remainTol,
         'total_irt' => $totalIrt,
     ];
     $cards[$cid]['total_irt'] += $totalIrt;

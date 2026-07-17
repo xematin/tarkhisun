@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw, Paperclip } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import CardBillingDialog from "@/components/admin/CardBillingDialog";
@@ -2299,7 +2299,16 @@ const AllPaymentsPanel = ({
 
   useEffect(() => { load(); }, [load]);
 
-  const qN = normDigits(q).trim().toLowerCase();
+  const normFa = (s: string) =>
+    normDigits(String(s || ""))
+      .replace(/ي/g, "ی")
+      .replace(/ك/g, "ک")
+      .replace(/[\u200c\u200f\u200e]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+  const qN = normFa(q);
+  const qTokens = qN ? qN.split(" ").filter(Boolean) : [];
   const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
   const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
 
@@ -2322,9 +2331,9 @@ const AllPaymentsPanel = ({
       if (fromJ && dj < fromJ) return false;
       if (toJ && dj > toJ) return false;
     }
-    if (!qN) return true;
-    const full = `${p.first_name} ${p.last_name} @${p.username} ${p.card_name}`.toLowerCase();
-    return full.includes(qN) || normDigits(String(p.amount_irt)).includes(qN);
+    if (!qTokens.length) return true;
+    const full = normFa(`${p.first_name} ${p.last_name} ${p.username} ${p.card_name} ${p.note || ""} ${p.amount_irt}`);
+    return qTokens.every(t => full.includes(t));
   });
 
   const filteredSum = filtered.reduce((s, p) => s + p.amount_irt, 0);
@@ -2489,8 +2498,24 @@ const AllPaymentsPanel = ({
             </SelectContent>
           </Select>
           <div className="grid grid-cols-2 gap-2 md:col-span-1">
-            <Input value={dateFrom} onChange={(e) => setDateFrom(normDigits(e.target.value))} placeholder="از تاریخ (1405/01/01)" className="text-persian" dir="ltr" />
-            <Input value={dateTo} onChange={(e) => setDateTo(normDigits(e.target.value))} placeholder="تا تاریخ (1405/12/29)" className="text-persian" dir="ltr" />
+            <DatePicker
+              value={dateFrom || ""}
+              onChange={(d) => setDateFrom(d ? (d as DateObject).format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-persian"
+              format="YYYY/MM/DD"
+              placeholder="از تاریخ (شمسی)"
+            />
+            <DatePicker
+              value={dateTo || ""}
+              onChange={(d) => setDateTo(d ? (d as DateObject).format("YYYY/MM/DD") : "")}
+              calendar={persian}
+              locale={persian_fa}
+              inputClass="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-persian"
+              format="YYYY/MM/DD"
+              placeholder="تا تاریخ (شمسی)"
+            />
           </div>
           {hasFilter && (
             <div className="md:col-span-3 flex justify-end">
@@ -3716,6 +3741,7 @@ interface KotajItemRow {
   id: number; name: string; value_usd: number; unit_price_irt: number; toman: number;
   kotaj_number: string; kotaj_date_jalali: string | null; kotaj_date_gregorian: string | null;
   card_name: string; user_name: string; username: string; entry_title: string | null;
+  attachments?: string[];
 }
 const KotajItemsSearchPanel = ({
   toast, cards,
@@ -3728,6 +3754,9 @@ const KotajItemsSearchPanel = ({
   const [items, setItems] = useState<KotajItemRow[]>([]);
   const [totals, setTotals] = useState<{ count: number; usd: number; toman: number }>({ count: 0, usd: 0, toman: 0 });
   const [loading, setLoading] = useState(false);
+  const [attachRow, setAttachRow] = useState<KotajItemRow | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const isImg = (p?: string | null) => !!p && /\.(jpe?g|png|webp|gif)$/i.test(p);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -3804,7 +3833,19 @@ const KotajItemsSearchPanel = ({
                     <TableCell data-label="جمع (تومان)" className="tabular-nums text-primary">{fmtToman(r.toman)}</TableCell>
                     <TableCell data-label="کارت / سکشن" className="text-persian text-xs">{r.card_name}{r.entry_title ? ` — ${r.entry_title}` : ""}</TableCell>
                     <TableCell data-label="کاربر" className="text-persian text-xs">{r.user_name}<div className="text-muted-foreground">@{r.username}</div></TableCell>
-                    <TableCell data-label="کوتاژ" className="text-persian text-xs">#{r.kotaj_number}</TableCell>
+                    <TableCell data-label="کوتاژ" className="text-persian text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setAttachRow(r)}
+                        className="text-primary hover:underline font-bold tabular-nums inline-flex items-center gap-1"
+                        title="مشاهده پیوست‌ها"
+                      >
+                        #{r.kotaj_number}
+                        {r.attachments && r.attachments.length > 0 && (
+                          <Paperclip className="w-3 h-3" />
+                        )}
+                      </button>
+                    </TableCell>
                     <TableCell data-label="تاریخ" className="text-persian text-xs">
                       <div className="tabular-nums">{r.kotaj_date_gregorian || "—"}</div>
                       <div className="text-muted-foreground opacity-70 tabular-nums">{r.kotaj_date_jalali || ""}</div>
@@ -3815,6 +3856,40 @@ const KotajItemsSearchPanel = ({
             </Table>
           </div>
         )}
+
+        <Dialog open={!!attachRow} onOpenChange={(v) => !v && setAttachRow(null)}>
+          <DialogContent className="panel-fa max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-persian">پیوست‌های کوتاژ #{attachRow?.kotaj_number}</DialogTitle>
+            </DialogHeader>
+            {!attachRow?.attachments || attachRow.attachments.length === 0 ? (
+              <p className="py-6 text-center text-muted-foreground text-persian text-sm">فایلی برای این کوتاژ ثبت نشده است.</p>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {attachRow.attachments.map((p, i) => (
+                  <div key={i} className="border rounded-md p-2 bg-muted/30">
+                    {isImg(p) ? (
+                      <button type="button" onClick={() => setPreview(p)} className="block w-full">
+                        <img src={p} alt={`پیوست ${i + 1}`} className="w-full h-32 object-cover rounded" />
+                      </button>
+                    ) : (
+                      <a href={p} target="_blank" rel="noreferrer" className="text-primary text-persian text-sm underline block text-center py-8">
+                        مشاهده فایل {i + 1}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={!!preview} onOpenChange={(v) => !v && setPreview(null)}>
+          <DialogContent className="max-w-3xl panel-fa">
+            <DialogHeader><DialogTitle className="text-persian">پیش‌نمایش</DialogTitle></DialogHeader>
+            {preview && <img src={preview} alt="پیش‌نمایش" className="w-full h-auto rounded" />}
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );

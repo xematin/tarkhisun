@@ -63,12 +63,14 @@ interface MyEntry {
   allocated: number;
   used_usd: number;
   remaining: number;
+  remaining_with_tolerance?: number;
   total_irt: number;
 }
 interface MyCard {
   id: number;
   name: string;
   updated_at?: string;
+  tolerance_percent?: number;
   entries: MyEntry[];
   total_irt: number;
   total_usd: number;
@@ -353,6 +355,12 @@ const MyCards = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => 
                           <span className="tabular-nums">{fmtUSD(e.remaining)}</span>
                         </div>
                       )}
+                      {e.currency === "USD" && (c.tolerance_percent ?? 0) > 0 && (e.remaining_with_tolerance ?? 0) > e.remaining && (
+                        <div className="flex justify-between text-xs text-amber-600">
+                          <span>مانده با تلورانس ({c.tolerance_percent}%)</span>
+                          <span className="tabular-nums">{fmtUSD(e.remaining_with_tolerance ?? e.remaining)}</span>
+                        </div>
+                      )}
                       {e.currency !== "IRT" && e.has_custom_price && (
                         <div className="text-xs text-muted-foreground tabular-nums">
                           قیمت هر {CURRENCY_LABEL[e.currency]}: {e.unit_price_irt.toLocaleString("fa-IR")} تومان
@@ -515,8 +523,12 @@ const KotajDialog = ({
   const usdEntries = usdEntriesAll;
   const totalUsd = items.reduce((s, it) => s + (parseFloat(normDigits(it.value_usd)) || 0), 0);
   const editingOwn = editing && selected && editing.entry_id === selected.entry_id ? editing.total_value_usd : 0;
+  const tol = card?.tolerance_percent ?? 0;
+  const remainTolBase = selected
+    ? ((selected.remaining_with_tolerance ?? selected.remaining) + editingOwn)
+    : 0;
   const remainBase = selected ? selected.remaining + editingOwn : 0;
-  const remainLive = remainBase - totalUsd;
+  const remainLive = remainTolBase - totalUsd;
   const over = selected ? remainLive < -0.0001 : false;
   const totalToman = items.reduce((s, it) => {
     const v = parseFloat(normDigits(it.value_usd)) || 0;
@@ -544,7 +556,7 @@ const KotajDialog = ({
       const v = parseFloat(normDigits(it.value_usd)) || 0;
       if (v <= 0) { toast({ title: `ارزش کالای «${it.name}»`, variant: "destructive" }); return false; }
     }
-    if (over) { toast({ title: "ارزش کل کوتاژ از مانده سکشن بیشتر است", variant: "destructive" }); return false; }
+    if (over) { toast({ title: `ارزش کل کوتاژ از سقف مجاز${tol > 0 ? ` (با ${tol}% تلورانس)` : ""} بیشتر است`, variant: "destructive" }); return false; }
     return true;
   };
 
@@ -599,11 +611,15 @@ const KotajDialog = ({
               <Select value={entryId} onValueChange={setEntryId}>
                 <SelectTrigger className="text-persian"><SelectValue placeholder="انتخاب سکشن" /></SelectTrigger>
                 <SelectContent>
-                  {usdEntries.map(e => (
-                    <SelectItem key={e.entry_id} value={String(e.entry_id)} className="text-persian">
-                      {e.title} (مانده: {fmtUSD(e.remaining)})
-                    </SelectItem>
-                  ))}
+                  {usdEntries.map(e => {
+                    const rt = e.remaining_with_tolerance ?? e.remaining;
+                    const showTol = tol > 0 && rt > e.remaining;
+                    return (
+                      <SelectItem key={e.entry_id} value={String(e.entry_id)} className="text-persian">
+                        {e.title} (مانده: {fmtUSD(e.remaining)}{showTol ? ` — با تلورانس: ${fmtUSD(rt)}` : ""})
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>
@@ -654,7 +670,7 @@ const KotajDialog = ({
             <div className="flex items-center justify-between">
               <Label className="text-persian">قلم‌های کوتاژ</Label>
               <div className={`text-sm font-bold tabular-nums text-persian ${over ? "text-destructive" : "text-emerald-600"}`}>
-                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده: ${fmtUSD(remainLive)}`}
+                جمع: {fmtUSD(totalUsd)} {selected && `/ مانده${tol > 0 ? ` با ${tol}% تلورانس` : ""}: ${fmtUSD(remainLive)}`}
               </div>
             </div>
             {items.map((it, i) => {
