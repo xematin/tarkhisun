@@ -88,9 +88,9 @@ const Header = () => {
               width={36}
               height={36}
             />
-            <div className="hidden sm:flex flex-col leading-tight text-right">
-              <span className="text-base text-primary text-persian font-bold">ترخیصان</span>
-              <span className="text-[10px] tracking-wider text-muted-foreground">TARKHISUN</span>
+            <div className="flex flex-col leading-tight text-right">
+              <span className="text-sm sm:text-base text-primary text-persian font-bold">ترخیصان</span>
+              <span className="text-[9px] sm:text-[10px] tracking-wider text-muted-foreground">TARKHISUN</span>
             </div>
           </a>
 
