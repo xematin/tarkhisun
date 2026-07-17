@@ -1,5 +1,6 @@
 import { Truck, FileCheck, Users, Search, Shield, Clock, CreditCard } from "lucide-react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const Services = () => {
   const services = [
@@ -55,45 +56,85 @@ const Services = () => {
   ];
 
   return (
-    <section id="services" className="contain-layout gpu-accelerated py-20 bg-background">
+    <section id="services" className="contain-layout gpu-accelerated py-12 md:py-20 bg-background">
       <div className="container mx-auto px-4" dir="rtl">
-        <div className="text-center mb-16">
+        <div className="text-center mb-8 md:mb-16">
           <h2 className="heading-secondary mb-4">خدمات <strong>ترخیصان</strong></h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
+          <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto text-persian">
             <strong>ترخیصان</strong> با تیم مجرب و متخصص، تمام نیازهای گمرکی و ترخیص کالای شما را در بندرعباس و سراسر ایران پوشش می‌دهد
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {services.map((service, index) => {
             const IconComponent = service.icon;
+            const isLast = index === services.length - 1;
             return (
-              <div key={index} className="service-card-v2 group">
-                <div className="service-icon-v2">
-                  <IconComponent className="w-7 h-7" strokeWidth={1.6} />
+              <div
+                key={index}
+                className={cn(
+                  "service-card-v2 group",
+                  "!p-3 md:!p-7",
+                  isLast && "col-span-2 md:col-span-1 !bg-accent md:!bg-card"
+                )}
+              >
+                <div className={cn(
+                  "service-icon-v2",
+                  "!w-8 !h-8 !rounded-lg md:!w-14 md:!h-14 md:!rounded-2xl !mb-2 md:!mb-5",
+                  isLast && "md:bg-gradient-to-br md:from-accent/10 md:to-primary/10"
+                )}>
+                  <IconComponent className={cn(
+                    "w-5 h-5 md:w-7 md:h-7",
+                    isLast && "text-white md:text-accent-dark"
+                  )} strokeWidth={1.6} />
                 </div>
 
-                <h3 className="heading-tertiary mb-3 group-hover:text-primary transition-colors">
+                <h3 className={cn(
+                  "heading-tertiary mb-1 md:mb-3 group-hover:text-primary transition-colors",
+                  "text-sm md:text-base",
+                  isLast && "text-white md:text-foreground group-hover:md:text-primary"
+                )}>
                   <strong>{service.title}</strong>
                 </h3>
 
-                <p className="text-muted-foreground mb-5 leading-relaxed text-persian text-sm">
+                <p className={cn(
+                  "text-muted-foreground leading-relaxed text-persian",
+                  "text-xs md:text-sm mb-2 md:mb-5",
+                  isLast && "text-emerald-50 md:text-muted-foreground"
+                )}>
                   {service.description}
                 </p>
 
-                <ul className="space-y-2">
+                <ul className="space-y-0.5 md:space-y-2">
                   {service.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center text-sm text-muted-foreground text-persian">
-                      <div className="w-1.5 h-1.5 bg-accent rounded-full ml-3 flex-shrink-0"></div>
+                    <li
+                      key={featureIndex}
+                      className={cn(
+                        "flex items-center text-xs md:text-sm text-muted-foreground text-persian",
+                        isLast && "text-emerald-100 md:text-muted-foreground"
+                      )}
+                    >
+                      <div className={cn(
+                        "w-1 h-1 md:w-1.5 md:h-1.5 rounded-full ml-1.5 md:ml-3 flex-shrink-0",
+                        isLast ? "bg-white md:bg-accent" : "bg-accent"
+                      )}></div>
                       {feature}
                     </li>
                   ))}
                 </ul>
 
-                <div className="mt-6 pt-5 border-t border-border">
+                <div className={cn(
+                  "mt-2 md:mt-6 pt-2 md:pt-5 border-t border-border",
+                  isLast && "border-white/20 md:border-border"
+                )}>
                   <Link
                     to={service.link}
-                    className="text-accent-dark font-semibold text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-2 hover:gap-3"
+                    className={cn(
+                      "font-semibold text-xs md:text-sm hover:text-accent transition-colors text-persian inline-flex items-center gap-1 md:gap-2 hover:gap-2 md:hover:gap-3",
+                      isLast
+                        ? "text-white md:text-accent-dark hover:md:text-accent"
+                        : "text-accent-dark"
+                    )}
                     aria-label={`مطالعه راهنمای ${service.title}`}
                   >
                     <span>اطلاعات بیشتر</span>
@@ -105,22 +146,21 @@ const Services = () => {
           })}
         </div>
 
-
         {/* CTA Section */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl p-8 max-w-3xl mx-auto">
+        <div className="text-center mt-10 md:mt-16">
+          <div className="bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 rounded-2xl p-6 md:p-8 max-w-3xl mx-auto">
             <h3 className="heading-tertiary mb-4">نیاز به مشاوره تخصصی <strong>ترخیصان</strong> دارید؟</h3>
             <p className="text-muted-foreground mb-6 text-persian">
               کارشناسان ما آماده ارائه مشاوره رایگان و بررسی پرونده شما هستند
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
+              <button
                 className="btn-hero"
                 onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 درخواست مشاوره رایگان
               </button>
-              <button 
+              <button
                 className="btn-ai"
                 onClick={() => window.open('https://t.me/N8NAutoBotBot', '_blank')}
               >
