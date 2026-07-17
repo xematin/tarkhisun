@@ -411,10 +411,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             <div className="col-span-3">
                               <div
                                 title="وضعیت ادمین"
-                                className={`w-full h-9 rounded-md flex items-center justify-center gap-2 px-2 shadow-md ${statusBtnClass}`}
+                                className={`w-full min-h-9 rounded-md flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-2 py-1 shadow-md ${statusBtnClass}`}
                               >
-                                <span className="text-persian text-xs font-medium">{label}</span>
-                                <span className="text-persian text-xs tabular-nums font-bold">
+                                <span className="text-persian text-xs font-medium whitespace-nowrap">{label}</span>
+                                <span className="text-persian text-[11px] leading-tight tabular-nums font-bold break-all text-center">
                                   {isSettled ? "—" : fmtToman(Math.abs(diff))}
                                 </span>
                               </div>
