@@ -241,6 +241,24 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
     }
   };
 
+  const handleFinalize = async (r: CardRow, mode: "finalize" | "reset") => {
+    const isFinalize = mode === "finalize";
+    const msg = isFinalize
+      ? `با تأیید، ستون «موجودی کل (دلار)» این کارت با مجموع دلاری کوتاژ‌های ثبت‌شده جایگزین می‌شود.\nسقف اصلی کارت دست‌نخورده باقی می‌ماند.\nادامه؟`
+      : `ستون «موجودی کل (دلار)» به مقدار اصلی (سقف کارت) بازگردانده شود؟`;
+    if (!confirm(msg)) return;
+    try {
+      await api("/api/admin/card-finalize.php", {
+        method: "POST",
+        body: JSON.stringify({ id: r.id, mode }),
+      });
+      toast({ title: isFinalize ? "اتمام ثبت شد" : "لغو اتمام انجام شد" });
+      void load();
+    } catch (e) {
+      toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
+    }
+  };
+
   return (
     <Tabs dir="rtl" defaultValue="cards" className="space-y-6">
       <div className="-mx-2 px-2 overflow-x-auto md:overflow-visible">
