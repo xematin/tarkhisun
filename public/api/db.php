@@ -394,6 +394,27 @@ function ts_ensure_card_admin_payments_schema(PDO $pdo): bool {
     }
 }
 
+/**
+ * Ensures ts_cards has the tolerance + display-balance columns used for
+ * per-section tolerance and the "اتمام" (finalize) snapshot.
+ */
+function ts_ensure_cards_tolerance_schema(PDO $pdo): bool {
+    try {
+        if (!ts_column_exists($pdo, 'ts_cards', 'tolerance_percent')) {
+            $pdo->exec("ALTER TABLE ts_cards ADD COLUMN tolerance_percent DECIMAL(6,3) NOT NULL DEFAULT 0");
+        }
+        if (!ts_column_exists($pdo, 'ts_cards', 'display_balance_usd')) {
+            $pdo->exec("ALTER TABLE ts_cards ADD COLUMN display_balance_usd DECIMAL(18,2) NULL");
+        }
+        if (!ts_column_exists($pdo, 'ts_cards', 'finalized_at')) {
+            $pdo->exec("ALTER TABLE ts_cards ADD COLUMN finalized_at DATETIME NULL");
+        }
+        return true;
+    } catch (Throwable $e) {
+        return false;
+    }
+}
+
 function ts_ensure_treasury_schema(PDO $pdo): bool {
     try {
         $pdo->exec("CREATE TABLE IF NOT EXISTS ts_treasury_ledger (
