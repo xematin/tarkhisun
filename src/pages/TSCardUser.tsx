@@ -574,11 +574,15 @@ const KotajDialog = ({
         kotaj_date_gregorian: dateG,
         customs_code: customsCode,
         customs_name: customsName,
-        items: items.map(it => ({
-          name: it.name.trim(),
-          value_usd: parseFloat(normDigits(it.value_usd)) || 0,
-          unit_price_irt: parseFloat(normDigits(it.unit_price_irt)) || 0,
-        })),
+        items: items.map(it => {
+          const typed = parseFloat(normDigits(it.unit_price_irt));
+          const price = typed > 0 ? typed : refPrice;
+          return {
+            name: it.name.trim(),
+            value_usd: parseFloat(normDigits(it.value_usd)) || 0,
+            unit_price_irt: price || 0,
+          };
+        }),
       };
       const url = editing ? "/api/cards/kotaj-update.php" : "/api/cards/kotaj-create.php";
       if (editing) payload.id = editing.id;
