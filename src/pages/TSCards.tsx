@@ -1434,6 +1434,18 @@ const KotajReportDialog = ({
                               <span className="font-bold tabular-nums text-primary">{fmtToman(k.toman_total || 0)}</span>
                             </div>
                           )}
+                          {Array.isArray(k.attachments) && k.attachments.length > 0 && (
+                            <div className="border-t pt-2 mt-2">
+                              <div className="text-persian text-xs text-muted-foreground mb-1">فایل‌های پیوست:</div>
+                              <div className="flex flex-wrap gap-2">
+                                {k.attachments.map((p, i) => (
+                                  <a key={i} href={p} target="_blank" rel="noopener noreferrer" className="text-xs text-primary underline break-all">
+                                    فایل {(i + 1).toLocaleString("fa-IR")}
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
