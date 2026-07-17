@@ -2,6 +2,9 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen } from "lucide-react";
 import { getRelatedPosts, getLatestPosts } from "@/data/blogPosts";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { useMobile } from "@/hooks/use-mobile";
+
 
 interface RelatedArticlesProps {
   currentPostId?: number;
