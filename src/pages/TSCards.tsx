@@ -335,8 +335,28 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                       <TableRow key={r.id}>
                         <TableCell data-label="نام کارت" className="text-persian font-medium align-top md:!text-sm text-base md:!font-medium !font-bold">{r.name}</TableCell>
                         <TableCell data-label="موجودی کل (دلار)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
-                          {usdTotal > 0 ? `${usdTotal.toLocaleString("fa-IR")} دلار` : "—"}
+                          {(() => {
+                            const hasDisplay = r.display_balance_usd !== null && r.display_balance_usd !== undefined;
+                            const shown = hasDisplay ? Number(r.display_balance_usd) : usdTotal;
+                            const tol = Number(r.tolerance_percent || 0);
+                            return (
+                              <div className="flex flex-col gap-0.5">
+                                <span>{shown > 0 ? `${shown.toLocaleString("fa-IR")} دلار` : "—"}</span>
+                                {hasDisplay && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    سقف: {usdTotal.toLocaleString("fa-IR")} دلار
+                                  </span>
+                                )}
+                                {tol > 0 && !hasDisplay && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    با {tol.toLocaleString("fa-IR")}٪ تلورانس: {(usdTotal * (1 + tol / 100)).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} دلار
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </TableCell>
+
                         <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
                           {fmtToman(bal || 0)}
                         </TableCell>
