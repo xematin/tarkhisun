@@ -5,8 +5,12 @@ ts_cors_same_origin();
 $u = ts_carduser_require();
 
 $pdo = ts_db();
+
+$hasTol = ts_column_exists($pdo, 'ts_cards', 'tolerance_percent');
+$tolSel = $hasTol ? 'c.tolerance_percent' : '0 AS tolerance_percent';
+
 $stmt = $pdo->prepare(
-    "SELECT c.id AS card_id, c.name AS card_name, c.updated_at,
+    "SELECT c.id AS card_id, c.name AS card_name, c.updated_at, $tolSel,
             a.id AS access_id, a.entry_id, a.allocated,
             a.custom_unit_price_irt AS unit_price_irt,
             e.title AS entry_title, e.currency AS entry_currency
