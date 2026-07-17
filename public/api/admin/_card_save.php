@@ -221,9 +221,10 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
     }
 
     // Light-weight log entry
+    $tolLabel = $tolerance > 0 ? ' (تلورانس: ' . rtrim(rtrim(number_format($tolerance, 3, '.', ''), '0'), '.') . '٪)' : '';
     ts_card_alloc_log(
         $cardId, null, 'card_balance', null, $balanceIrt, 'IRT', null,
-        ($cardId !== null ? 'به‌روزرسانی' : 'ساخت') . ' کارت «' . $name . '» با ' . count($entries) . ' سکشن'
+        ($cardId !== null ? 'به‌روزرسانی' : 'ساخت') . ' کارت «' . $name . '» با ' . count($entries) . ' سکشن' . $tolLabel
     );
 
     return ['card_id' => $cardId];
