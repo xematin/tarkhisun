@@ -6,14 +6,22 @@ ts_admin_require();
 
 $pdo = ts_db();
 ts_ensure_card_admin_payments_schema($pdo);
+ts_ensure_cards_tolerance_schema($pdo);
 
 // detect cost_unit_price_irt column
 $hasCost = false;
 try { $pdo->query('SELECT cost_unit_price_irt FROM ts_cards LIMIT 0'); $hasCost = true; } catch (Throwable $e) {}
 $costSel = $hasCost ? 'c.cost_unit_price_irt,' : 'NULL AS cost_unit_price_irt,';
 
+$hasTol = ts_column_exists($pdo, 'ts_cards', 'tolerance_percent');
+$hasDisp = ts_column_exists($pdo, 'ts_cards', 'display_balance_usd');
+$hasFin = ts_column_exists($pdo, 'ts_cards', 'finalized_at');
+$tolSel  = $hasTol  ? 'c.tolerance_percent,'   : '0 AS tolerance_percent,';
+$dispSel = $hasDisp ? 'c.display_balance_usd,' : 'NULL AS display_balance_usd,';
+$finSel  = $hasFin  ? 'c.finalized_at,'        : 'NULL AS finalized_at,';
+
 $rows = $pdo->query(
-    "SELECT c.id, c.name, c.balance, c.currency, $costSel c.created_at, c.updated_at
+    "SELECT c.id, c.name, c.balance, c.currency, $costSel $tolSel $dispSel $finSel c.created_at, c.updated_at
      FROM ts_cards c
      ORDER BY c.id DESC"
 )->fetchAll();
