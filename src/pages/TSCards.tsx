@@ -2299,7 +2299,16 @@ const AllPaymentsPanel = ({
 
   useEffect(() => { load(); }, [load]);
 
-  const qN = normDigits(q).trim().toLowerCase();
+  const normFa = (s: string) =>
+    normDigits(String(s || ""))
+      .replace(/ي/g, "ی")
+      .replace(/ك/g, "ک")
+      .replace(/[\u200c\u200f\u200e]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+  const qN = normFa(q);
+  const qTokens = qN ? qN.split(" ").filter(Boolean) : [];
   const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
   const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
 
@@ -2322,9 +2331,9 @@ const AllPaymentsPanel = ({
       if (fromJ && dj < fromJ) return false;
       if (toJ && dj > toJ) return false;
     }
-    if (!qN) return true;
-    const full = `${p.first_name} ${p.last_name} @${p.username} ${p.card_name}`.toLowerCase();
-    return full.includes(qN) || normDigits(String(p.amount_irt)).includes(qN);
+    if (!qTokens.length) return true;
+    const full = normFa(`${p.first_name} ${p.last_name} ${p.username} ${p.card_name} ${p.note || ""} ${p.amount_irt}`);
+    return qTokens.every(t => full.includes(t));
   });
 
   const filteredSum = filtered.reduce((s, p) => s + p.amount_irt, 0);
