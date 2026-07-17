@@ -534,6 +534,13 @@ export const getRelatedPosts = (postId: number, limit: number = 3): BlogPost[] =
     .slice(0, limit);
 };
 
+// Helper function to get latest posts
+export const getLatestPosts = (limit: number = 3): BlogPost[] => {
+  return [...blogPosts]
+    .sort((a, b) => b.id - a.id)
+    .slice(0, limit);
+};
+
 // Helper function to get post by slug
 export const getPostBySlug = (slug: string): BlogPost | undefined => {
   return blogPosts.find((p) => p.slug === slug);

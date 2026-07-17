@@ -1,28 +1,35 @@
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, BookOpen } from "lucide-react";
-import { getRelatedPosts } from "@/data/blogPosts";
+import { getRelatedPosts, getLatestPosts } from "@/data/blogPosts";
 
 interface RelatedArticlesProps {
-  currentPostId: number;
+  currentPostId?: number;
   limit?: number;
+  mode?: "related" | "latest";
 }
 
-const RelatedArticles = ({ currentPostId, limit = 3 }: RelatedArticlesProps) => {
-  const relatedPosts = getRelatedPosts(currentPostId, limit);
+const RelatedArticles = ({ currentPostId, limit = 3, mode = "related" }: RelatedArticlesProps) => {
+  const posts = mode === "latest"
+    ? getLatestPosts(limit)
+    : currentPostId !== undefined
+      ? getRelatedPosts(currentPostId, limit)
+      : [];
 
-  if (relatedPosts.length === 0) return null;
+  if (posts.length === 0) return null;
 
   return (
     <section className="mt-16 py-12 bg-muted/30 rounded-lg">
       <div className="container mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
           <BookOpen className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-bold text-foreground">مقالات مرتبط</h2>
+          <h2 className="text-2xl font-bold text-foreground">
+            {mode === "latest" ? "جدیدترین مقالات" : "مقالات مرتبط"}
+          </h2>
         </div>
         
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {relatedPosts.map((post) => (
+          {posts.map((post) => (
             <Link 
               key={post.id} 
               to={`/blog/${post.slug}`}
