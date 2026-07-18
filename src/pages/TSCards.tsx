@@ -3180,7 +3180,10 @@ const AdminPayCardDialog = ({
   }, [card]);
 
 
-  const bal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
+  const rawBal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
+  const bal = card && card.display_balance_irt !== null && card.display_balance_irt !== undefined
+    ? Number(card.display_balance_irt)
+    : rawBal;
   const paid = card?.admin_paid_irt || 0;
   const remain = Math.max(0, bal - paid);
   const amt = parseFloat(amount) || 0;
