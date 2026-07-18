@@ -79,6 +79,7 @@ interface CardRow {
   admin_debt_remaining_irt?: number;
   tolerance_percent?: number;
   display_balance_usd?: number | null;
+  display_balance_irt?: number | null;
   finalized_at?: string | null;
 }
 
