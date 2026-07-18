@@ -482,7 +482,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                             <div className="col-span-3">
                               <div
-                                title="وضعیت ادمین"
+                                title="وضعیت مانده"
                                 className={`w-full min-h-9 rounded-md flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-2 py-1 shadow-md ${statusBtnClass}`}
                               >
                                 <span className="text-persian text-xs font-medium whitespace-nowrap">{label}</span>
