@@ -200,6 +200,7 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
       qs.set("limit", "200");
       const r = await api<LedgerResponse>(`/api/admin/treasury-ledger.php?${qs.toString()}`);
       setLedger(r.items || []);
+      setVisibleCount(15);
       clearPanelError("treasury-ledger");
     } catch (e) {
       pushPanelError("treasury-ledger", (e as Error).message);
