@@ -417,7 +417,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         </TableCell>
                         {(() => {
                           const paid = Number(r.admin_paid_irt || 0);
-                          const diff = paid - (bal || 0);
+                          const effectiveBal = (r.display_balance_irt !== null && r.display_balance_irt !== undefined)
+                            ? Number(r.display_balance_irt)
+                            : (bal || 0);
+                          const diff = paid - effectiveBal;
                           // Reversed labels per business rule: admin overpaid => admin is debtor to card owner
                           const isOver = diff > 0.0001;
                           const isSettled = Math.abs(diff) <= 0.0001;
