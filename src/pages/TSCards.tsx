@@ -359,7 +359,20 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         </TableCell>
 
                         <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
-                          {fmtToman(bal || 0)}
+                          {(() => {
+                            const hasDispIrt = r.display_balance_irt !== null && r.display_balance_irt !== undefined;
+                            const shownIrt = hasDispIrt ? Number(r.display_balance_irt) : (bal || 0);
+                            return (
+                              <div className="flex flex-col gap-0.5">
+                                <span>{fmtToman(shownIrt)}</span>
+                                {hasDispIrt && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    سقف: {fmtToman(bal || 0)}
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </TableCell>
                         <TableCell data-label="سکشن‌ها" className="text-persian align-top md:min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
