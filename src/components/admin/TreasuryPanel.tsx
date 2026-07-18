@@ -168,6 +168,7 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
   const [fFrom, setFFrom] = useState("");
   const [fTo, setFTo] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [visibleCount, setVisibleCount] = useState(15);
 
   const pushPanelError = useCallback((source: string, message: string) => {
     setErrors((prev) => [`${source}: ${message}`, ...prev.filter((x) => !x.startsWith(`${source}:`))].slice(0, 4));
