@@ -406,6 +406,9 @@ function ts_ensure_cards_tolerance_schema(PDO $pdo): bool {
         if (!ts_column_exists($pdo, 'ts_cards', 'display_balance_usd')) {
             $pdo->exec("ALTER TABLE ts_cards ADD COLUMN display_balance_usd DECIMAL(18,2) NULL");
         }
+        if (!ts_column_exists($pdo, 'ts_cards', 'display_balance_irt')) {
+            $pdo->exec("ALTER TABLE ts_cards ADD COLUMN display_balance_irt DECIMAL(18,2) NULL");
+        }
         if (!ts_column_exists($pdo, 'ts_cards', 'finalized_at')) {
             $pdo->exec("ALTER TABLE ts_cards ADD COLUMN finalized_at DATETIME NULL");
         }

@@ -15,13 +15,15 @@ $costSel = $hasCost ? 'c.cost_unit_price_irt,' : 'NULL AS cost_unit_price_irt,';
 
 $hasTol = ts_column_exists($pdo, 'ts_cards', 'tolerance_percent');
 $hasDisp = ts_column_exists($pdo, 'ts_cards', 'display_balance_usd');
+$hasDispIrt = ts_column_exists($pdo, 'ts_cards', 'display_balance_irt');
 $hasFin = ts_column_exists($pdo, 'ts_cards', 'finalized_at');
-$tolSel  = $hasTol  ? 'c.tolerance_percent,'   : '0 AS tolerance_percent,';
-$dispSel = $hasDisp ? 'c.display_balance_usd,' : 'NULL AS display_balance_usd,';
-$finSel  = $hasFin  ? 'c.finalized_at,'        : 'NULL AS finalized_at,';
+$tolSel      = $hasTol      ? 'c.tolerance_percent,'    : '0 AS tolerance_percent,';
+$dispSel     = $hasDisp     ? 'c.display_balance_usd,'  : 'NULL AS display_balance_usd,';
+$dispIrtSel  = $hasDispIrt  ? 'c.display_balance_irt,'  : 'NULL AS display_balance_irt,';
+$finSel      = $hasFin      ? 'c.finalized_at,'         : 'NULL AS finalized_at,';
 
 $rows = $pdo->query(
-    "SELECT c.id, c.name, c.balance, c.currency, $costSel $tolSel $dispSel $finSel c.created_at, c.updated_at
+    "SELECT c.id, c.name, c.balance, c.currency, $costSel $tolSel $dispSel $dispIrtSel $finSel c.created_at, c.updated_at
      FROM ts_cards c
      ORDER BY c.id DESC"
 )->fetchAll();
@@ -145,6 +147,8 @@ if ($rows) {
         $r['tolerance_percent'] = (float)($r['tolerance_percent'] ?? 0);
         $r['display_balance_usd'] = isset($r['display_balance_usd']) && $r['display_balance_usd'] !== null
             ? (float)$r['display_balance_usd'] : null;
+        $r['display_balance_irt'] = isset($r['display_balance_irt']) && $r['display_balance_irt'] !== null
+            ? (float)$r['display_balance_irt'] : null;
         $r['entries'] = $entriesByCard[$cid] ?? [];
         foreach ($r['entries'] as &$ent) {
             $ent['kotaj_toman_total'] = $kotajByEntry[(int)$ent['id']] ?? 0.0;

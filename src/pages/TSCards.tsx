@@ -79,6 +79,7 @@ interface CardRow {
   admin_debt_remaining_irt?: number;
   tolerance_percent?: number;
   display_balance_usd?: number | null;
+  display_balance_irt?: number | null;
   finalized_at?: string | null;
 }
 
@@ -358,7 +359,20 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         </TableCell>
 
                         <TableCell data-label="موجودی کل (تومان)" className="text-persian whitespace-nowrap align-top font-bold tabular-nums">
-                          {fmtToman(bal || 0)}
+                          {(() => {
+                            const hasDispIrt = r.display_balance_irt !== null && r.display_balance_irt !== undefined;
+                            const shownIrt = hasDispIrt ? Number(r.display_balance_irt) : (bal || 0);
+                            return (
+                              <div className="flex flex-col gap-0.5">
+                                <span>{fmtToman(shownIrt)}</span>
+                                {hasDispIrt && (
+                                  <span className="text-[10px] font-normal text-muted-foreground tabular-nums">
+                                    سقف: {fmtToman(bal || 0)}
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </TableCell>
                         <TableCell data-label="سکشن‌ها" className="text-persian align-top md:min-w-[240px]">
                           {r.entries && r.entries.length > 0 ? (
@@ -403,7 +417,10 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                         </TableCell>
                         {(() => {
                           const paid = Number(r.admin_paid_irt || 0);
-                          const diff = paid - (bal || 0);
+                          const effectiveBal = (r.display_balance_irt !== null && r.display_balance_irt !== undefined)
+                            ? Number(r.display_balance_irt)
+                            : (bal || 0);
+                          const diff = paid - effectiveBal;
                           // Reversed labels per business rule: admin overpaid => admin is debtor to card owner
                           const isOver = diff > 0.0001;
                           const isSettled = Math.abs(diff) <= 0.0001;
@@ -465,7 +482,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
                             </div>
                             <div className="col-span-3">
                               <div
-                                title="وضعیت ادمین"
+                                title="وضعیت مانده"
                                 className={`w-full min-h-9 rounded-md flex flex-wrap items-center justify-center gap-x-2 gap-y-0.5 px-2 py-1 shadow-md ${statusBtnClass}`}
                               >
                                 <span className="text-persian text-xs font-medium whitespace-nowrap">{label}</span>
@@ -2309,7 +2326,7 @@ const AllPaymentsPanel = ({
   useEffect(() => { load(); }, [load]);
 
   const normFa = (s: string) =>
-    normDigits(String(s || ""))
+    normDateDigits(String(s || ""))
       .replace(/ي/g, "ی")
       .replace(/ك/g, "ک")
       .replace(/[\u200c\u200f\u200e]/g, " ")
@@ -2318,8 +2335,8 @@ const AllPaymentsPanel = ({
       .toLowerCase();
   const qN = normFa(q);
   const qTokens = qN ? qN.split(" ").filter(Boolean) : [];
-  const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
-  const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
+  const fromJ = normDateDigits(dateFrom).trim().replace(/-/g, "/");
+  const toJ = normDateDigits(dateTo).trim().replace(/-/g, "/");
 
   const toJalaliDate = (iso: string): string => {
     if (!iso) return "";
@@ -3163,7 +3180,10 @@ const AdminPayCardDialog = ({
   }, [card]);
 
 
-  const bal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
+  const rawBal = card ? (typeof card.balance === "string" ? parseFloat(card.balance) : card.balance as number) : 0;
+  const bal = card && card.display_balance_irt !== null && card.display_balance_irt !== undefined
+    ? Number(card.display_balance_irt)
+    : rawBal;
   const paid = card?.admin_paid_irt || 0;
   const remain = Math.max(0, bal - paid);
   const amt = parseFloat(amount) || 0;
