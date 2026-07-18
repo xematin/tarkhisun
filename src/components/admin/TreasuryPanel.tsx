@@ -168,6 +168,7 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
   const [fFrom, setFFrom] = useState("");
   const [fTo, setFTo] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
+  const [visibleCount, setVisibleCount] = useState(15);
 
   const pushPanelError = useCallback((source: string, message: string) => {
     setErrors((prev) => [`${source}: ${message}`, ...prev.filter((x) => !x.startsWith(`${source}:`))].slice(0, 4));
@@ -199,6 +200,7 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
       qs.set("limit", "200");
       const r = await api<LedgerResponse>(`/api/admin/treasury-ledger.php?${qs.toString()}`);
       setLedger(r.items || []);
+      setVisibleCount(15);
       clearPanelError("treasury-ledger");
     } catch (e) {
       pushPanelError("treasury-ledger", (e as Error).message);
@@ -583,7 +585,7 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
                 <TableRow><TableCell colSpan={6} className="text-center py-6"><Loader2 className="w-4 h-4 animate-spin inline" /></TableCell></TableRow>
               ) : ledger.length === 0 ? (
                 <TableRow><TableCell colSpan={6} className="text-center text-muted-foreground text-persian py-6">تراکنشی نیست.</TableCell></TableRow>
-              ) : ledger.map((l) => (
+              ) : ledger.slice(0, visibleCount).map((l) => (
                 <TableRow key={l.id}>
                   <TableCell className="text-xs tabular-nums opacity-80">
                     <div>{l.occurred_at}</div>
@@ -610,6 +612,30 @@ const TreasuryPanel = ({ toast, refreshKey = 0 }: Props) => {
               ))}
             </TableBody>
           </Table>
+          {!ledgerLoading && ledger.length > visibleCount && (
+            <div className="flex items-center justify-center pt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setVisibleCount((c) => c + 15)}
+                className="text-persian"
+              >
+                ادامه ({ledger.length - visibleCount} مورد باقی‌مانده)
+              </Button>
+            </div>
+          )}
+          {!ledgerLoading && ledger.length > 15 && ledger.length <= visibleCount && (
+            <div className="flex items-center justify-center pt-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setVisibleCount(15)}
+                className="text-persian text-xs opacity-70"
+              >
+                نمایش کمتر
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
