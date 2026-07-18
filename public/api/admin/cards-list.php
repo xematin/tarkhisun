@@ -147,6 +147,8 @@ if ($rows) {
         $r['tolerance_percent'] = (float)($r['tolerance_percent'] ?? 0);
         $r['display_balance_usd'] = isset($r['display_balance_usd']) && $r['display_balance_usd'] !== null
             ? (float)$r['display_balance_usd'] : null;
+        $r['display_balance_irt'] = isset($r['display_balance_irt']) && $r['display_balance_irt'] !== null
+            ? (float)$r['display_balance_irt'] : null;
         $r['entries'] = $entriesByCard[$cid] ?? [];
         foreach ($r['entries'] as &$ent) {
             $ent['kotaj_toman_total'] = $kotajByEntry[(int)$ent['id']] ?? 0.0;
