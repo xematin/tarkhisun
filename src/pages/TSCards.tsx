@@ -2310,7 +2310,7 @@ const AllPaymentsPanel = ({
   useEffect(() => { load(); }, [load]);
 
   const normFa = (s: string) =>
-    normDigits(String(s || ""))
+    normDateDigits(String(s || ""))
       .replace(/ي/g, "ی")
       .replace(/ك/g, "ک")
       .replace(/[\u200c\u200f\u200e]/g, " ")
@@ -2319,8 +2319,8 @@ const AllPaymentsPanel = ({
       .toLowerCase();
   const qN = normFa(q);
   const qTokens = qN ? qN.split(" ").filter(Boolean) : [];
-  const fromJ = normDigits(dateFrom).trim().replace(/-/g, "/");
-  const toJ = normDigits(dateTo).trim().replace(/-/g, "/");
+  const fromJ = normDateDigits(dateFrom).trim().replace(/-/g, "/");
+  const toJ = normDateDigits(dateTo).trim().replace(/-/g, "/");
 
   const toJalaliDate = (iso: string): string => {
     if (!iso) return "";
