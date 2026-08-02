@@ -666,7 +666,7 @@ const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: Retu
       </TabsContent>
 
       <TabsContent value="payments" className="mt-0">
-        <AllPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
+        <AllPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); onPendingChanged?.(); }} />
       </TabsContent>
 
       <TabsContent value="kotaj-items" className="mt-0">
