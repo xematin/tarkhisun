@@ -295,7 +295,7 @@ const BackupPanel = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {items.map((b) => (
+                  {items.slice(0, visible).map((b) => (
                     <TableRow key={b.id}>
                       <TableCell data-label="تاریخ" className="text-persian text-xs whitespace-nowrap tabular-nums">{toJalali(b.created_at)}</TableCell>
                       <TableCell data-label="نوع">
@@ -321,10 +321,40 @@ const BackupPanel = () => {
                   ))}
                 </TableBody>
               </Table>
+              {items.length > visible && (
+                <div className="pt-3 text-center">
+                  <Button variant="outline" size="sm" className="text-persian" onClick={() => setVisible((v) => v + PAGE)}>
+                    نمایش بیشتر ({(items.length - visible).toLocaleString("fa-IR")} مورد دیگر)
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* راهنمای کرون */}
+      <Card className="border-border">
+        <CardHeader>
+          <CardTitle className="text-persian flex items-center gap-2 text-base">
+            <Terminal className="w-4 h-4 text-primary" />
+            فعال‌سازی بک‌آپ خودکار با کرون‌جاب
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <ol className="text-persian text-xs text-muted-foreground leading-7 list-decimal pr-5 space-y-1">
+            <li>در فایل <span className="font-mono">public/api/config.php</span> مقدار <span className="font-mono">backup_cron_secret</span> را با یک رشته تصادفی و طولانی تنظیم کنید.</li>
+            <li>در cPanel وارد بخش <span className="font-mono">Cron Jobs</span> شوید و «Add New Cron Job» را بزنید.</li>
+            <li>در Common Settings گزینه «Once Per Day» (معادل <span className="font-mono">0 3 * * *</span>) را انتخاب کنید؛ خود اسکریپت بازه ۴۸ ساعت را کنترل می‌کند.</li>
+            <li>دستور زیر را در فیلد Command وارد کنید و <span className="font-mono">YOUR_SECRET</span> را با کلید خودتان جایگزین کنید.</li>
+          </ol>
+          <pre dir="ltr" className="rounded-lg bg-muted/50 border border-border p-3 text-[11px] font-mono overflow-x-auto">{cronCmd}</pre>
+          <p className="text-persian text-[11px] text-muted-foreground leading-6">
+            خروجی موفق پیام <span className="font-mono">OK: backup-auto-...sql</span> و در صورت زودتر بودن از ۴۸ ساعت پیام <span className="font-mono">SKIP</span> است. پوشه <span className="font-mono">public/api/backups/</span> باید قابل نوشتن (۷۵۵) باشد.
+          </p>
+        </CardContent>
+      </Card>
+
 
       {/* بازگردانی - غیرفعال */}
       <Card className="border-border opacity-90">
