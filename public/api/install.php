@@ -341,6 +341,18 @@ try {
         echo "WARN: ts_customs_codes: " . $e->getMessage() . "\n";
     }
 
+    // ===== جدول بک‌آپ‌ها =====
+    try {
+        require_once __DIR__ . '/admin/_backup_lib.php';
+        ts_backup_ensure_schema($pdo);
+        ts_backup_dir();
+        echo "OK: ensured ts_backups\n";
+    } catch (Throwable $e) {
+        echo "WARN: ts_backups: " . $e->getMessage() . "\n";
+    }
+
+
+
 
 
     // ===== One-time data repair: orphan kotaj entry_ids =====

@@ -19,4 +19,8 @@ return [
     'admin_session_ttl' => 60 * 60 * 24 * 7,
     // مدت کش پاسخ سرچ HS Code (پیش‌فرض ۶۰ ثانیه) - بدون استفاده فعلی
     'cache_ttl' => 60,
+    // کلید مخفی کرون‌جاب بک‌آپ خودکار (هر ۴۸ ساعت)
+    // نمونه کرون: curl -s "https://example.com/api/admin/backup-cron.php?key=YOUR_SECRET"
+    'backup_cron_secret' => '',
+
 ];
