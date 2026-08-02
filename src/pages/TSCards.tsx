@@ -285,7 +285,7 @@ const TSCards = () => {
   );
 };
 
-const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
+const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: ReturnType<typeof useToast>["toast"]; pendingCount?: number; onPendingChanged?: () => void }) => {
   const [items, setItems] = useState<CardRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
