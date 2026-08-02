@@ -63,7 +63,13 @@ const BackupPanel = () => {
   const [creating, setCreating] = useState(false);
   const [storage, setStorage] = useState<StorageInfo | null>(null);
   const [visible, setVisible] = useState(PAGE);
-
+  const loadStorage = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/backup-storage.php", { credentials: "same-origin" });
+      const data = await res.json();
+      if (res.ok) setStorage(data as StorageInfo);
+    } catch { /* ignore */ }
+  }, []);
 
   const load = useCallback(async (auto = 1) => {
     setLoading(true);
@@ -81,10 +87,12 @@ const BackupPanel = () => {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally {
       setLoading(false);
+      void loadStorage();
     }
-  }, [toast]);
+  }, [toast, loadStorage]);
 
   useEffect(() => { void load(1); }, [load]);
+
 
   const createNow = async () => {
     setCreating(true);
