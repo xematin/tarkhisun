@@ -31,6 +31,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
         if ($unit < 0) ts_json_error(400, "قیمت واحد سکشن «$title» معتبر نیست");
         $total = round($amount * $unit, 2);
         $entries[] = [
+            'id' => isset($e['id']) && (int)$e['id'] > 0 ? (int)$e['id'] : null,
             'title' => $title,
             'amount' => $amount,
             'currency' => $currency,
@@ -122,26 +123,31 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                 $stmt->execute([$name, $balanceIrt, 'IRT', $tolerance, $now, $cardId]);
             }
 
-            // Snapshot custom_unit_price_irt by (card_user_id, entry_title)
+            // Snapshot custom_unit_price_irt by (card_user_id, entry_id)
             $customMap = [];
             $snap = $pdo->prepare(
-                "SELECT a.card_user_id, e.title AS entry_title, a.custom_unit_price_irt
+                "SELECT a.card_user_id, a.entry_id, a.custom_unit_price_irt
                  FROM ts_card_user_access a
-                 JOIN ts_card_entries e ON e.id = a.entry_id
-                 WHERE a.card_id = ? AND a.custom_unit_price_irt IS NOT NULL"
+                 WHERE a.card_id = ? AND a.entry_id IS NOT NULL AND a.custom_unit_price_irt IS NOT NULL"
             );
             $snap->execute([$cardId]);
             foreach ($snap->fetchAll() as $s) {
-                $customMap[(int)$s['card_user_id'] . '|' . $s['entry_title']] = (float)$s['custom_unit_price_irt'];
+                $customMap[(int)$s['card_user_id'] . '|' . (int)$s['entry_id']] = (float)$s['custom_unit_price_irt'];
             }
 
-            // Load existing entries for stable-id matching by title
+            // Load existing entries (id-based matching; titles may repeat)
             $exE = $pdo->prepare("SELECT id, title FROM ts_card_entries WHERE card_id=?");
             $exE->execute([$cardId]);
-            $existingByTitle = [];
+            $existingTitles = [];   // id => title
+            $existingByTitle = [];  // legacy fallback: title => id
             foreach ($exE->fetchAll() as $er) {
-                $existingByTitle[(string)$er['title']] = (int)$er['id'];
+                $existingTitles[(int)$er['id']] = (string)$er['title'];
+                if (!isset($existingByTitle[(string)$er['title']])) $existingByTitle[(string)$er['title']] = (int)$er['id'];
             }
+
+            // Legacy clients don't send entry ids; only then fall back to title matching.
+            $anyIncomingId = false;
+            foreach ($entries as $e) { if ($e['id'] !== null) { $anyIncomingId = true; break; } }
 
             $entryIds = [];
             $usedExistingIds = [];
@@ -150,13 +156,17 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                  VALUES (?, ?, ?, ?, ?, ?, ?)'
             );
             $updE = $pdo->prepare(
-                'UPDATE ts_card_entries SET amount=?, currency=?, unit_price_irt=?, total_irt=?, sort_order=? WHERE id=?'
+                'UPDATE ts_card_entries SET title=?, amount=?, currency=?, unit_price_irt=?, total_irt=?, sort_order=? WHERE id=?'
             );
             foreach ($entries as $i => $e) {
-                $title = (string)$e['title'];
-                if (isset($existingByTitle[$title])) {
-                    $eid = $existingByTitle[$title];
-                    $updE->execute([$e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order'], $eid]);
+                $eid = null;
+                if ($e['id'] !== null && isset($existingTitles[$e['id']]) && !isset($usedExistingIds[$e['id']])) {
+                    $eid = (int)$e['id'];
+                } elseif (!$anyIncomingId && isset($existingByTitle[(string)$e['title']]) && !isset($usedExistingIds[$existingByTitle[(string)$e['title']]])) {
+                    $eid = $existingByTitle[(string)$e['title']];
+                }
+                if ($eid !== null) {
+                    $updE->execute([$e['title'], $e['amount'], $e['currency'], $e['unit_price_irt'], $e['total_irt'], $e['sort_order'], $eid]);
                     $entryIds[$i] = $eid;
                     $usedExistingIds[$eid] = true;
                 } else {
@@ -167,7 +177,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
 
             // Entries to remove: those not used. Block removal if they have kotajs.
             $toRemove = [];
-            foreach ($existingByTitle as $title => $eid) {
+            foreach ($existingTitles as $eid => $title) {
                 if (!isset($usedExistingIds[$eid])) $toRemove[$eid] = $title;
             }
             if ($toRemove) {
@@ -186,6 +196,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
                 $pdo->prepare("DELETE FROM ts_card_entries WHERE id IN ($place)")->execute($rids);
             }
 
+
             // Rebuild access for this card based on incoming user rows
             $pdo->prepare('DELETE FROM ts_card_user_access WHERE card_id=?')->execute([$cardId]);
         }
@@ -200,17 +211,16 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
             }
         }
 
-        // Re-apply preserved custom prices using current entry ids (matched by title).
+        // Re-apply preserved custom prices using the preserved entry ids.
         if (!empty($customMap)) {
             $upd = $pdo->prepare(
-                "UPDATE ts_card_user_access a
-                 JOIN ts_card_entries e ON e.id = a.entry_id
-                 SET a.custom_unit_price_irt = ?
-                 WHERE a.card_id = ? AND a.card_user_id = ? AND e.title = ?"
+                "UPDATE ts_card_user_access
+                 SET custom_unit_price_irt = ?
+                 WHERE card_id = ? AND card_user_id = ? AND entry_id = ?"
             );
             foreach ($customMap as $k => $price) {
-                [$uid, $title] = explode('|', $k, 2);
-                $upd->execute([$price, $cardId, (int)$uid, $title]);
+                [$uid, $eid] = explode('|', $k, 2);
+                $upd->execute([$price, $cardId, (int)$uid, (int)$eid]);
             }
         }
 

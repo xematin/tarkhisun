@@ -622,6 +622,7 @@ interface DialogProps {
 }
 
 interface EntryDraft {
+  id?: number;
   title: string;
   amount: string;
   currency: Currency;
@@ -654,6 +655,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     setTolerancePercent(editing?.tolerance_percent !== undefined && editing?.tolerance_percent !== null ? String(editing.tolerance_percent) : "0");
     if (editing?.entries && editing.entries.length > 0) {
       setEntries(editing.entries.map(e => ({
+        id: e.id,
         title: e.title,
         amount: String(e.amount),
         currency: e.currency,
@@ -756,6 +758,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
         name: name.trim(),
         tolerance_percent: parseFloat(normDigits(tolerancePercent)) || 0,
         entries: entries.map(e => ({
+          id: e.id,
           title: e.title.trim(),
           amount: parseFloat(e.amount) || 0,
           currency: e.currency,
