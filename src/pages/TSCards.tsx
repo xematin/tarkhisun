@@ -655,6 +655,7 @@ const CardDialog = ({ open, onClose, onSaved, editing, toast }: DialogProps) => 
     setTolerancePercent(editing?.tolerance_percent !== undefined && editing?.tolerance_percent !== null ? String(editing.tolerance_percent) : "0");
     if (editing?.entries && editing.entries.length > 0) {
       setEntries(editing.entries.map(e => ({
+        id: e.id,
         title: e.title,
         amount: String(e.amount),
         currency: e.currency,
