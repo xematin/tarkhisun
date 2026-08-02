@@ -136,9 +136,88 @@ const BackupPanel = () => {
     return `بک‌آپ خودکار بعدی تا حدود ${h.toLocaleString("fa-IR")} ساعت دیگر`;
   })();
 
+  const total = storage?.disk_total ?? null;
+  const used = storage?.disk_used ?? null;
+  const pct = total && total > 0 && used !== null ? Math.min(100, Math.max(0, (used / total) * 100)) : null;
+  const tankColor = pct === null ? "bg-muted-foreground/40"
+    : pct >= 90 ? "bg-destructive"
+    : pct >= 70 ? "bg-amber-500"
+    : "bg-emerald-500";
+  const backupsShare = used && used > 0 && storage ? Math.min(100, (storage.backups_size / used) * 100) : 0;
+  const cronCmd = `curl -s "https://tarkhisun.com/api/admin/backup-cron.php?key=YOUR_SECRET" > /dev/null`;
+
   return (
     <div className="space-y-6 panel-fa">
+      {/* مخزن حافظه هاست */}
+      <Card className="border-border overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-persian flex items-center gap-2 text-base">
+            <HardDrive className="w-4 h-4 text-primary" />
+            مخزن حافظه هاست
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            {/* مخزن شیشه‌ای */}
+            <div className="relative w-24 h-44 shrink-0 rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted/60 backdrop-blur overflow-hidden shadow-inner">
+              <div
+                className={`absolute bottom-0 left-0 right-0 ${tankColor} transition-[height] duration-700 ease-out opacity-90`}
+                style={{ height: `${pct ?? 0}%` }}
+              >
+                <div className="absolute inset-x-0 top-0 h-2 bg-background/30" />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-bold tabular-nums text-foreground drop-shadow">
+                  {pct === null ? "نامشخص" : `${pct.toLocaleString("fa-IR", { maximumFractionDigits: 1 })}٪`}
+                </span>
+              </div>
+              {[25, 50, 75].map((m) => (
+                <div key={m} className="absolute left-0 right-0 border-t border-border/50" style={{ bottom: `${m}%` }} />
+              ))}
+            </div>
+
+            {/* شاخص‌ها */}
+            <div className="flex-1 w-full space-y-3">
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "کل فضا", value: total },
+                  { label: "مصرف‌شده", value: used },
+                  { label: "آزاد", value: storage?.disk_free ?? null },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-lg border border-border bg-muted/30 p-2 text-center">
+                    <div className="text-persian text-[11px] text-muted-foreground">{s.label}</div>
+                    <div className="text-sm font-bold tabular-nums">{s.value === null ? "—" : fmtSize(s.value)}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-persian text-[11px] text-muted-foreground">
+                  <span>سهم بک‌آپ‌ها از فضای مصرفی ({(storage?.backups_count ?? 0).toLocaleString("fa-IR")} فایل)</span>
+                  <span className="tabular-nums">{fmtSize(storage?.backups_size ?? 0)}</span>
+                </div>
+                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                  <div className="h-full bg-primary transition-[width] duration-700 ease-out" style={{ width: `${backupsShare}%` }} />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-persian text-[11px] text-muted-foreground">
+                <span>حجم دیتابیس</span>
+                <span className="tabular-nums">{storage?.db_size ? fmtSize(storage.db_size) : "—"}</span>
+              </div>
+
+              {pct === null && (
+                <p className="text-persian text-[11px] text-muted-foreground">
+                  هاست شما اجازه خواندن فضای دیسک را نمی‌دهد؛ فقط حجم بک‌آپ‌ها و دیتابیس نمایش داده می‌شود.
+                </p>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* بک‌آپ فوری */}
+      <Card className="border-border">
       <Card className="border-border">
         <CardHeader>
           <CardTitle className="text-persian flex items-center gap-2 text-base">
