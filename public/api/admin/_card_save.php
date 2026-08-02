@@ -31,6 +31,7 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
         if ($unit < 0) ts_json_error(400, "قیمت واحد سکشن «$title» معتبر نیست");
         $total = round($amount * $unit, 2);
         $entries[] = [
+            'id' => isset($e['id']) && (int)$e['id'] > 0 ? (int)$e['id'] : null,
             'title' => $title,
             'amount' => $amount,
             'currency' => $currency,
