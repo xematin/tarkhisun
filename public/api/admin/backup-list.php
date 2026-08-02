@@ -23,7 +23,7 @@ if (((int)($_GET['auto'] ?? 1)) === 1) {
 }
 
 $items = [];
-foreach ($pdo->query('SELECT * FROM ts_backups ORDER BY created_at DESC, id DESC LIMIT 50')->fetchAll() as $r) {
+foreach ($pdo->query('SELECT * FROM ts_backups ORDER BY created_at DESC, id DESC')->fetchAll() as $r) {
     $path = $dir . '/' . basename((string)$r['filename']);
     $items[] = [
         'id'          => (int)$r['id'],

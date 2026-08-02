@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Database, Download, RefreshCw, Trash2, Loader2, FileSpreadsheet,
-  FileText, FileArchive, Upload, ShieldAlert, Clock,
+  FileText, FileArchive, Upload, ShieldAlert, Clock, HardDrive, Terminal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +19,15 @@ interface BackupItem {
   size_bytes: number;
   created_at: string;
   exists: boolean;
+}
+
+interface StorageInfo {
+  disk_total: number | null;
+  disk_free: number | null;
+  disk_used: number | null;
+  backups_size: number;
+  backups_count: number;
+  db_size: number | null;
 }
 
 const toJalali = (iso: string): string => {
@@ -39,8 +48,11 @@ const fmtSize = (b: number): string => {
   if (!b) return "—";
   if (b < 1024) return `${b} B`;
   if (b < 1024 * 1024) return `${(b / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 1 })} KB`;
-  return `${(b / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} MB`;
+  if (b < 1024 * 1024 * 1024) return `${(b / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} MB`;
+  return `${(b / 1024 / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} GB`;
 };
+
+const PAGE = 15;
 
 const BackupPanel = () => {
   const { toast } = useToast();
@@ -49,6 +61,15 @@ const BackupPanel = () => {
   const [writable, setWritable] = useState(true);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [storage, setStorage] = useState<StorageInfo | null>(null);
+  const [visible, setVisible] = useState(PAGE);
+  const loadStorage = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/backup-storage.php", { credentials: "same-origin" });
+      const data = await res.json();
+      if (res.ok) setStorage(data as StorageInfo);
+    } catch { /* ignore */ }
+  }, []);
 
   const load = useCallback(async (auto = 1) => {
     setLoading(true);
@@ -66,10 +87,12 @@ const BackupPanel = () => {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });
     } finally {
       setLoading(false);
+      void loadStorage();
     }
-  }, [toast]);
+  }, [toast, loadStorage]);
 
   useEffect(() => { void load(1); }, [load]);
+
 
   const createNow = async () => {
     setCreating(true);
@@ -113,8 +136,86 @@ const BackupPanel = () => {
     return `بک‌آپ خودکار بعدی تا حدود ${h.toLocaleString("fa-IR")} ساعت دیگر`;
   })();
 
+  const total = storage?.disk_total ?? null;
+  const used = storage?.disk_used ?? null;
+  const pct = total && total > 0 && used !== null ? Math.min(100, Math.max(0, (used / total) * 100)) : null;
+  const tankColor = pct === null ? "bg-muted-foreground/40"
+    : pct >= 90 ? "bg-destructive"
+    : pct >= 70 ? "bg-amber-500"
+    : "bg-emerald-500";
+  const backupsShare = used && used > 0 && storage ? Math.min(100, (storage.backups_size / used) * 100) : 0;
+  const cronCmd = `curl -s "https://tarkhisun.com/api/admin/backup-cron.php?key=YOUR_SECRET" > /dev/null`;
+
   return (
     <div className="space-y-6 panel-fa">
+      {/* مخزن حافظه هاست */}
+      <Card className="border-border overflow-hidden">
+        <CardHeader>
+          <CardTitle className="text-persian flex items-center gap-2 text-base">
+            <HardDrive className="w-4 h-4 text-primary" />
+            مخزن حافظه هاست
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            {/* مخزن شیشه‌ای */}
+            <div className="relative w-24 h-44 shrink-0 rounded-2xl border border-border bg-gradient-to-b from-muted/30 to-muted/60 backdrop-blur overflow-hidden shadow-inner">
+              <div
+                className={`absolute bottom-0 left-0 right-0 ${tankColor} transition-[height] duration-700 ease-out opacity-90`}
+                style={{ height: `${pct ?? 0}%` }}
+              >
+                <div className="absolute inset-x-0 top-0 h-2 bg-background/30" />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm font-bold tabular-nums text-foreground drop-shadow">
+                  {pct === null ? "نامشخص" : `${pct.toLocaleString("fa-IR", { maximumFractionDigits: 1 })}٪`}
+                </span>
+              </div>
+              {[25, 50, 75].map((m) => (
+                <div key={m} className="absolute left-0 right-0 border-t border-border/50" style={{ bottom: `${m}%` }} />
+              ))}
+            </div>
+
+            {/* شاخص‌ها */}
+            <div className="flex-1 w-full space-y-3">
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "کل فضا", value: total },
+                  { label: "مصرف‌شده", value: used },
+                  { label: "آزاد", value: storage?.disk_free ?? null },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-lg border border-border bg-muted/30 p-2 text-center">
+                    <div className="text-persian text-[11px] text-muted-foreground">{s.label}</div>
+                    <div className="text-sm font-bold tabular-nums">{s.value === null ? "—" : fmtSize(s.value)}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-persian text-[11px] text-muted-foreground">
+                  <span>سهم بک‌آپ‌ها از فضای مصرفی ({(storage?.backups_count ?? 0).toLocaleString("fa-IR")} فایل)</span>
+                  <span className="tabular-nums">{fmtSize(storage?.backups_size ?? 0)}</span>
+                </div>
+                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                  <div className="h-full bg-primary transition-[width] duration-700 ease-out" style={{ width: `${backupsShare}%` }} />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between text-persian text-[11px] text-muted-foreground">
+                <span>حجم دیتابیس</span>
+                <span className="tabular-nums">{storage?.db_size ? fmtSize(storage.db_size) : "—"}</span>
+              </div>
+
+              {pct === null && (
+                <p className="text-persian text-[11px] text-muted-foreground">
+                  هاست شما اجازه خواندن فضای دیسک را نمی‌دهد؛ فقط حجم بک‌آپ‌ها و دیتابیس نمایش داده می‌شود.
+                </p>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* بک‌آپ فوری */}
       <Card className="border-border">
         <CardHeader>
@@ -167,8 +268,9 @@ const BackupPanel = () => {
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-2 text-persian text-xs text-muted-foreground">
             <Badge variant="secondary" className="text-persian">{dueIn}</Badge>
-            <span>آخرین ۱۰ نسخه نگهداری می‌شود.</span>
+            <span>همه نسخه‌ها نگهداری می‌شوند و فقط با حذف دستی شما پاک می‌شوند.</span>
           </div>
+
 
           {!writable && (
             <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-persian text-xs text-destructive">
@@ -193,7 +295,7 @@ const BackupPanel = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {items.map((b) => (
+                  {items.slice(0, visible).map((b) => (
                     <TableRow key={b.id}>
                       <TableCell data-label="تاریخ" className="text-persian text-xs whitespace-nowrap tabular-nums">{toJalali(b.created_at)}</TableCell>
                       <TableCell data-label="نوع">
@@ -219,10 +321,40 @@ const BackupPanel = () => {
                   ))}
                 </TableBody>
               </Table>
+              {items.length > visible && (
+                <div className="pt-3 text-center">
+                  <Button variant="outline" size="sm" className="text-persian" onClick={() => setVisible((v) => v + PAGE)}>
+                    نمایش بیشتر ({(items.length - visible).toLocaleString("fa-IR")} مورد دیگر)
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </CardContent>
       </Card>
+
+      {/* راهنمای کرون */}
+      <Card className="border-border">
+        <CardHeader>
+          <CardTitle className="text-persian flex items-center gap-2 text-base">
+            <Terminal className="w-4 h-4 text-primary" />
+            فعال‌سازی بک‌آپ خودکار با کرون‌جاب
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <ol className="text-persian text-xs text-muted-foreground leading-7 list-decimal pr-5 space-y-1">
+            <li>در فایل <span className="font-mono">public/api/config.php</span> مقدار <span className="font-mono">backup_cron_secret</span> را با یک رشته تصادفی و طولانی تنظیم کنید.</li>
+            <li>در cPanel وارد بخش <span className="font-mono">Cron Jobs</span> شوید و «Add New Cron Job» را بزنید.</li>
+            <li>در Common Settings گزینه «Once Per Day» (معادل <span className="font-mono">0 3 * * *</span>) را انتخاب کنید؛ خود اسکریپت بازه ۴۸ ساعت را کنترل می‌کند.</li>
+            <li>دستور زیر را در فیلد Command وارد کنید و <span className="font-mono">YOUR_SECRET</span> را با کلید خودتان جایگزین کنید.</li>
+          </ol>
+          <pre dir="ltr" className="rounded-lg bg-muted/50 border border-border p-3 text-[11px] font-mono overflow-x-auto">{cronCmd}</pre>
+          <p className="text-persian text-[11px] text-muted-foreground leading-6">
+            خروجی موفق پیام <span className="font-mono">OK: backup-auto-...sql</span> و در صورت زودتر بودن از ۴۸ ساعت پیام <span className="font-mono">SKIP</span> است. پوشه <span className="font-mono">public/api/backups/</span> باید قابل نوشتن (۷۵۵) باشد.
+          </p>
+        </CardContent>
+      </Card>
+
 
       {/* بازگردانی - غیرفعال */}
       <Card className="border-border opacity-90">
