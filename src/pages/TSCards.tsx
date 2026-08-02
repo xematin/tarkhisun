@@ -701,6 +701,11 @@ const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: Retu
           </TabsContent>
         </Tabs>
       </TabsContent>
+
+      <TabsContent value="backup" className="mt-0">
+        <BackupPanel />
+      </TabsContent>
+
     </Tabs>
   );
 };
