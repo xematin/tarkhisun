@@ -2061,7 +2061,7 @@ const UsersManagementPanel = ({
                 className="w-full sm:w-56 pr-8 text-persian"
               />
             </div>
-            <Button variant="default" size="sm" onClick={() => { setCreateForm({ first_name: "", last_name: "", username: "", password: "", password2: "" }); setCreateOpen(true); }} className="gap-1.5">
+            <Button variant="default" size="sm" onClick={() => { setCreateForm({ first_name: "", last_name: "", username: "", password: "", password2: "", require_payment_approval: 0 }); setCreateOpen(true); }} className="gap-1.5">
               <Plus className="h-4 w-4" />
               <span className="text-persian">افزودن</span>
             </Button>
