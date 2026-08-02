@@ -65,6 +65,7 @@ $sql = [
         last_name  VARCHAR(100) NOT NULL,
         username VARCHAR(100) NOT NULL UNIQUE,
         password_hash VARCHAR(255) NOT NULL,
+        require_payment_approval TINYINT(1) NOT NULL DEFAULT 0,
         created_by INT NULL,
         created_at DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
