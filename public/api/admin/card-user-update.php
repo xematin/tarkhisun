@@ -27,14 +27,26 @@ $st = $pdo->prepare('SELECT id FROM ts_card_users WHERE username=? AND id<>? LIM
 $st->execute([$user, $id]);
 if ($st->fetch()) ts_json_error(409, 'این نام کاربری قبلاً استفاده شده');
 
+if (!ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval')) {
+    try { $pdo->exec("ALTER TABLE ts_card_users ADD COLUMN require_payment_approval TINYINT(1) NOT NULL DEFAULT 0"); } catch (Throwable $e) {}
+}
+$hasFlag = ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval');
+
+$sets = ['first_name=?', 'last_name=?', 'username=?'];
+$params = [$first, $last, $user];
+
+if ($hasFlag && array_key_exists('require_payment_approval', $body)) {
+    $sets[] = 'require_payment_approval=?';
+    $params[] = (int)$body['require_payment_approval'] === 1 ? 1 : 0;
+}
+
 if ($pass !== '') {
     if (strlen($pass) < 6) ts_json_error(400, 'رمز عبور باید حداقل ۶ کاراکتر باشد');
-    $hash = password_hash($pass, PASSWORD_BCRYPT);
-    $up = $pdo->prepare('UPDATE ts_card_users SET first_name=?, last_name=?, username=?, password_hash=? WHERE id=?');
-    $up->execute([$first, $last, $user, $hash, $id]);
-} else {
-    $up = $pdo->prepare('UPDATE ts_card_users SET first_name=?, last_name=?, username=? WHERE id=?');
-    $up->execute([$first, $last, $user, $id]);
+    $sets[] = 'password_hash=?';
+    $params[] = password_hash($pass, PASSWORD_BCRYPT);
 }
+
+$params[] = $id;
+$pdo->prepare('UPDATE ts_card_users SET ' . implode(',', $sets) . ' WHERE id=?')->execute($params);
 
 ts_json(200, ['ok' => true]);
