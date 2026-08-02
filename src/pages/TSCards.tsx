@@ -2147,6 +2147,23 @@ const UsersManagementPanel = ({
                 <Label className="text-persian">رمز جدید (اختیاری)</Label>
                 <Input type="text" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} dir="ltr" placeholder="خالی = بدون تغییر" />
               </div>
+              <div className="rounded-md border p-3 bg-muted/20 space-y-2">
+                <Label className="text-persian text-sm font-bold">وضعیت پیش‌فرض پرداخت‌های کاربر</Label>
+                <RadioGroup
+                  value={String(form.require_payment_approval)}
+                  onValueChange={(v) => setForm(f => ({ ...f, require_payment_approval: Number(v) }))}
+                  className="gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="0" id="eu-appr-0" />
+                    <Label htmlFor="eu-appr-0" className="text-persian text-sm font-normal cursor-pointer">تأیید شده (اعمال فوری روی حساب‌ها)</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="1" id="eu-appr-1" />
+                    <Label htmlFor="eu-appr-1" className="text-persian text-sm font-normal cursor-pointer">در انتظار تأیید ادمین</Label>
+                  </div>
+                </RadioGroup>
+              </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEdit(null)} disabled={saving}>انصراف</Button>
