@@ -189,6 +189,8 @@ const TSCards = () => {
 
   useEffect(() => { void refresh(); }, [refresh]);
 
+  const pending = usePendingPayments(state === "auth");
+
   return (
     <>
       <Helmet>
@@ -203,6 +205,45 @@ const TSCards = () => {
             </h1>
             {state === "auth" && (
               <div className="flex items-center gap-3 text-sm text-persian">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="sm" className="relative px-2" title="پرداخت‌های در انتظار تأیید">
+                      <Bell className={`w-5 h-5 ${pending.count > 0 ? "text-destructive" : ""}`} />
+                      {pending.count > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] leading-[18px] font-bold tabular-nums">
+                          {pending.count.toLocaleString("fa-IR")}
+                        </span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="panel-fa w-80 p-0">
+                    <div className="px-3 py-2 border-b flex items-center justify-between">
+                      <span className="text-persian text-sm font-bold">پرداخت‌های در انتظار تأیید</span>
+                      <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => void pending.reload()}>
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto">
+                      {pending.count === 0 ? (
+                        <div className="p-4 text-center text-xs text-muted-foreground text-persian">
+                          پرداخت در انتظاری وجود ندارد.
+                        </div>
+                      ) : (
+                        pending.items.map((p) => (
+                          <div key={p.id} className="px-3 py-2 border-b last:border-b-0 text-xs">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-persian">{p.first_name} {p.last_name}</span>
+                              <span className="tabular-nums font-bold">{Number(p.amount_irt || 0).toLocaleString("fa-IR")} تومان</span>
+                            </div>
+                            <div className="text-muted-foreground text-persian mt-0.5">
+                              {p.card_name || "—"}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <a href="/TSDashboard" className="opacity-80 hover:opacity-100">پنل اصلی</a>
                 <span className="opacity-80">{username}</span>
                 <Button
