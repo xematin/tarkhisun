@@ -2182,6 +2182,23 @@ const UsersManagementPanel = ({
                 <Label className="text-persian">تایید رمز عبور</Label>
                 <Input type="text" value={createForm.password2} onChange={e => setCreateForm(f => ({ ...f, password2: e.target.value }))} dir="ltr" />
               </div>
+              <div className="rounded-md border p-3 bg-muted/20 space-y-2">
+                <Label className="text-persian text-sm font-bold">وضعیت پیش‌فرض پرداخت‌های کاربر</Label>
+                <RadioGroup
+                  value={String(createForm.require_payment_approval)}
+                  onValueChange={(v) => setCreateForm(f => ({ ...f, require_payment_approval: Number(v) }))}
+                  className="gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="0" id="cu-appr-0" />
+                    <Label htmlFor="cu-appr-0" className="text-persian text-sm font-normal cursor-pointer">تأیید شده (اعمال فوری روی حساب‌ها)</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="1" id="cu-appr-1" />
+                    <Label htmlFor="cu-appr-1" className="text-persian text-sm font-normal cursor-pointer">در انتظار تأیید ادمین</Label>
+                  </div>
+                </RadioGroup>
+              </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={creating}>انصراف</Button>
