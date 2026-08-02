@@ -12,6 +12,7 @@ if ($hasMultipart && isset($_POST['payload'])) {
 if (!is_array($body)) $body = ts_read_json_body();
 
 $id           = (int)($body['id'] ?? 0);
+$newEntryId   = isset($body['entry_id']) ? (int)$body['entry_id'] : 0;
 $kotaj_number = preg_replace('/\D+/', '', ts_normalize_digits((string)($body['kotaj_number'] ?? '')));
 $kotaj_date_j = trim(ts_normalize_digits((string)($body['kotaj_date_jalali'] ?? '')));
 $kotaj_date_g = trim((string)($body['kotaj_date_gregorian'] ?? ''));
