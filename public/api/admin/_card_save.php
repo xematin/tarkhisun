@@ -211,17 +211,16 @@ function ts_card_save(array $body, int $adminId, ?int $cardId): array {
             }
         }
 
-        // Re-apply preserved custom prices using current entry ids (matched by title).
+        // Re-apply preserved custom prices using the preserved entry ids.
         if (!empty($customMap)) {
             $upd = $pdo->prepare(
-                "UPDATE ts_card_user_access a
-                 JOIN ts_card_entries e ON e.id = a.entry_id
-                 SET a.custom_unit_price_irt = ?
-                 WHERE a.card_id = ? AND a.card_user_id = ? AND e.title = ?"
+                "UPDATE ts_card_user_access
+                 SET custom_unit_price_irt = ?
+                 WHERE card_id = ? AND card_user_id = ? AND entry_id = ?"
             );
             foreach ($customMap as $k => $price) {
-                [$uid, $title] = explode('|', $k, 2);
-                $upd->execute([$price, $cardId, (int)$uid, $title]);
+                [$uid, $eid] = explode('|', $k, 2);
+                $upd->execute([$price, $cardId, (int)$uid, (int)$eid]);
             }
         }
 
