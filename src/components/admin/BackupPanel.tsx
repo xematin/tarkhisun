@@ -268,8 +268,9 @@ const BackupPanel = () => {
         <CardContent className="space-y-4">
           <div className="flex flex-wrap items-center gap-2 text-persian text-xs text-muted-foreground">
             <Badge variant="secondary" className="text-persian">{dueIn}</Badge>
-            <span>آخرین ۱۰ نسخه نگهداری می‌شود.</span>
+            <span>همه نسخه‌ها نگهداری می‌شوند و فقط با حذف دستی شما پاک می‌شوند.</span>
           </div>
+
 
           {!writable && (
             <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-3 text-persian text-xs text-destructive">
