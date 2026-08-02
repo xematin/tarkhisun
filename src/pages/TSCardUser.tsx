@@ -1132,7 +1132,12 @@ const PaymentDialog = ({
       setUploadPct(0);
       const { ok, status, data } = await xhrUpload("/api/cards/payment-create.php", fd, setUploadPct);
       if (!ok) throw new Error((data as { error?: string })?.error || `HTTP ${status}`);
-      toast({ title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." });
+      const isPending = (data as { status?: string })?.status === "pending";
+      toast(
+        isPending
+          ? { title: "پرداخت ثبت شد", description: "پرداخت شما در انتظار تأیید ادمین است و پس از تأیید اعمال می‌شود." }
+          : { title: "پرداخت ثبت شد", description: "از مجموع بدهی شما کسر شد." }
+      );
       onSaved();
     } catch (e) {
       toast({ title: "خطا", description: (e as Error).message, variant: "destructive" });

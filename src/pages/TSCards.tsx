@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw, Paperclip } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw, Paperclip, Bell } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import CardBillingDialog from "@/components/admin/CardBillingDialog";
@@ -23,6 +23,8 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import DatePicker, { DateObject } from "react-multi-date-picker";
@@ -39,6 +41,7 @@ interface CardUser {
   username: string;
   created_at?: string;
   allocated?: number;
+  require_payment_approval?: number;
 }
 interface EntryUser {
   id: number;
@@ -126,6 +129,44 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 
 type AuthState = "loading" | "login" | "auth";
 
+interface PendingPayment {
+  id: number;
+  amount_irt: number;
+  created_at: string;
+  note?: string | null;
+  card_name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  username?: string | null;
+}
+
+function usePendingPayments(enabled: boolean) {
+  const [count, setCount] = useState(0);
+  const [items, setItems] = useState<PendingPayment[]>([]);
+
+  const reload = useCallback(async () => {
+    if (!enabled) return;
+    try {
+      const r = await api<{ count: number; items: PendingPayment[] }>("/api/admin/payments-pending-count.php");
+      setCount(Number(r.count || 0));
+      setItems(r.items || []);
+    } catch {
+      /* silent */
+    }
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    void reload();
+    const t = window.setInterval(() => { void reload(); }, 60000);
+    return () => window.clearInterval(t);
+  }, [enabled, reload]);
+
+  return { count, items, reload };
+}
+
+
+
 const TSCards = () => {
   const { toast } = useToast();
   const [state, setState] = useState<AuthState>("loading");
@@ -148,6 +189,8 @@ const TSCards = () => {
 
   useEffect(() => { void refresh(); }, [refresh]);
 
+  const pending = usePendingPayments(state === "auth");
+
   return (
     <>
       <Helmet>
@@ -162,6 +205,45 @@ const TSCards = () => {
             </h1>
             {state === "auth" && (
               <div className="flex items-center gap-3 text-sm text-persian">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="ghost" size="sm" className="relative px-2" title="پرداخت‌های در انتظار تأیید">
+                      <Bell className={`w-5 h-5 ${pending.count > 0 ? "text-destructive" : ""}`} />
+                      {pending.count > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] leading-[18px] font-bold tabular-nums">
+                          {pending.count.toLocaleString("fa-IR")}
+                        </span>
+                      )}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start" className="panel-fa w-80 p-0">
+                    <div className="px-3 py-2 border-b flex items-center justify-between">
+                      <span className="text-persian text-sm font-bold">پرداخت‌های در انتظار تأیید</span>
+                      <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => void pending.reload()}>
+                        <RefreshCw className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto">
+                      {pending.count === 0 ? (
+                        <div className="p-4 text-center text-xs text-muted-foreground text-persian">
+                          پرداخت در انتظاری وجود ندارد.
+                        </div>
+                      ) : (
+                        pending.items.map((p) => (
+                          <div key={p.id} className="px-3 py-2 border-b last:border-b-0 text-xs">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-persian">{p.first_name} {p.last_name}</span>
+                              <span className="tabular-nums font-bold">{Number(p.amount_irt || 0).toLocaleString("fa-IR")} تومان</span>
+                            </div>
+                            <div className="text-muted-foreground text-persian mt-0.5">
+                              {p.card_name || "—"}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
                 <a href="/TSDashboard" className="opacity-80 hover:opacity-100">پنل اصلی</a>
                 <span className="opacity-80">{username}</span>
                 <Button
@@ -196,14 +278,14 @@ const TSCards = () => {
               </CardContent>
             </Card>
           )}
-          {state === "auth" && <CardsPanel toast={toast} />}
+          {state === "auth" && <CardsPanel toast={toast} pendingCount={pending.count} onPendingChanged={() => { void pending.reload(); }} />}
         </main>
       </div>
     </>
   );
 };
 
-const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) => {
+const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: ReturnType<typeof useToast>["toast"]; pendingCount?: number; onPendingChanged?: () => void }) => {
   const [items, setItems] = useState<CardRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -273,8 +355,13 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
           <TabsTrigger value="users" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
             مدیریت کاربران
           </TabsTrigger>
-          <TabsTrigger value="payments" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+          <TabsTrigger value="payments" className="relative shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
             پرداخت‌های کاربران
+            {pendingCount > 0 && (
+              <span className="absolute -top-1 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] leading-[18px] font-bold tabular-nums">
+                {pendingCount.toLocaleString("fa-IR")}
+              </span>
+            )}
           </TabsTrigger>
           <TabsTrigger value="kotaj-items" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
             کوتاژ‌ها
@@ -579,7 +666,7 @@ const CardsPanel = ({ toast }: { toast: ReturnType<typeof useToast>["toast"] }) 
       </TabsContent>
 
       <TabsContent value="payments" className="mt-0">
-        <AllPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); }} />
+        <AllPaymentsPanel toast={toast} cards={items} onChanged={() => { void load(); bumpTreasury(); onPendingChanged?.(); }} />
       </TabsContent>
 
       <TabsContent value="kotaj-items" className="mt-0">
@@ -1838,13 +1925,13 @@ const UsersManagementPanel = ({
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState("");
   const [edit, setEdit] = useState<CardUser | null>(null);
-  const [form, setForm] = useState<{ first_name: string; last_name: string; username: string; password: string }>({
-    first_name: "", last_name: "", username: "", password: "",
+  const [form, setForm] = useState<{ first_name: string; last_name: string; username: string; password: string; require_payment_approval: number }>({
+    first_name: "", last_name: "", username: "", password: "", require_payment_approval: 0,
   });
   const [saving, setSaving] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
-  const [createForm, setCreateForm] = useState<{ first_name: string; last_name: string; username: string; password: string; password2: string }>({
-    first_name: "", last_name: "", username: "", password: "", password2: "",
+  const [createForm, setCreateForm] = useState<{ first_name: string; last_name: string; username: string; password: string; password2: string; require_payment_approval: number }>({
+    first_name: "", last_name: "", username: "", password: "", password2: "", require_payment_approval: 0,
   });
   const [creating, setCreating] = useState(false);
   const [payUser, setPayUser] = useState<CardUser | null>(null);
@@ -1882,7 +1969,7 @@ const UsersManagementPanel = ({
 
   const openEdit = (u: CardUser) => {
     setEdit(u);
-    setForm({ first_name: u.first_name, last_name: u.last_name, username: u.username, password: "" });
+    setForm({ first_name: u.first_name, last_name: u.last_name, username: u.username, password: "", require_payment_approval: Number(u.require_payment_approval || 0) });
   };
 
   const save = async () => {
@@ -1921,7 +2008,7 @@ const UsersManagementPanel = ({
     try {
       await api("/api/admin/card-user-create.php", {
         method: "POST",
-        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password }),
+        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password, require_payment_approval: f.require_payment_approval }),
       });
       toast({ title: "کاربر ساخته شد" });
       setCreateOpen(false);
@@ -1974,7 +2061,7 @@ const UsersManagementPanel = ({
                 className="w-full sm:w-56 pr-8 text-persian"
               />
             </div>
-            <Button variant="default" size="sm" onClick={() => { setCreateForm({ first_name: "", last_name: "", username: "", password: "", password2: "" }); setCreateOpen(true); }} className="gap-1.5">
+            <Button variant="default" size="sm" onClick={() => { setCreateForm({ first_name: "", last_name: "", username: "", password: "", password2: "", require_payment_approval: 0 }); setCreateOpen(true); }} className="gap-1.5">
               <Plus className="h-4 w-4" />
               <span className="text-persian">افزودن</span>
             </Button>
@@ -2060,6 +2147,23 @@ const UsersManagementPanel = ({
                 <Label className="text-persian">رمز جدید (اختیاری)</Label>
                 <Input type="text" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} dir="ltr" placeholder="خالی = بدون تغییر" />
               </div>
+              <div className="rounded-md border p-3 bg-muted/20 space-y-2">
+                <Label className="text-persian text-sm font-bold">وضعیت پیش‌فرض پرداخت‌های کاربر</Label>
+                <RadioGroup
+                  value={String(form.require_payment_approval)}
+                  onValueChange={(v) => setForm(f => ({ ...f, require_payment_approval: Number(v) }))}
+                  className="gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="0" id="eu-appr-0" />
+                    <Label htmlFor="eu-appr-0" className="text-persian text-sm font-normal cursor-pointer">تأیید شده (اعمال فوری روی حساب‌ها)</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="1" id="eu-appr-1" />
+                    <Label htmlFor="eu-appr-1" className="text-persian text-sm font-normal cursor-pointer">در انتظار تأیید ادمین</Label>
+                  </div>
+                </RadioGroup>
+              </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setEdit(null)} disabled={saving}>انصراف</Button>
@@ -2094,6 +2198,23 @@ const UsersManagementPanel = ({
               <div>
                 <Label className="text-persian">تایید رمز عبور</Label>
                 <Input type="text" value={createForm.password2} onChange={e => setCreateForm(f => ({ ...f, password2: e.target.value }))} dir="ltr" />
+              </div>
+              <div className="rounded-md border p-3 bg-muted/20 space-y-2">
+                <Label className="text-persian text-sm font-bold">وضعیت پیش‌فرض پرداخت‌های کاربر</Label>
+                <RadioGroup
+                  value={String(createForm.require_payment_approval)}
+                  onValueChange={(v) => setCreateForm(f => ({ ...f, require_payment_approval: Number(v) }))}
+                  className="gap-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="0" id="cu-appr-0" />
+                    <Label htmlFor="cu-appr-0" className="text-persian text-sm font-normal cursor-pointer">تأیید شده (اعمال فوری روی حساب‌ها)</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="1" id="cu-appr-1" />
+                    <Label htmlFor="cu-appr-1" className="text-persian text-sm font-normal cursor-pointer">در انتظار تأیید ادمین</Label>
+                  </div>
+                </RadioGroup>
               </div>
             </div>
             <DialogFooter>

@@ -21,9 +21,20 @@ $stmt = $pdo->prepare('SELECT id FROM ts_card_users WHERE username = ? LIMIT 1')
 $stmt->execute([$user]);
 if ($stmt->fetch()) ts_json_error(409, 'Username already exists');
 
+if (!ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval')) {
+    try { $pdo->exec("ALTER TABLE ts_card_users ADD COLUMN require_payment_approval TINYINT(1) NOT NULL DEFAULT 0"); } catch (Throwable $e) {}
+}
+$hasFlag = ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval');
+$flag = (int)($body['require_payment_approval'] ?? 0) === 1 ? 1 : 0;
+
 $hash = password_hash($pass, PASSWORD_BCRYPT);
-$stmt = $pdo->prepare('INSERT INTO ts_card_users (first_name, last_name, username, password_hash, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?)');
-$stmt->execute([$first, $last, $user, $hash, (int)$admin['id'], date('Y-m-d H:i:s')]);
+if ($hasFlag) {
+    $stmt = $pdo->prepare('INSERT INTO ts_card_users (first_name, last_name, username, password_hash, require_payment_approval, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$first, $last, $user, $hash, $flag, (int)$admin['id'], date('Y-m-d H:i:s')]);
+} else {
+    $stmt = $pdo->prepare('INSERT INTO ts_card_users (first_name, last_name, username, password_hash, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$first, $last, $user, $hash, (int)$admin['id'], date('Y-m-d H:i:s')]);
+}
 $id = (int)$pdo->lastInsertId();
 
-ts_json(200, ['ok' => true, 'id' => $id, 'first_name' => $first, 'last_name' => $last, 'username' => $user]);
+ts_json(200, ['ok' => true, 'id' => $id, 'first_name' => $first, 'last_name' => $last, 'username' => $user, 'require_payment_approval' => $flag]);

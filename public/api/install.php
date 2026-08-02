@@ -65,6 +65,7 @@ $sql = [
         last_name  VARCHAR(100) NOT NULL,
         username VARCHAR(100) NOT NULL UNIQUE,
         password_hash VARCHAR(255) NOT NULL,
+        require_payment_approval TINYINT(1) NOT NULL DEFAULT 0,
         created_by INT NULL,
         created_at DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4",
@@ -284,6 +285,10 @@ try {
     if (!ts_column_exists($pdo, 'ts_card_payments', 'to_treasury')) {
         $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN to_treasury TINYINT(1) NOT NULL DEFAULT 1 AFTER status");
         echo "OK: added ts_card_payments.to_treasury\n";
+    }
+    if (!ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval')) {
+        $pdo->exec("ALTER TABLE ts_card_users ADD COLUMN require_payment_approval TINYINT(1) NOT NULL DEFAULT 0");
+        echo "OK: added ts_card_users.require_payment_approval\n";
     }
     if (!ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian')) {
         $pdo->exec("ALTER TABLE ts_card_payments ADD COLUMN pay_date_gregorian DATE NULL AFTER note");

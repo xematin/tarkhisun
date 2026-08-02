@@ -92,8 +92,20 @@ $hasPayDates = ts_column_exists($pdo, 'ts_card_payments', 'pay_date_gregorian')
             && ts_column_exists($pdo, 'ts_card_payments', 'pay_date_jalali');
 $hasPathsCol = ts_column_exists($pdo, 'ts_card_payments', 'receipt_paths');
 
+// Does this user require admin approval for payments?
+if (!ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval')) {
+    try { $pdo->exec("ALTER TABLE ts_card_users ADD COLUMN require_payment_approval TINYINT(1) NOT NULL DEFAULT 0"); } catch (Throwable $e) {}
+}
+$needsApproval = false;
+if (ts_column_exists($pdo, 'ts_card_users', 'require_payment_approval')) {
+    $fs = $pdo->prepare('SELECT require_payment_approval FROM ts_card_users WHERE id=? LIMIT 1');
+    $fs->execute([(int)$u['id']]);
+    $needsApproval = (int)($fs->fetchColumn() ?: 0) === 1;
+}
+$status = $needsApproval ? 'pending' : 'confirmed';
+
 $cols = ['card_id','card_user_id','amount_irt','receipt_path','note','status','to_treasury','created_at'];
-$vals = [$card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null, 'confirmed', 1, $now];
+$vals = [$card_id, (int)$u['id'], $amount, $receiptPath, $note !== '' ? $note : null, $status, 1, $now];
 if ($hasPayDates) {
     array_splice($cols, 5, 0, ['pay_date_gregorian','pay_date_jalali']);
     array_splice($vals, 5, 0, [$payG !== '' ? $payG : null, $payJ !== '' ? $payJ : null]);
@@ -107,12 +119,14 @@ $sql = "INSERT INTO ts_card_payments (" . implode(',', $cols) . ") VALUES ($plac
 $pdo->prepare($sql)->execute($vals);
 $paymentId = (int)$pdo->lastInsertId();
 
-// Treasury: use payment date as occurred_at when provided
-$occurredAt = $payG !== '' ? ($payG . ' ' . date('H:i:s')) : $now;
-ts_treasury_log(
-    'in', $amount, $card_id, 'user_payment', $paymentId,
-    'پرداخت کاربر #' . (int)$u['id'] . ($note !== '' ? ' — ' . $note : ''),
-    $occurredAt
-);
+// Treasury: only confirmed payments hit the ledger
+if ($status === 'confirmed') {
+    $occurredAt = $payG !== '' ? ($payG . ' ' . date('H:i:s')) : $now;
+    ts_treasury_log(
+        'in', $amount, $card_id, 'user_payment', $paymentId,
+        'پرداخت کاربر #' . (int)$u['id'] . ($note !== '' ? ' — ' . $note : ''),
+        $occurredAt
+    );
+}
 
-ts_json(200, ['ok' => true, 'id' => $paymentId, 'receipt_path' => $receiptPath, 'receipt_paths' => $savedPaths]);
+ts_json(200, ['ok' => true, 'id' => $paymentId, 'status' => $status, 'pending' => $needsApproval, 'receipt_path' => $receiptPath, 'receipt_paths' => $savedPaths]);
