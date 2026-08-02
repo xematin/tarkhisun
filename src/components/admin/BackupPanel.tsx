@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   Database, Download, RefreshCw, Trash2, Loader2, FileSpreadsheet,
-  FileText, FileArchive, Upload, ShieldAlert, Clock,
+  FileText, FileArchive, Upload, ShieldAlert, Clock, HardDrive, Terminal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +19,15 @@ interface BackupItem {
   size_bytes: number;
   created_at: string;
   exists: boolean;
+}
+
+interface StorageInfo {
+  disk_total: number | null;
+  disk_free: number | null;
+  disk_used: number | null;
+  backups_size: number;
+  backups_count: number;
+  db_size: number | null;
 }
 
 const toJalali = (iso: string): string => {
@@ -39,8 +48,11 @@ const fmtSize = (b: number): string => {
   if (!b) return "—";
   if (b < 1024) return `${b} B`;
   if (b < 1024 * 1024) return `${(b / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 1 })} KB`;
-  return `${(b / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} MB`;
+  if (b < 1024 * 1024 * 1024) return `${(b / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} MB`;
+  return `${(b / 1024 / 1024 / 1024).toLocaleString("fa-IR", { maximumFractionDigits: 2 })} GB`;
 };
+
+const PAGE = 15;
 
 const BackupPanel = () => {
   const { toast } = useToast();
@@ -49,6 +61,9 @@ const BackupPanel = () => {
   const [writable, setWritable] = useState(true);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
+  const [storage, setStorage] = useState<StorageInfo | null>(null);
+  const [visible, setVisible] = useState(PAGE);
+
 
   const load = useCallback(async (auto = 1) => {
     setLoading(true);
