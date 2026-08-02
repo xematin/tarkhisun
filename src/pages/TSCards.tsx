@@ -278,7 +278,7 @@ const TSCards = () => {
               </CardContent>
             </Card>
           )}
-          {state === "auth" && <CardsPanel toast={toast} />}
+          {state === "auth" && <CardsPanel toast={toast} pendingCount={pending.count} onPendingChanged={() => { void pending.reload(); }} />}
         </main>
       </div>
     </>
