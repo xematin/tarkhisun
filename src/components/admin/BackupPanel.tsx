@@ -218,7 +218,6 @@ const BackupPanel = () => {
 
       {/* بک‌آپ فوری */}
       <Card className="border-border">
-      <Card className="border-border">
         <CardHeader>
           <CardTitle className="text-persian flex items-center gap-2 text-base">
             <Database className="w-4 h-4 text-primary" />
