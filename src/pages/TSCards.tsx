@@ -41,6 +41,7 @@ interface CardUser {
   username: string;
   created_at?: string;
   allocated?: number;
+  require_payment_approval?: number;
 }
 interface EntryUser {
   id: number;
