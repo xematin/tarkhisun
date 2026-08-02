@@ -622,6 +622,7 @@ interface DialogProps {
 }
 
 interface EntryDraft {
+  id?: number;
   title: string;
   amount: string;
   currency: Currency;
