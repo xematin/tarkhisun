@@ -145,7 +145,7 @@ function ts_backup_ensure_schema(PDO $pdo): void {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 }
 
-/** ساخت و ذخیره یک بک‌آپ SQL روی سرور + نگهداری ۱۰ نسخه آخر */
+/** ساخت و ذخیره یک بک‌آپ SQL روی سرور (بدون حذف خودکار نسخه‌های قدیمی) */
 function ts_backup_store(PDO $pdo, string $source = 'manual'): array {
     ts_backup_ensure_schema($pdo);
     $dir  = ts_backup_dir();
@@ -159,15 +159,6 @@ function ts_backup_store(PDO $pdo, string $source = 'manual'): array {
     $st = $pdo->prepare('INSERT INTO ts_backups (filename, format, source, size_bytes) VALUES (?, ?, ?, ?)');
     $st->execute([$name, 'sql', $source, $size]);
     $id = (int)$pdo->lastInsertId();
-
-    // نگهداری ۱۰ نسخه آخر
-    try {
-        $old = $pdo->query('SELECT id, filename FROM ts_backups ORDER BY created_at DESC, id DESC LIMIT 100 OFFSET 10')->fetchAll();
-        foreach ($old as $o) {
-            @unlink($dir . '/' . basename((string)$o['filename']));
-            $pdo->prepare('DELETE FROM ts_backups WHERE id = ?')->execute([(int)$o['id']]);
-        }
-    } catch (Throwable $e) { /* ignore */ }
 
     return ['id' => $id, 'filename' => $name, 'size_bytes' => $size, 'source' => $source, 'format' => 'sql'];
 }
