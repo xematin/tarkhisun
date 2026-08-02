@@ -2008,7 +2008,7 @@ const UsersManagementPanel = ({
     try {
       await api("/api/admin/card-user-create.php", {
         method: "POST",
-        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password }),
+        body: JSON.stringify({ first_name: f.first_name, last_name: f.last_name, username: f.username, password: f.password, require_payment_approval: f.require_payment_approval }),
       });
       toast({ title: "کاربر ساخته شد" });
       setCreateOpen(false);
