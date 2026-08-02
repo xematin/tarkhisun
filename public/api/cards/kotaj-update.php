@@ -133,8 +133,8 @@ $attachJson = $final ? json_encode($final, JSON_UNESCAPED_SLASHES | JSON_UNESCAP
 
 $pdo->beginTransaction();
 try {
-    $sets = ['kotaj_number=?','kotaj_date_jalali=?','total_value_usd=?'];
-    $vals = [$kotaj_number, $kotaj_date_j, $totalUsd];
+    $sets = ['kotaj_number=?','kotaj_date_jalali=?','total_value_usd=?','entry_id=?','card_id=?'];
+    $vals = [$kotaj_number, $kotaj_date_j, $totalUsd, $entry_id, $card_id];
     try {
         $s2 = $sets; $v2 = $vals;
         $s2[] = 'kotaj_date_gregorian=?'; $v2[] = ($kotaj_date_g ?: null);
