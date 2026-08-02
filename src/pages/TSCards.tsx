@@ -129,6 +129,44 @@ async function api<T>(path: string, init?: RequestInit): Promise<T> {
 
 type AuthState = "loading" | "login" | "auth";
 
+interface PendingPayment {
+  id: number;
+  amount_irt: number;
+  created_at: string;
+  note?: string | null;
+  card_name?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  username?: string | null;
+}
+
+function usePendingPayments(enabled: boolean) {
+  const [count, setCount] = useState(0);
+  const [items, setItems] = useState<PendingPayment[]>([]);
+
+  const reload = useCallback(async () => {
+    if (!enabled) return;
+    try {
+      const r = await api<{ count: number; items: PendingPayment[] }>("/api/admin/payments-pending-count.php");
+      setCount(Number(r.count || 0));
+      setItems(r.items || []);
+    } catch {
+      /* silent */
+    }
+  }, [enabled]);
+
+  useEffect(() => {
+    if (!enabled) return;
+    void reload();
+    const t = window.setInterval(() => { void reload(); }, 60000);
+    return () => window.clearInterval(t);
+  }, [enabled, reload]);
+
+  return { count, items, reload };
+}
+
+
+
 const TSCards = () => {
   const { toast } = useToast();
   const [state, setState] = useState<AuthState>("loading");
