@@ -1,7 +1,9 @@
 import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw, Paperclip, Bell } from "lucide-react";
+import { Loader2, LogOut, Plus, Trash2, Pencil, RefreshCw, CreditCard, UserPlus, History, DollarSign, FileText, ChevronDown, ChevronUp, Search, Download, Wallet, Banknote, Package, Vault, Receipt, Upload, CheckCircle2, RotateCcw, Paperclip, Bell, Database } from "lucide-react";
 import TreasuryPanel from "@/components/admin/TreasuryPanel";
+import BackupPanel from "@/components/admin/BackupPanel";
+
 import UserBillingDialog from "@/components/admin/UserBillingDialog";
 import CardBillingDialog from "@/components/admin/CardBillingDialog";
 import { xhrUpload } from "@/lib/xhrUpload";
@@ -372,6 +374,10 @@ const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: Retu
           <TabsTrigger value="reports" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
             گزارش‌گیری
           </TabsTrigger>
+          <TabsTrigger value="backup" className="shrink-0 md:flex-1 h-full px-3 md:px-2 rounded-full text-persian text-xs md:text-sm whitespace-nowrap text-muted-foreground hover:text-primary hover:bg-primary/5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_6px_16px_hsl(var(--primary)/0.4),0_2px_4px_hsl(var(--primary)/0.2)] data-[state=active]:font-bold data-[state=active]:scale-[1.02] transition-all duration-300 ease-out">
+            <Database className="w-3.5 h-3.5 ml-1 inline" /> بک‌آپ
+          </TabsTrigger>
+
         </TabsList>
       </div>
 
@@ -695,6 +701,11 @@ const CardsPanel = ({ toast, pendingCount = 0, onPendingChanged }: { toast: Retu
           </TabsContent>
         </Tabs>
       </TabsContent>
+
+      <TabsContent value="backup" className="mt-0">
+        <BackupPanel />
+      </TabsContent>
+
     </Tabs>
   );
 };
