@@ -1969,7 +1969,7 @@ const UsersManagementPanel = ({
 
   const openEdit = (u: CardUser) => {
     setEdit(u);
-    setForm({ first_name: u.first_name, last_name: u.last_name, username: u.username, password: "" });
+    setForm({ first_name: u.first_name, last_name: u.last_name, username: u.username, password: "", require_payment_approval: Number(u.require_payment_approval || 0) });
   };
 
   const save = async () => {
