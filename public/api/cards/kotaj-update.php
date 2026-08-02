@@ -52,12 +52,33 @@ if (!$row) {
 }
 
 $entry_id = (int)$row['entry_id'];
+$card_id  = (int)$row['card_id'];
 $alloc    = (float)$row['allocated'];
+
+// Optional section (entry) change — validate access to the target section
+if ($newEntryId > 0 && $newEntryId !== $entry_id) {
+    $ac = $pdo->prepare("SELECT card_id, allocated FROM ts_card_user_access WHERE card_user_id=? AND entry_id=? LIMIT 1");
+    $ac->execute([(int)$u['id'], $newEntryId]);
+    $acc = $ac->fetch();
+    if (!$acc) ts_json_error(403, 'دسترسی به سکشن انتخاب‌شده ندارید');
+    $entry_id = $newEntryId;
+    $card_id  = (int)$acc['card_id'];
+    $alloc    = (float)$acc['allocated'];
+}
+
+// Tolerance of the (possibly new) card
+$tolerance = 0.0;
+try {
+    $ts = $pdo->prepare('SELECT tolerance_percent FROM ts_cards WHERE id=? LIMIT 1');
+    $ts->execute([$card_id]);
+    $tolerance = (float)($ts->fetchColumn() ?: 0);
+} catch (Throwable $e) { $tolerance = 0.0; }
+$allowedMax = $alloc * (1 + $tolerance / 100.0);
 
 $us = $pdo->prepare("SELECT COALESCE(SUM(total_value_usd),0) FROM ts_kotaj WHERE card_user_id=? AND entry_id=? AND id<>?");
 $us->execute([(int)$u['id'], $entry_id, $id]);
 $used = (float)$us->fetchColumn();
-$remain = $alloc - $used;
+$remain = $allowedMax - $used;
 
 $items = [];
 $totalUsd = 0.0;
@@ -72,7 +93,8 @@ foreach ($itemsRaw as $i => $it) {
     $totalUsd += $val;
 }
 if ($totalUsd - $remain > 0.0001) {
-    ts_json_error(400, "ارزش کل کوتاژ ($totalUsd) از مانده سکشن ($remain) بیشتر است");
+    $tolMsg = $tolerance > 0 ? " با احتساب " . rtrim(rtrim(number_format($tolerance, 3, '.', ''), '0'), '.') . "٪ تلورانس" : '';
+    ts_json_error(400, "ارزش کل کوتاژ ($totalUsd) از مانده سکشن$tolMsg ($remain دلار) بیشتر است");
 }
 
 // Existing attachments
